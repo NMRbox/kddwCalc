@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane hgap="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="986.0" vgap="14.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+  <columnConstraints>
+    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="167.0" minWidth="10.0" prefWidth="167.0" />
+    <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="146.0" minWidth="10.0" prefWidth="133.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Label text="[Receptor] (uM)" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+      <Label text="[Ligand] (uM)" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+      <Label text="Type of titration" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+      <ComboBox prefWidth="150.0" promptText="Select type..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="4" />
+      <TextField editable="false" text="0" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="6" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="6" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="7" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="8" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="9" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="10" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="11" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="12" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="13" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="14" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="15" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="16" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="17" />
+      <TextField GridPane.columnIndex="5" GridPane.rowIndex="6" />
+      <TextField GridPane.columnIndex="5" GridPane.rowIndex="6" />
+      <TextField GridPane.columnIndex="5" GridPane.rowIndex="7" />
+      <TextField GridPane.columnIndex="5" GridPane.rowIndex="8" />
+      <TextField GridPane.columnIndex="5" GridPane.rowIndex="9" />
+      <TextField GridPane.columnIndex="5" GridPane.rowIndex="10" />
+      <TextField GridPane.columnIndex="5" GridPane.rowIndex="11" />
+      <TextField GridPane.columnIndex="5" GridPane.rowIndex="12" />
+      <TextField GridPane.columnIndex="5" GridPane.rowIndex="13" />
+      <TextField GridPane.columnIndex="5" GridPane.rowIndex="14" />
+      <TextField GridPane.columnIndex="5" GridPane.rowIndex="15" />
+      <TextField GridPane.columnIndex="5" GridPane.rowIndex="16" />
+      <TextField GridPane.columnIndex="5" GridPane.rowIndex="17" />
+      <TextField editable="false" focusTraversable="false" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+      <Label text="Order in file" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+      <Label text="Point 2" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+      <Label text="Point 1 (free receptor)" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <Label text="Point 3" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+      <Label text="Point 4" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+      <Label text="Point 5" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+      <Label text="Point 6" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+      <Label text="Point 7" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+      <Label text="Point 8" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+      <Label text="Point 9" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+      <Label text="Point 10" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+      <Label text="Point 11" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+      <Label text="Point 12" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+      <Label text="Point 13" GridPane.columnIndex="1" GridPane.rowIndex="16" />
+      <Label text="Point 14" GridPane.columnIndex="1" GridPane.rowIndex="17" />
+      <Label text="Point 15" GridPane.columnIndex="1" GridPane.rowIndex="18" />
+      <TextField GridPane.columnIndex="3" GridPane.rowIndex="4" />
+      <TextField GridPane.columnIndex="3" GridPane.rowIndex="5" />
+      <TextField GridPane.columnIndex="3" GridPane.rowIndex="6" />
+      <TextField GridPane.columnIndex="3" GridPane.rowIndex="7" />
+      <TextField GridPane.columnIndex="3" GridPane.rowIndex="8" />
+      <TextField GridPane.columnIndex="3" GridPane.rowIndex="9" />
+      <TextField GridPane.columnIndex="3" GridPane.rowIndex="10" />
+      <TextField GridPane.columnIndex="3" GridPane.rowIndex="11" />
+      <TextField GridPane.columnIndex="3" GridPane.rowIndex="12" />
+      <TextField GridPane.columnIndex="3" GridPane.rowIndex="13" />
+      <TextField GridPane.columnIndex="3" GridPane.rowIndex="14" />
+      <TextField GridPane.columnIndex="3" GridPane.rowIndex="15" />
+      <TextField GridPane.columnIndex="3" GridPane.rowIndex="16" />
+      <TextField GridPane.columnIndex="3" GridPane.rowIndex="17" />
+      <TextField GridPane.columnIndex="3" GridPane.rowIndex="18" />
+      <Label text="Number of points" GridPane.halignment="RIGHT" GridPane.rowIndex="20" />
+      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="4" />
+      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="5" />
+      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="6" />
+      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="7" />
+      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="8" />
+      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="9" />
+      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="10" />
+      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="11" />
+      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="12" />
+      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="13" />
+      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="18" />
+      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="17" />
+      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="16" />
+      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="14" />
+      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="15" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="5" />
+      <TextField GridPane.columnIndex="5" GridPane.rowIndex="5" />
+      <Button mnemonicParsing="false" text="Execute" GridPane.columnIndex="4" GridPane.rowIndex="20" />
+      <TextField editable="false" focusTraversable="false" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+      <TextField GridPane.columnIndex="4" GridPane.rowIndex="18" />
+      <TextField GridPane.columnIndex="5" GridPane.rowIndex="18" />
+      <Label text="File name" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+      <TextArea editable="false" focusTraversable="false" prefHeight="322.0" prefWidth="150.0" text="1) Choose type of&#10;titration &#10;&#10;2) Make sure order&#10;displayed is the&#10;same as order in&#10;data files&#10;&#10;3) Choose files with&#10;the data&#10;&#10;4) Enter [protein]&#10;note: receptor is&#10;the labeled species&#10;&#10;5) Enter total # of &#10;titration points&#10;(helps validation)" wrapText="true" GridPane.rowIndex="6" GridPane.rowSpan="11" />
+      <ComboBox prefWidth="150.0" promptText="Choose number..." GridPane.columnIndex="1" GridPane.rowIndex="20" />
+      <Button mnemonicParsing="false" text="Save" GridPane.columnIndex="3" GridPane.rowIndex="20" />
+      <Button mnemonicParsing="false" text="Clear form" GridPane.rowIndex="3" />
+   </children>
+   <padding>
+      <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+   </padding>
+</GridPane>
