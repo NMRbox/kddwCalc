@@ -48,7 +48,8 @@ public class RawData
                 + " and receptorConcs do not have the same length. They must.");
         }
         
-        
+        // TODO code validation that each file has the same number of lines (i.e. same number of points
+        // since each line from each file matches the same line from other files),
         
         
         
