@@ -16,6 +16,8 @@
 
 package edu.uconn.kdCalcdata;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
@@ -38,7 +40,7 @@ public class RawData
     }
     
     public final static RawData createRawData(ArrayList<Path> dataFiles, ArrayList<Double> ligandConcs,
-        ArrayList<Double> receptorConcs, double multiplier, boolean resonanceReversal)
+        ArrayList<Double> receptorConcs, double multiplier, boolean resonanceReversal) throws IOException
     {
         if (dataFiles.size() != ligandConcs.size()
             || ligandConcs.size() != receptorConcs.size()
@@ -48,12 +50,30 @@ public class RawData
                 + " and receptorConcs do not have the same length. They must.");
         }
         
-        // TODO code validation that each file has the same number of lines (i.e. same number of points
-        // since each line from each file matches the same line from other files),
         
         
+        long[] numLines = new long[dataFiles.size()];
         
+        try
+        {
+            for (int ctr = 0; ctr < dataFiles.size(); ctr++)
+            {
+                numLines[ctr] = Files.lines(dataFiles.get(ctr)).count();
+            }
+        }
+        catch(IOException e)
+        {
+            System.err.println("Error when opening file in class RawData");
+        }
         
+        long count = dataFiles.stream()   // have a Stream<Path>
+            .map(Files::lines) 
+            {
+                .count()
+            }
+            .distinct();
+         
+       
         return new RawData(dataFiles, ligandConcs,receptorConcs, multiplier, resonanceReversal);
     }
 }
