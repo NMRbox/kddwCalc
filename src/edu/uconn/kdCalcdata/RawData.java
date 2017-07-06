@@ -21,12 +21,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class RawData 
+public final class RawData 
 {
     private final ArrayList<Path> dataFiles;
     private final ArrayList<Double> ligandConcs;
     private final ArrayList<Double> receptorConcs;
-    private final double multipler;
+    private final double multiplier;
     private final boolean resonanceReversal;
     
     private RawData(ArrayList<Path> dataFiles, ArrayList<Double> ligandConcs,
@@ -35,7 +35,7 @@ public class RawData
         this.dataFiles = dataFiles;
         this.ligandConcs = ligandConcs;
         this.receptorConcs = receptorConcs;
-        this.multipler = multiplier;
+        this.multiplier = multiplier;
         this.resonanceReversal = resonanceReversal;
     }
     
@@ -50,9 +50,9 @@ public class RawData
                 + " and receptorConcs do not have the same length. They must.");
         }
         
+        // TODO finish validation code to ensure equal number of lines in each data file
         
-        
-        long[] numLines = new long[dataFiles.size()];
+/*        long[] numLines = new long[dataFiles.size()];
         
         try
         {
@@ -65,15 +65,59 @@ public class RawData
         {
             System.err.println("Error when opening file in class RawData");
         }
+*/
         
-        long count = dataFiles.stream()   // have a Stream<Path>
-            .map(Files::lines) 
-            {
-                .count()
-            }
-            .distinct();
-         
+  /*      
+        long count = 0;
+        
+        
+
+            count = dataFiles.stream()   // have a Stream<Path>
+                .mapToLong(datafile -> {
+                    try {Files.lines(datafile).count();}
+                    catch (IOException e) {}
+                    })
+                .distinct()
+                .count();
+
+        
+        
        
+         if(count != 1)
+             throw new IllegalArgumentException("Data files do not all have the same number of lines");
+      */
+        
+        // if this statement is reached, all the validation was passed 
         return new RawData(dataFiles, ligandConcs,receptorConcs, multiplier, resonanceReversal);
+          
+        
     }
+
+    
+    // GETTERS
+    public final ArrayList<Path> getDataFiles()
+    {
+        return dataFiles;
+    }
+    
+    public final ArrayList<Double> getLigandConcs()
+    {
+        return ligandConcs;
+    }
+    
+    public final ArrayList<Double> getReceptorConcs()
+    {
+        return receptorConcs;
+    }
+    
+    public final double getMultiplier()
+    {
+        return multiplier;
+    }
+    
+    public final boolean getResonanceReversal()
+    {
+        return resonanceReversal;
+    }
+    
 }
