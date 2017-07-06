@@ -18,5 +18,10 @@ package edu.uconn.kdCalcdata;
 
 public class AbsFactory 
 {
-    RawData rawDataSet = new Raw
+    // no-argument default constructor
+    
+    public final TitrationSeries<Titration> analyzeDataFiles(RawData dataObject)
+    {
+        TitrationSeries<Titration?
+    }
 }
