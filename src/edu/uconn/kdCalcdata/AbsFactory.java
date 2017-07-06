@@ -9,19 +9,38 @@
 // the first titration point. these are the data from teh first line of the
 // GUI that requests the data
 *
-* edited by Alex Ri on 170704 to use a Template method to create the dataset.
+* edited by Alex Ri on 170704 and 170706 to use a Template method to create the dataset.
 *
+*
+*  class RawData has: 
+*     private final ArrayList<Path> dataFiles;
+*     private final ArrayList<Double> ligandConcs;
+*     private final ArrayList<Double> receptorConcs;
+*     private final double multiplier;
+*     private final boolean resonanceReversal;
+
 */
 
 package edu.uconn.kdCalcdata;
 
-
 public class AbsFactory 
 {
-    // no-argument default constructor
+    // no-argument default constructor is only construtor
     
-    public final TitrationSeries<Titration> analyzeDataFiles(RawData dataObject)
+    // method that data an object of class RawData (comes from user) and parses files.
+    // 
+    // this is meant to use the Template method pattern, where creation of each resonance is
+    // overriden in a subclass
+    public final TitrationSeries analyzeDataFiles(RawData dataObject)
     {
-        TitrationSeries<Titration?
+        final TitrationSeries dataSet = new TitrationSeries();
+        
+        
+        
+        
+        
+        
+        
+        return dataSet;
     }
 }
