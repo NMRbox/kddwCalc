@@ -23,6 +23,13 @@
 
 package edu.uconn.kdCalcdata;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
 public class AbsFactory 
 {
     // no-argument default constructor is only construtor
@@ -35,7 +42,14 @@ public class AbsFactory
     {
         final TitrationSeries dataSet = new TitrationSeries();
         
+        // open files by getting a List<Scanner> from the List<Path>
+        List<Scanner> scanners = makeScannersFromPaths(dataObject.getDataFiles());
         
+        
+        
+        
+            
+            
         
         
         
@@ -43,4 +57,27 @@ public class AbsFactory
         
         return dataSet;
     }
+    
+    
+    private List<Scanner> makeScannersFromPaths(List<Path> paths)
+    {
+        final List<Scanner> scanners = new ArrayList<>();
+        
+        try
+        {
+            for (Path pth : paths)
+            {
+                scanners.add(new Scanner(pth));
+            }
+        }
+        catch(IOException e)
+        {
+            System.err.println("Exception when change List<Path> to List<Scanner> in AbsFactory");
+        }
+        
+        return scanners;
+    }
+    
+    
+    
 }
