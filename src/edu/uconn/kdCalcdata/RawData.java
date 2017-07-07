@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public final class RawData 
 {
@@ -42,6 +43,8 @@ public final class RawData
     public final static RawData createRawData(ArrayList<Path> dataFiles, ArrayList<Double> ligandConcs,
         ArrayList<Double> receptorConcs, double multiplier, boolean resonanceReversal) throws IOException
     {
+        
+        // bit of code to make sure user entered and equal number of dataFiles, ligand conccentrations...
         if (dataFiles.size() != ligandConcs.size()
             || ligandConcs.size() != receptorConcs.size()
             || dataFiles.size() != receptorConcs.size())
@@ -50,10 +53,14 @@ public final class RawData
                 + " and receptorConcs do not have the same length. They must.");
         }
         
-        // TODO finish validation code to ensure equal number of lines in each data file
         
-/*        long[] numLines = new long[dataFiles.size()];
+
+      // validation to ensure equal number of lines in each data file
         
+        // this array holds the number of lines in each file
+        long[] numLines = new long[dataFiles.size()];
+        
+        // now count the number of lines in each file
         try
         {
             for (int ctr = 0; ctr < dataFiles.size(); ctr++)
@@ -64,28 +71,13 @@ public final class RawData
         catch(IOException e)
         {
             System.err.println("Error when opening file in class RawData");
+
+        
+        // if every number in that array isnt the same    
+         if (Arrays.stream(numLines).distinct().count() != 1)
+             throw new IllegalArgumentException("Data files dont all have same number of lines");
+        
         }
-*/
-        
-  /*      
-        long count = 0;
-        
-        
-
-            count = dataFiles.stream()   // have a Stream<Path>
-                .mapToLong(datafile -> {
-                    try {Files.lines(datafile).count();}
-                    catch (IOException e) {}
-                    })
-                .distinct()
-                .count();
-
-        
-        
-       
-         if(count != 1)
-             throw new IllegalArgumentException("Data files do not all have the same number of lines");
-      */
         
         // if this statement is reached, all the validation was passed 
         return new RawData(dataFiles, ligandConcs,receptorConcs, multiplier, resonanceReversal);
