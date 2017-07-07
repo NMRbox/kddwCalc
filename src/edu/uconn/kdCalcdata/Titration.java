@@ -10,14 +10,18 @@ import java.util.Comparator;
 import java.util.List;
 
 
-public class Titration implements Comparator
+public abstract class Titration implements Comparator
 {
     
     private final List<TitrationPoint> titration = new ArrayList<>();
     
-    // one-argument constructor.
-    // the first file (top of gui) will be searched for residues number which will
-    // be used to create the set of titrations.  
+    private final double multiplier;
+    
+    // one argument constructor
+    public Titration(double multiplier)
+    {
+        this.multiplier = multiplier;
+    }
     
     public final void addPoint(TitrationPoint pnt)
     {
@@ -25,7 +29,7 @@ public class Titration implements Comparator
     }
     
     // TODO code me
-    public ResultsObject calculateResults(double multiplier)
+    public ResultsObject calculateResults()
     {
         ResultsObject result;
         
