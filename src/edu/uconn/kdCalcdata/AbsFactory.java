@@ -57,6 +57,8 @@ public abstract class AbsFactory
             
             dataSet.addTitration(titration);   
         }
+        
+        closeFiles(scanners);
 
         return dataSet;
     }
@@ -64,14 +66,8 @@ public abstract class AbsFactory
     // override in subclasses to create correct Resonance
     public abstract Resonance makeResonance(int ctr, RawData dataObject, List<Scanner> scanners);
     
-    public TitrationPoint makeTitrationPoint(int ctr, RawData dataObject, List<Scanner> scanners)
-    {
-        TitrationPoint point = new TitrationPoint(dataObject.getLigandConcs().get(ctr),
-            dataObject.getReceptorConcs().get(ctr), makeResonance(ctr, dataObject, scanners), 
-            makeResonance(ctr, dataObject, scanners));
-        
-        return point;
-    }
+    public abstract TitrationPoint makeTitrationPoint(int ctr, RawData dataObject, List<Scanner> scanners);
+    
     
     
     
@@ -95,5 +91,10 @@ public abstract class AbsFactory
     }
     
     
+    private void closeFiles(List<Scanner> scanners)
+    {
+        scanners.stream()
+                .forEach(scanner -> scanner.close());
+    }
     
 }

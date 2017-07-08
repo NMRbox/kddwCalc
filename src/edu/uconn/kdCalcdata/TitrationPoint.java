@@ -4,7 +4,7 @@ package edu.uconn.kdCalcdata;
 
 
 
-public class TitrationPoint
+public abstract class TitrationPoint
 {   
     // concentrations of the two proteins.
     // the receptor is the labeled species.
