@@ -19,6 +19,6 @@ public class MethylProton extends Resonance
         if (isWithinLegitRange(chemShift, METHYL_PROTON_MAX_SHIFT, METHYL_PROTON_MIN_SHIFT))
             return new MethylProton(chemShift);
         
-        else throw new ResonanceOutOfRangeException();
+        else throw new IllegalArgumentException();
     } 
 }

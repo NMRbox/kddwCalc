@@ -50,7 +50,9 @@ public abstract class AbsFactory
             
             for(int ctr = 0; ctr < dataObject.getDataFiles().size(); ctr++)
             {
-                TitrationPoint point = makeTitrationPoint(ctr, dataObject, scanners);
+                TitrationPoint point = makeTitrationPoint(scanners.get(ctr), 
+                    dataObject.getLigandConcs().get(ctr), dataObject.getReceptorConcs().get(ctr),
+                    dataObject.getResonanceReversal());
                 
                 titration.addPoint(point);
             }
@@ -64,11 +66,10 @@ public abstract class AbsFactory
     }
     
     // override in subclasses to create correct Resonance
-    public abstract Resonance makeResonance(int ctr, RawData dataObject, List<Scanner> scanners);
+    public abstract Resonance[] makeResonances(Scanner scanner, boolean resonanceReversal);
     
-    public abstract TitrationPoint makeTitrationPoint(int ctr, RawData dataObject, List<Scanner> scanners);
-    
-    
+    public abstract TitrationPoint makeTitrationPoint(Scanner scanner, double ligandConc,
+        double receptorConc, boolean resonanceReversal);
     
     
     private List<Scanner> makeScannersFromPaths(List<Path> paths)

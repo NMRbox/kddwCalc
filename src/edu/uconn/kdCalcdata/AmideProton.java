@@ -19,6 +19,6 @@ public class AmideProton extends Resonance
         if (isWithinLegitRange(chemShift, AMIDE_PROTON_MAX_SHIFT, AMIDE_PROTON_MIN_SHIFT))
             return new AmideProton(chemShift);
         
-        else throw new ResonanceOutOfRangeException();
+        else throw new IllegalArgumentException();
     }  
 }

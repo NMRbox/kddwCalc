@@ -31,7 +31,7 @@ public class Titration implements Comparator
     // TODO code me
     public ResultsObject calculateResults()
     {
-        ResultsObject result;
+        ResultsObject result = null;
         
         return result;
     }

@@ -19,6 +19,6 @@ public class MethylCarbon extends Resonance
         if (isWithinLegitRange(chemShift, METHYL_CARBON_MAX_SHIFT, METHYL_CARBON_MIN_SHIFT))
             return new MethylCarbon(chemShift);
         
-        else throw new ResonanceOutOfRangeException();
+        else throw new IllegalArgumentException();
     }
 }  // end class MethylCarbon

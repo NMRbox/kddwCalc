@@ -7,15 +7,36 @@ public class MethylCarbonProtonFactory extends AbsFactory
 {
 
     @Override
-    public Resonance makeResonance(int ctr, RawData dataObject, List<Scanner> scanners) 
+    public Resonance[] makeResonances(Scanner scanner, boolean resonanceReversal) 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       Resonance[] twoResonances = new Resonance[2];
+       
+       if(resonanceReversal == false)
+       {
+           twoResonances[1] = MethylCarbon.validateAndCreate(scanner.nextDouble());
+           twoResonances[2] = MethylProton.validateAndCreate(scanner.nextDouble());
+       }
+       else if (resonanceReversal == true)
+       {
+           twoResonances[2] = MethylProton.validateAndCreate(scanner.nextDouble());
+           twoResonances[1] = MethylCarbon.validateAndCreate(scanner.nextDouble()); 
+       }
+       
+       return twoResonances;   
     }
 
     @Override
-    public TitrationPoint makeTitrationPoint(int ctr, RawData dataObject, List<Scanner> scanners) 
+    public TitrationPoint makeTitrationPoint(Scanner scanner, double ligandConc, 
+        double receptorConc, boolean resonanceReversal) 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Resonance[] twoCoordinates = makeResonances(scanner, resonanceReversal);
+
+        TitrationPoint point = MethylCarbonProtonTitrationPoint.validateAndCreate(ligandConc, receptorConc, 
+                twoCoordinates[1], twoCoordinates[2]);
+
+        return point;
     }
+
+
 
 }
