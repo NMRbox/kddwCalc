@@ -95,7 +95,7 @@ public abstract class AbsFactory
     private void closeFiles(List<Scanner> scanners)
     {
         scanners.stream()
-                .forEach(scanner -> scanner.close());
+                .forEach(Scanner::close);
     }
     
 }

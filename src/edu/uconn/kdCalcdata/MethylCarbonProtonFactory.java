@@ -13,13 +13,13 @@ public class MethylCarbonProtonFactory extends AbsFactory
        
        if(resonanceReversal == false)
        {
-           twoResonances[1] = MethylCarbon.validateAndCreate(scanner.nextDouble());
-           twoResonances[2] = MethylProton.validateAndCreate(scanner.nextDouble());
+           twoResonances[0] = MethylCarbon.validateAndCreate(scanner.nextDouble());
+           twoResonances[1] = MethylProton.validateAndCreate(scanner.nextDouble());
        }
        else if (resonanceReversal == true)
        {
-           twoResonances[2] = MethylProton.validateAndCreate(scanner.nextDouble());
-           twoResonances[1] = MethylCarbon.validateAndCreate(scanner.nextDouble()); 
+           twoResonances[1] = MethylProton.validateAndCreate(scanner.nextDouble());
+           twoResonances[0] = MethylCarbon.validateAndCreate(scanner.nextDouble()); 
        }
        
        return twoResonances;   
