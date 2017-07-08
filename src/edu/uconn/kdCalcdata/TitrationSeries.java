@@ -11,5 +11,8 @@ public class TitrationSeries
 {   
     private final List<Titration> titrationSeries = new ArrayList<>();
     
-    
+    public void addTitration(Titration titration)
+    {
+        titrationSeries.add(titration);
+    }
 }

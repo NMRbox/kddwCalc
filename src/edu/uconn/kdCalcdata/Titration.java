@@ -10,7 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 
 
-public abstract class Titration implements Comparator
+public class Titration implements Comparator
 {
     
     private final List<TitrationPoint> titration = new ArrayList<>();

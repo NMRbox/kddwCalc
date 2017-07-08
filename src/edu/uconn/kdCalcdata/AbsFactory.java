@@ -28,9 +28,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
-public class AbsFactory 
+public abstract class AbsFactory 
 {
     // no-argument default constructor is only construtor
     
@@ -45,18 +44,35 @@ public class AbsFactory
         // open files by getting a List<Scanner> from the List<Path>
         List<Scanner> scanners = makeScannersFromPaths(dataObject.getDataFiles());
         
-        
-        
-        
+        while(scanners.get(0).hasNext())
+        {
+            Titration titration = new Titration(dataObject.getMultiplier());
             
+            for(int ctr = 0; ctr < dataObject.getDataFiles().size(); ctr++)
+            {
+                TitrationPoint point = makeTitrationPoint(ctr, dataObject, scanners);
+                
+                titration.addPoint(point);
+            }
             
-        
-        
-        
-        
-        
+            dataSet.addTitration(titration);   
+        }
+
         return dataSet;
     }
+    
+    // override in subclasses to create correct Resonance
+    public abstract Resonance makeResonance(int ctr, RawData dataObject, List<Scanner> scanners);
+    
+    public TitrationPoint makeTitrationPoint(int ctr, RawData dataObject, List<Scanner> scanners)
+    {
+        TitrationPoint point = new TitrationPoint(dataObject.getLigandConcs().get(ctr),
+            dataObject.getReceptorConcs().get(ctr), makeResonance(ctr, dataObject, scanners), 
+            makeResonance(ctr, dataObject, scanners));
+        
+        return point;
+    }
+    
     
     
     private List<Scanner> makeScannersFromPaths(List<Path> paths)
