@@ -42,11 +42,11 @@ public abstract class AbsFactory
         final TitrationSeries dataSet = new TitrationSeries();
         
         // open files by getting a List<Scanner> from the List<Path>
-        List<Scanner> scanners = makeScannersFromPaths(dataObject.getDataFiles());
+        final List<Scanner> scanners = makeScannersFromPaths(dataObject.getDataFiles());
         
         while(scanners.get(0).hasNext())
         {
-            Titration titration = new Titration(dataObject.getMultiplier());
+            final Titration titration = new Titration(dataObject.getMultiplier());
             
             for(int ctr = 0; ctr < dataObject.getDataFiles().size(); ctr++)
             {
@@ -66,7 +66,7 @@ public abstract class AbsFactory
     }
     
     // override in subclasses to create correct Resonance
-    public abstract Resonance[] makeResonances(Scanner scanner, boolean resonanceReversal);
+    public abstract Resonance[] makeTwoResonances(Scanner scanner, boolean resonanceReversal);
     
     public abstract TitrationPoint makeTitrationPoint(Scanner scanner, double ligandConc,
         double receptorConc, boolean resonanceReversal);

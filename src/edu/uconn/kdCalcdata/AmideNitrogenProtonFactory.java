@@ -7,9 +7,9 @@ public class AmideNitrogenProtonFactory extends AbsFactory
 {
 
     @Override
-    public Resonance[] makeResonances(Scanner scanner, boolean resonanceReversal) 
+    public Resonance[] makeTwoResonances(Scanner scanner, boolean resonanceReversal) 
     {
-       Resonance[] twoResonances = new Resonance[2];
+       final Resonance[] twoResonances = new Resonance[2];
        
        if(resonanceReversal == false)
        {
@@ -29,7 +29,7 @@ public class AmideNitrogenProtonFactory extends AbsFactory
     public TitrationPoint makeTitrationPoint(Scanner scanner, double ligandConc, 
         double receptorConc, boolean resonanceReversal) 
     {
-        Resonance[] twoCoordinates = makeResonances(scanner, resonanceReversal);
+        final Resonance[] twoCoordinates = makeTwoResonances(scanner, resonanceReversal);
 
         TitrationPoint point = AmideNitrogenProtonTitrationPoint.validateAndCreate(ligandConc, receptorConc, 
                 twoCoordinates[1], twoCoordinates[2]);
