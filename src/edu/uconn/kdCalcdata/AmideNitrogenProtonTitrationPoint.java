@@ -1,7 +1,7 @@
 // created by AR on 170626
 //
-// resonance1 must be a AmideProton
-// resonance2 must be a AmideNitrogen
+// resonance1 must be a AmideNitrogen
+// resonance2 must be a AmideProton
 
 
 package edu.uconn.kdCalcdata;
@@ -38,5 +38,7 @@ public class AmideNitrogenProtonTitrationPoint extends TitrationPoint
         
         return new AmideNitrogenProtonTitrationPoint(ligandConc, receptorConc, resonance1, resonance2);   
     }
+    
+    
         
 }

@@ -29,18 +29,26 @@ public class Titration implements Comparator
     }
     
     // TODO code me
-    public ResultsObject calculateResults()
+    /*public ResultsObject calculateResults()
     {
         ResultsObject result = null;
         
         return result;
     }
-
+*/
     @Override
-    public int compare(Object o1, Object o2) {
+    public int compare(Object o1, Object o2) 
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    
+    @Override
+    public String toString()
+    {
+        return String.format("Titration:%nLigandConc  ReceptorConc  Resonance1  Resonance 2"
+            + titration.stream()
+                       .map(TitrationPoint::toString)
+                       .reduce("", (x, y) -> String.format("%s%n%s", x, y)));
+    }
     
 }

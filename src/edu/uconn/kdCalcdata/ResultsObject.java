@@ -1,3 +1,4 @@
+/*
 package edu.uconn.kdCalcdata;
 
 
@@ -9,4 +10,4 @@ public class ResultsObject
     private final int[][] resultsTable;
     
     
-}
+*/
