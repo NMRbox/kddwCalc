@@ -45,7 +45,7 @@
       <Label text="[Receptor] (uM)" GridPane.columnIndex="4" GridPane.rowIndex="3" />
       <Label text="[Ligand] (uM)" GridPane.columnIndex="5" GridPane.rowIndex="3" />
       <Label text="Type of titration" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-      <ComboBox prefWidth="150.0" promptText="Select type..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <ComboBox fx:id="typeOfTitration" onAction="#typeOfTitrationSelected" prefWidth="150.0" promptText="Select type" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <TextField GridPane.columnIndex="4" GridPane.rowIndex="4" />
       <TextField editable="false" text="0.0" GridPane.columnIndex="5" GridPane.rowIndex="4" />
       <TextField GridPane.columnIndex="4" GridPane.rowIndex="6" />
@@ -129,7 +129,7 @@
       <TextArea editable="false" focusTraversable="false" prefHeight="322.0" prefWidth="150.0" text="1) Choose type of&#10;titration &#10;&#10;2) Make sure order&#10;displayed is the&#10;same as order in&#10;data files&#10;&#10;3) Choose files with&#10;the data&#10;&#10;4) Enter [protein]&#10;note: receptor is&#10;the labeled species&#10;&#10;5) Enter total # of &#10;titration points&#10;(helps validation)" wrapText="true" GridPane.rowIndex="6" GridPane.rowSpan="11" />
       <Button mnemonicParsing="false" text="Save" GridPane.columnIndex="3" GridPane.rowIndex="20" />
       <Button mnemonicParsing="false" text="Clear form" GridPane.rowIndex="3" />
-      <ComboBox prefWidth="150.0" promptText="Select order..." GridPane.columnIndex="3" GridPane.rowIndex="1" />
+      <ComboBox fx:id="resonanceOrderSelector" prefWidth="150.0" promptText="Select order" GridPane.columnIndex="3" GridPane.rowIndex="1" />
    </children>
    <padding>
       <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
