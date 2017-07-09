@@ -69,7 +69,7 @@ public class ResonanceTest
         series.addTitration(amideTitr);
         series.addTitration(methylTitr);
         
-        System.out.println(series);
+        series.printTitrationSeries();
          
     }
 }

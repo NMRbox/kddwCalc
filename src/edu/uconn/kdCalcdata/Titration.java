@@ -42,6 +42,7 @@ public class Titration implements Comparator
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    /*
     @Override
     public String toString()
     {
@@ -49,6 +50,18 @@ public class Titration implements Comparator
             + titration.stream()
                        .map(TitrationPoint::toString)
                        .reduce("", (x, y) -> String.format("%s%n%s", x, y)));
+    }
+    
+    */
+    
+    public void printTitration()
+    {
+        System.out.printf("Titration with multiplier of %.2f%n"
+            + "LigandConc  ReceptorConc  Resonance1  Resonance 2%n", multiplier);
+        
+        titration.stream()
+                 .forEach(System.out::println);
+  
     }
     
 }
