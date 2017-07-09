@@ -1,13 +1,18 @@
 package edu.uconn.kdCalcdata;
 
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ResonanceTest
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException
     {
+        /*
         Resonance amideNitro = AmideNitrogen.validateAndCreate(115.9);
         Resonance amideProton = AmideProton.validateAndCreate(8.1);
         Resonance methylCarbon = MethylCarbon.validateAndCreate(20.1);
@@ -45,7 +50,7 @@ public class ResonanceTest
         
         System.out.println(amide);
         
-        */
+        
         
         Titration amideTitr = new Titration(20.0);
         Titration methylTitr = new Titration(30.0);
@@ -69,7 +74,54 @@ public class ResonanceTest
         series.addTitration(amideTitr);
         series.addTitration(methylTitr);
         
+        */
+        
+        //RawData
+        
+        //TitrationSeries series = 
+        //series.printTitrationSeries();
+        
+        List<Path> paths = new ArrayList<>();
+        paths.add(Paths.get("0.txt"));
+        paths.add(Paths.get("0.25.txt"));
+        paths.add(Paths.get("0.5.txt"));
+        paths.add(Paths.get("0.75.txt"));
+        paths.add(Paths.get("1.txt"));
+        paths.add(Paths.get("1.5.txt"));
+        paths.add(Paths.get("2.txt"));
+        paths.add(Paths.get("3.txt"));
+        paths.add(Paths.get("4.txt"));
+        
+        List<Double> ligandConcs = new ArrayList<>();
+        ligandConcs.add(0.0);
+        ligandConcs.add(12.405);
+        ligandConcs.add(24.629);
+        ligandConcs.add(36.675);
+        ligandConcs.add(48.548);
+        ligandConcs.add(71.788);
+        ligandConcs.add(94.377);
+        ligandConcs.add(137.709);
+        ligandConcs.add(178.743);
+        
+        List<Double> receptorConcs = new ArrayList<>();
+        receptorConcs.add(50.0);
+        receptorConcs.add(49.632);
+        receptorConcs.add(49.269);
+        receptorConcs.add(48.912);
+        receptorConcs.add(48.559);
+        receptorConcs.add(47.870);
+        receptorConcs.add(47.199);
+        receptorConcs.add(45.914);
+        receptorConcs.add(44.696);
+        
+        RawData rawData = RawData.createRawData(paths, ligandConcs, receptorConcs, 0.1 , false);
+        
+        AbsFactory factory = new AmideNitrogenProtonFactory();
+        
+        TitrationSeries series = factory.analyzeDataFiles(rawData);
+        
         series.printTitrationSeries();
-         
+        
+        
     }
 }

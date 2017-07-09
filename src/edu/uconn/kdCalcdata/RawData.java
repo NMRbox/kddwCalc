@@ -21,17 +21,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public final class RawData 
 {
-    private final ArrayList<Path> dataFiles;
-    private final ArrayList<Double> ligandConcs;
-    private final ArrayList<Double> receptorConcs;
+    private final List<Path> dataFiles;
+    private final List<Double> ligandConcs;
+    private final List<Double> receptorConcs;
     private final double multiplier;
     private final boolean resonanceReversal;
     
-    private RawData(ArrayList<Path> dataFiles, ArrayList<Double> ligandConcs,
-        ArrayList<Double> receptorConcs, double multiplier, boolean resonanceReversal)
+    private RawData(List<Path> dataFiles, List<Double> ligandConcs,
+        List<Double> receptorConcs, double multiplier, boolean resonanceReversal)
     {
         this.dataFiles = dataFiles;
         this.ligandConcs = ligandConcs;
@@ -40,8 +41,8 @@ public final class RawData
         this.resonanceReversal = resonanceReversal;
     }
     
-    public final static RawData createRawData(ArrayList<Path> dataFiles, ArrayList<Double> ligandConcs,
-        ArrayList<Double> receptorConcs, double multiplier, boolean resonanceReversal) throws IOException
+    public final static RawData createRawData(List<Path> dataFiles, List<Double> ligandConcs,
+        List<Double> receptorConcs, double multiplier, boolean resonanceReversal) throws IOException
     {
         
         // bit of code to make sure user entered and equal number of dataFiles, ligand conccentrations...
@@ -87,17 +88,17 @@ public final class RawData
 
     
     // GETTERS
-    public final ArrayList<Path> getDataFiles()
+    public final List<Path> getDataFiles()
     {
         return dataFiles;
     }
     
-    public final ArrayList<Double> getLigandConcs()
+    public final List<Double> getLigandConcs()
     {
         return ligandConcs;
     }
     
-    public final ArrayList<Double> getReceptorConcs()
+    public final List<Double> getReceptorConcs()
     {
         return receptorConcs;
     }

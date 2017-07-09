@@ -13,13 +13,13 @@ public class AmideNitrogenProtonFactory extends AbsFactory
        
        if(resonanceReversal == false)
        {
-           twoResonances[1] = AmideNitrogen.validateAndCreate(scanner.nextDouble());
-           twoResonances[2] = AmideProton.validateAndCreate(scanner.nextDouble());
+           twoResonances[0] = AmideNitrogen.validateAndCreate(scanner.nextDouble());
+           twoResonances[1] = AmideProton.validateAndCreate(scanner.nextDouble());
        }
        else if (resonanceReversal == true)
        {
-           twoResonances[2] = AmideProton.validateAndCreate(scanner.nextDouble());
-           twoResonances[1] = AmideNitrogen.validateAndCreate(scanner.nextDouble()); 
+           twoResonances[1] = AmideProton.validateAndCreate(scanner.nextDouble());
+           twoResonances[0] = AmideNitrogen.validateAndCreate(scanner.nextDouble()); 
        }
        
        return twoResonances;   
@@ -32,7 +32,7 @@ public class AmideNitrogenProtonFactory extends AbsFactory
         final Resonance[] twoCoordinates = makeTwoResonances(scanner, resonanceReversal);
 
         TitrationPoint point = AmideNitrogenProtonTitrationPoint.validateAndCreate(ligandConc, receptorConc, 
-                twoCoordinates[1], twoCoordinates[2]);
+                twoCoordinates[0], twoCoordinates[1]);
 
         return point;
     }

@@ -32,7 +32,7 @@ public class MethylCarbonProtonFactory extends AbsFactory
         Resonance[] twoCoordinates = makeTwoResonances(scanner, resonanceReversal);
 
         TitrationPoint point = MethylCarbonProtonTitrationPoint.validateAndCreate(ligandConc, receptorConc, 
-                twoCoordinates[1], twoCoordinates[2]);
+                twoCoordinates[0], twoCoordinates[1]);
 
         return point;
     }
