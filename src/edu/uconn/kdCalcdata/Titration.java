@@ -45,7 +45,7 @@ public class Titration implements Comparator
     @Override
     public String toString()
     {
-        return String.format("Titration:%nLigandConc  ReceptorConc  Resonance1  Resonance 2"
+        return String.format("%nTitration:%nLigandConc  ReceptorConc  Resonance1  Resonance 2"
             + titration.stream()
                        .map(TitrationPoint::toString)
                        .reduce("", (x, y) -> String.format("%s%n%s", x, y)));
