@@ -90,36 +90,36 @@
       <Label text="Point 13" GridPane.columnIndex="1" GridPane.rowIndex="16" />
       <Label text="Point 14" GridPane.columnIndex="1" GridPane.rowIndex="17" />
       <Label text="Point 15" GridPane.columnIndex="1" GridPane.rowIndex="18" />
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="4" />
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="5" />
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="6" />
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="7" />
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="8" />
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="9" />
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="10" />
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="11" />
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="12" />
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="13" />
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="14" />
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="15" />
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="16" />
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="17" />
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="18" />
-      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="4" />
-      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="5" />
-      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="6" />
-      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="7" />
-      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="8" />
-      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="9" />
-      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="10" />
-      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="11" />
-      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="12" />
-      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="13" />
-      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="18" />
-      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="17" />
-      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="16" />
-      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="14" />
-      <Button mnemonicParsing="false" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="15" />
+      <TextField fx:id="fileName1" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+      <TextField fx:id="fileName2" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+      <TextField fx:id="fileName3" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+      <TextField fx:id="fileName4" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+      <TextField fx:id="fileName5" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+      <TextField fx:id="fileName6" GridPane.columnIndex="3" GridPane.rowIndex="9" />
+      <TextField fx:id="fileName7" GridPane.columnIndex="3" GridPane.rowIndex="10" />
+      <TextField fx:id="fileName8" GridPane.columnIndex="3" GridPane.rowIndex="11" />
+      <TextField fx:id="fileName9" GridPane.columnIndex="3" GridPane.rowIndex="12" />
+      <TextField fx:id="fileName10" GridPane.columnIndex="3" GridPane.rowIndex="13" />
+      <TextField fx:id="fileName11" GridPane.columnIndex="3" GridPane.rowIndex="14" />
+      <TextField fx:id="fileName12" GridPane.columnIndex="3" GridPane.rowIndex="15" />
+      <TextField fx:id="fileName13" GridPane.columnIndex="3" GridPane.rowIndex="16" />
+      <TextField fx:id="fileName14" GridPane.columnIndex="3" GridPane.rowIndex="17" />
+      <TextField fx:id="fileName15" GridPane.columnIndex="3" GridPane.rowIndex="18" />
+      <Button fx:id="chooser1" mnemonicParsing="false" onAction="#Button1pressed" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="4" />
+      <Button fx:id="chooser2" mnemonicParsing="false" onAction="#Button2pressed" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="5" />
+      <Button fx:id="chooser3" mnemonicParsing="false" onAction="#Button3pressed" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="6" />
+      <Button fx:id="chooser4" mnemonicParsing="false" onAction="#Button4pressed" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="7" />
+      <Button fx:id="chooser5" mnemonicParsing="false" onAction="#Button5pressed" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="8" />
+      <Button fx:id="chooser6" mnemonicParsing="false" onAction="#Button6pressed" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="9" />
+      <Button fx:id="chooser7" mnemonicParsing="false" onAction="#Button7pressed" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="10" />
+      <Button fx:id="chooser8" mnemonicParsing="false" onAction="#Button8pressed" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="11" />
+      <Button fx:id="chooser9" mnemonicParsing="false" onAction="#Button9pressed" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="12" />
+      <Button fx:id="chooser10" mnemonicParsing="false" onAction="#Button10pressed" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="13" />
+      <Button fx:id="chooser15" mnemonicParsing="false" onAction="#Button15pressed" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="18" />
+      <Button fx:id="chooser14" mnemonicParsing="false" onAction="#Button14pressed" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="17" />
+      <Button fx:id="chooser13" mnemonicParsing="false" onAction="#Button13pressed" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="16" />
+      <Button fx:id="chooser11" mnemonicParsing="false" onAction="#Button11pressed" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="14" />
+      <Button fx:id="chooser12" mnemonicParsing="false" onAction="#Button12pressed" text="Choose file..." GridPane.columnIndex="2" GridPane.rowIndex="15" />
       <TextField GridPane.columnIndex="4" GridPane.rowIndex="5" />
       <TextField GridPane.columnIndex="5" GridPane.rowIndex="5" />
       <Button mnemonicParsing="false" text="Execute" GridPane.columnIndex="4" GridPane.rowIndex="20" />

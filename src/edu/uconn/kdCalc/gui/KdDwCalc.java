@@ -29,6 +29,8 @@ public class KdDwCalc extends Application
     public static void main(String[] args) 
     {
         launch(args);
+        
+        
     }
     
 }
