@@ -21,7 +21,7 @@
 
 */
 
-package edu.uconn.kdCalcdata;
+package edu.uconn.kdCalc.data;
 
 import java.io.IOException;
 import java.nio.file.Path;

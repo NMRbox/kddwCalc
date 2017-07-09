@@ -1,6 +1,6 @@
 // created by AR on 170626
 
-package edu.uconn.kdCalcdata;
+package edu.uconn.kdCalc.data;
 
 
 

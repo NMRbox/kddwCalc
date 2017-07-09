@@ -1,4 +1,4 @@
-package edu.uconn.kdCalcdata;
+package edu.uconn.kdCalc.data;
 
 import java.util.List;
 import java.util.Scanner;

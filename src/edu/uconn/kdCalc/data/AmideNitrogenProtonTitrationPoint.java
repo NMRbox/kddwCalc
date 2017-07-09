@@ -4,7 +4,7 @@
 // resonance2 must be a AmideProton
 
 
-package edu.uconn.kdCalcdata;
+package edu.uconn.kdCalc.data;
 
 public class AmideNitrogenProtonTitrationPoint extends TitrationPoint
 {

@@ -1,6 +1,6 @@
 // created by Alex Rizzo on 170625
 
-package edu.uconn.kdCalcdata;
+package edu.uconn.kdCalc.data;
 
 
 public abstract class Resonance 

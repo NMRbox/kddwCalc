@@ -9,7 +9,7 @@
 *  the String paramater is the text from the comboBox is the GUI where user choose spectrum type.
 */
 
-package edu.uconn.kdCalcdata;
+package edu.uconn.kdCalc.data;
 
 public class FactoryMaker 
 {

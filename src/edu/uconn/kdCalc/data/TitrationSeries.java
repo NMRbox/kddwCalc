@@ -1,6 +1,6 @@
 
 
-package edu.uconn.kdCalcdata;
+package edu.uconn.kdCalc.data;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -14,7 +14,7 @@
 * i.e. is it proton then carbon, or carbon then proton.
 */
 
-package edu.uconn.kdCalcdata;
+package edu.uconn.kdCalc.data;
 
 import java.io.IOException;
 import java.nio.file.Files;
