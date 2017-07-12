@@ -75,43 +75,6 @@ public abstract class AbsFactory
         return dataSet;
     }    
     
-    public TitrationPoint makeTitrationPoint(Scanner scanner, double ligandConc,
-        double receptorConc, boolean resonanceReversal)
-    {
-        final Resonance[] twoCoordinates = makeTwoResonances(scanner, resonanceReversal);
-
-        final TitrationPoint point = makeSpecificTypeOfPoint(ligandConc, receptorConc, 
-                twoCoordinates[0], twoCoordinates[1]);
-
-        return point;
-    }
-    
-    // override in subclasses to create correct Resonance
-    public Resonance[] makeTwoResonances(Scanner scanner, boolean resonanceReversal)
-    {
-       final Resonance[] twoResonances = new Resonance[2];
-       
-       if(resonanceReversal == false)
-       {
-           twoResonances[0] = AmideNitrogen.validateAndCreate(scanner.nextDouble());
-           twoResonances[1] = AmideProton.validateAndCreate(scanner.nextDouble());
-       }
-       else if (resonanceReversal == true)
-       {
-           twoResonances[1] = AmideProton.validateAndCreate(scanner.nextDouble());
-           twoResonances[0] = AmideNitrogen.validateAndCreate(scanner.nextDouble()); 
-       }
-       
-       return twoResonances;   
-    }
-    
-    public abstract Resonance getFirstSpecificResonance(Scanner scanner);
-    
-    public abstract Resonance getSecondSpecificResonance(Scanner scanner);
-    
-    public abstract TitrationPoint makeSpecificTypeOfPoint(double ligandConc, double receptorConc, 
-                Resonance firstCoordinate, Resonance secondCoordinate);
-
     private List<Scanner> makeScannersFromPaths(List<Path> paths)
     {
         final List<Scanner> scanners = new ArrayList<>();
@@ -131,6 +94,45 @@ public abstract class AbsFactory
         return scanners;
     }
     
+    public TitrationPoint makeTitrationPoint(Scanner scanner, double ligandConc,
+        double receptorConc, boolean resonanceReversal)
+    {
+        final Resonance[] twoCoordinates = makeTwoResonances(scanner, resonanceReversal);
+
+        final TitrationPoint point = makeSpecificTypeOfPoint(ligandConc, receptorConc, 
+                twoCoordinates[0], twoCoordinates[1]);
+
+        return point;
+    }
+    
+    public Resonance[] makeTwoResonances(Scanner scanner, boolean resonanceReversal)
+    {
+       final Resonance[] twoResonances = new Resonance[2];
+       
+       if(resonanceReversal == false)
+       {
+           twoResonances[0] = getFirstSpecificResonance(scanner);
+           twoResonances[1] = getSecondSpecificResonance(scanner);
+       }
+       else if (resonanceReversal == true)
+       {
+           twoResonances[1] = getSecondSpecificResonance(scanner);
+           twoResonances[0] = getFirstSpecificResonance(scanner); 
+       }
+       
+       return twoResonances;   
+    }
+    
+    // delegates creation of amide nitrogen or methyl carbon resonances to subclass
+    public abstract Resonance getFirstSpecificResonance(Scanner scanner);
+    
+    // delegates create of methyl or amide proton resonances to sublass
+    public abstract Resonance getSecondSpecificResonance(Scanner scanner);
+    
+    // delegates creation of methyl or amide titration point to subclass
+    public abstract TitrationPoint makeSpecificTypeOfPoint(double ligandConc, double receptorConc, 
+                Resonance firstCoordinate, Resonance secondCoordinate);
+
     private void closeFiles(List<Scanner> scanners)
     {
         scanners.stream()
