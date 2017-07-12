@@ -7,36 +7,21 @@ public class MethylCarbonProtonFactory extends AbsFactory
 {
 
     @Override
-    public Resonance[] makeTwoResonances(Scanner scanner, boolean resonanceReversal) 
+    public Resonance getFirstSpecificResonance(Scanner scanner)
     {
-       final Resonance[] twoResonances = new Resonance[2];
-       
-       if(resonanceReversal == false)
-       {
-           twoResonances[0] = MethylCarbon.validateAndCreate(scanner.nextDouble());
-           twoResonances[1] = MethylProton.validateAndCreate(scanner.nextDouble());
-       }
-       else if (resonanceReversal == true)
-       {
-           twoResonances[1] = MethylProton.validateAndCreate(scanner.nextDouble());
-           twoResonances[0] = MethylCarbon.validateAndCreate(scanner.nextDouble()); 
-       }
-       
-       return twoResonances;   
+        return MethylCarbon.validateAndCreate(scanner.nextDouble());
     }
-
     @Override
-    public TitrationPoint makeTitrationPoint(Scanner scanner, double ligandConc, 
-        double receptorConc, boolean resonanceReversal) 
+    public Resonance getSecondSpecificResonance(Scanner scanner)
     {
-        Resonance[] twoCoordinates = makeTwoResonances(scanner, resonanceReversal);
-
-        TitrationPoint point = MethylCarbonProtonTitrationPoint.validateAndCreate(ligandConc, receptorConc, 
-                twoCoordinates[0], twoCoordinates[1]);
-
-        return point;
+        return MethylProton.validateAndCreate(scanner.nextDouble());
     }
-
-
-
+    
+    @Override
+    public TitrationPoint makeSpecificTypeOfPoint(double ligandConc, double receptorConc, 
+                Resonance firstCoordinate, Resonance secondCoordinate)
+    {
+        return MethylCarbonProtonTitrationPoint.validateAndCreate(ligandConc, receptorConc, 
+                firstCoordinate, secondCoordinate);
+    }
 }

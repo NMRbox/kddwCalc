@@ -45,12 +45,17 @@ public abstract class AbsFactory
         final List<Scanner> scanners = makeScannersFromPaths(dataObject.getDataFiles());
         
         // iterate through the files and concentrations and group them
-        // as long as there is more data in the first file.
+        //    as long as there is more data in the first file.
+        // each iteration of the while loop creates a full titration curve
+        //    for a single residue
         while(scanners.get(0).hasNext())
         {
+       
             final Titration titration = new Titration(dataObject.getMultiplier());
             
-            // each iteration of for loop creates and titration curve for a single residue
+            // each iteration of for loop adds a single point to the titration.
+            // the control variable is the number of data files, which is the 
+            //   number of individial titraiton points collected
             for(int ctr = 0; ctr < dataObject.getDataFiles().size(); ctr++)
             {
                 TitrationPoint point = makeTitrationPoint(scanners.get(ctr), 
@@ -66,15 +71,45 @@ public abstract class AbsFactory
         closeFiles(scanners);
 
         return dataSet;
+    }    
+    
+    public TitrationPoint makeTitrationPoint(Scanner scanner, double ligandConc,
+        double receptorConc, boolean resonanceReversal)
+    {
+        final Resonance[] twoCoordinates = makeTwoResonances(scanner, resonanceReversal);
+
+        final TitrationPoint point = makeSpecificTypeOfPoint(ligandConc, receptorConc, 
+                twoCoordinates[0], twoCoordinates[1]);
+
+        return point;
     }
     
     // override in subclasses to create correct Resonance
-    public abstract Resonance[] makeTwoResonances(Scanner scanner, boolean resonanceReversal);
+    public Resonance[] makeTwoResonances(Scanner scanner, boolean resonanceReversal)
+    {
+       final Resonance[] twoResonances = new Resonance[2];
+       
+       if(resonanceReversal == false)
+       {
+           twoResonances[0] = AmideNitrogen.validateAndCreate(scanner.nextDouble());
+           twoResonances[1] = AmideProton.validateAndCreate(scanner.nextDouble());
+       }
+       else if (resonanceReversal == true)
+       {
+           twoResonances[1] = AmideProton.validateAndCreate(scanner.nextDouble());
+           twoResonances[0] = AmideNitrogen.validateAndCreate(scanner.nextDouble()); 
+       }
+       
+       return twoResonances;   
+    }
     
-    public abstract TitrationPoint makeTitrationPoint(Scanner scanner, double ligandConc,
-        double receptorConc, boolean resonanceReversal);
+    public abstract Resonance getFirstSpecificResonance(Scanner scanner);
     
+    public abstract Resonance getSecondSpecificResonance(Scanner scanner);
     
+    public abstract TitrationPoint makeSpecificTypeOfPoint(double ligandConc, double receptorConc, 
+                Resonance firstCoordinate, Resonance secondCoordinate);
+
     private List<Scanner> makeScannersFromPaths(List<Path> paths)
     {
         final List<Scanner> scanners = new ArrayList<>();
