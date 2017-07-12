@@ -44,10 +44,13 @@ public abstract class AbsFactory
         // open files by getting a List<Scanner> from the List<Path>
         final List<Scanner> scanners = makeScannersFromPaths(dataObject.getDataFiles());
         
+        // iterate through the files and concentrations and group them
+        // as long as there is more data in the first file.
         while(scanners.get(0).hasNext())
         {
             final Titration titration = new Titration(dataObject.getMultiplier());
             
+            // each iteration of for loop creates and titration curve for a single residue
             for(int ctr = 0; ctr < dataObject.getDataFiles().size(); ctr++)
             {
                 TitrationPoint point = makeTitrationPoint(scanners.get(ctr), 

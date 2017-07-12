@@ -121,19 +121,17 @@ public class InputGUIController implements Initializable
     private final List<Double> ligandConcList = new ArrayList<>();
     private final List<Double> receptorConcList = new ArrayList<>();
 
-    ObservableList<String> listOfSpectra = 
-        FXCollections.observableArrayList("1H-15N HSQC", "1H-13C methyl HMQC");
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) 
     {
-        typeOfTitration.setItems(listOfSpectra);
+        typeOfTitration.setItems(FXCollections.observableArrayList("1H-15N HSQC", "1H-13C methyl HMQC"));
         resonanceOrderSelector.setItems(FXCollections.observableArrayList("Please select type of spectrum first"));
         
-        addChoosersToList();
+        addChoosersToList(); // create the List<Button>, these are pressed to bring up file chooser for data
         addLigandConcTextFieldsToList();  // create the List<TextField>
         addReceptorConcTextFieldsToList();  // also creates List<TextField>
-        addFilesToList();
+        addFilesToList();  // create List<File>
+        createListPathFromListFile();
     }    
     
     public void typeOfTitrationSelected(ActionEvent event)
@@ -145,7 +143,7 @@ public class InputGUIController implements Initializable
             resonanceOrderSelector.setItems(FXCollections.observableArrayList("Carbon Proton", "Proton Carbon"));
     }
     
-    public void addChoosersToList()
+    private void addChoosersToList()
     {
         chooserButtonList.add(chooser1);
         chooserButtonList.add(chooser2);
@@ -164,7 +162,7 @@ public class InputGUIController implements Initializable
         chooserButtonList.add(chooser15);  
     }
     
-    public void addLigandConcTextFieldsToList()
+    private void addLigandConcTextFieldsToList()
     {
         ligandConcTextFieldList.add(ligandConc1);
         ligandConcTextFieldList.add(ligandConc2);
@@ -183,7 +181,7 @@ public class InputGUIController implements Initializable
         ligandConcTextFieldList.add(ligandConc15);
     }
     
-    public void addReceptorConcTextFieldsToList()
+    private void addReceptorConcTextFieldsToList()
     {
         receptorConcTextFieldList.add(receptorConc1);
         receptorConcTextFieldList.add(receptorConc2);
@@ -202,7 +200,7 @@ public class InputGUIController implements Initializable
         receptorConcTextFieldList.add(receptorConc15);   
     }
     
-    public void addFilesToList()
+    private void addFilesToList()
     {
         fileList.add(selection1);
         fileList.add(selection2);
@@ -219,6 +217,11 @@ public class InputGUIController implements Initializable
         fileList.add(selection13);
         fileList.add(selection14);
         fileList.add(selection15); 
+    }
+    
+    private void createListPathFromListFile()
+    {
+        
     }
     
     public void Button1pressed(ActionEvent event)
@@ -359,115 +362,7 @@ public class InputGUIController implements Initializable
     // 
     public void executeButtonPressed(ActionEvent event)
     {
-        if (selection1 != null)
-        {
-            fileList.add(selection1.toPath());
-            ligandConcList.add(Double.valueOf(receptorConc1.getText()));
-            receptorConcList.add(Double.valueOf(ligandConc1.getText()));
-        }
-        
-        if (selection2 != null)
-        {
-            fileList.add(selection2.toPath());
-            ligandConcList.add(Double.valueOf(receptorConc2.getText()));
-            receptorConcList.add(Double.valueOf(ligandConc2.getText()));
-        }
-        
-        if (selection3 != null)
-        {
-            fileList.add(selection3.toPath());
-            ligandConcList.add(Double.valueOf(receptorConc3.getText()));
-            receptorConcList.add(Double.valueOf(ligandConc3.getText()));
-        }
-        
-        if (selection4 != null)
-        {
-            fileList.add(selection4.toPath());
-            ligandConcList.add(Double.valueOf(receptorConc4.getText()));
-            receptorConcList.add(Double.valueOf(ligandConc4.getText()));
-        }
-        
-        if (selection5 != null)
-        {
-            fileList.add(selection5.toPath());
-            ligandConcList.add(Double.valueOf(receptorConc5.getText()));
-            receptorConcList.add(Double.valueOf(ligandConc5.getText()));
-        }
-        
-        if (selection6 != null)
-        {
-            fileList.add(selection6.toPath());
-            ligandConcList.add(Double.valueOf(receptorConc6.getText()));
-            receptorConcList.add(Double.valueOf(ligandConc6.getText()));
-        }
-        
-        if (selection7 != null)
-        {
-            fileList.add(selection7.toPath());
-            ligandConcList.add(Double.valueOf(receptorConc7.getText()));
-            receptorConcList.add(Double.valueOf(ligandConc7.getText()));
-        }
-        
-        if (selection8 != null)
-        {
-            fileList.add(selection8.toPath());
-            ligandConcList.add(Double.valueOf(receptorConc8.getText()));
-            receptorConcList.add(Double.valueOf(ligandConc8.getText()));
-        }
-        
-        if (selection9 != null)
-        {
-            fileList.add(selection9.toPath());
-            ligandConcList.add(Double.valueOf(receptorConc9.getText()));
-            receptorConcList.add(Double.valueOf(ligandConc9.getText()));
-        }
-        
-        if (selection10 != null)
-        {
-            fileList.add(selection10.toPath());
-            ligandConcList.add(Double.valueOf(receptorConc10.getText()));
-            receptorConcList.add(Double.valueOf(ligandConc10.getText()));
-        }
-        
-        if (selection11 != null)
-        {
-            fileList.add(selection11.toPath());
-            ligandConcList.add(Double.valueOf(receptorConc11.getText()));
-            receptorConcList.add(Double.valueOf(ligandConc11.getText()));
-        }
-        
-        if (selection12 != null)
-        {
-            fileList.add(selection12.toPath());
-            ligandConcList.add(Double.valueOf(receptorConc12.getText()));
-            receptorConcList.add(Double.valueOf(ligandConc12.getText()));
-        }
-        
-        if (selection13 != null)
-        {
-            fileList.add(selection13.toPath());
-            ligandConcList.add(Double.valueOf(receptorConc13.getText()));
-            receptorConcList.add(Double.valueOf(ligandConc13.getText()));
-        }
-        
-        if (selection14 != null)
-        {
-            fileList.add(selection14.toPath());
-            ligandConcList.add(Double.valueOf(receptorConc14.getText()));
-            receptorConcList.add(Double.valueOf(ligandConc14.getText()));
-        }
-        
-        if (selection15 != null)
-        {
-            fileList.add(selection15.toPath());
-            ligandConcList.add(Double.valueOf(receptorConc15.getText()));
-            receptorConcList.add(Double.valueOf(ligandConc15.getText()));
-        }
-        
         
     }
-    
-    
-    
-    
-}
+   
+} // end class InputGUIController
