@@ -33,10 +33,12 @@ public abstract class AbsFactory
 {
     // no-argument default constructor is only construtor
     
-    // method that data an object of class RawData (comes from user) and parses files.
+    // essentially the factories take the data from the user and break it up 
+    //     into individual titrations by residue. titration curve for a single 
+    //     residue contains all the information needed to calculate kd and dw
     // 
-    // this is meant to use the Template method pattern, where creation of each resonance is
-    // overriden in a subclass
+    // this is meant to use the Template method pattern, where creation of each point and resonance is
+    //   delated to overriden method in a subclass
     public final TitrationSeries analyzeDataFiles(RawData dataObject)
     {
         final TitrationSeries dataSet = new TitrationSeries();
@@ -128,7 +130,6 @@ public abstract class AbsFactory
         
         return scanners;
     }
-    
     
     private void closeFiles(List<Scanner> scanners)
     {
