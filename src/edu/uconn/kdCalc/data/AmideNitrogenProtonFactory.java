@@ -5,12 +5,12 @@ import java.util.Scanner;
 
 public class AmideNitrogenProtonFactory extends AbsFactory
 {
-
     @Override
     public Resonance getFirstSpecificResonance(Scanner scanner)
     {
         return AmideNitrogen.validateAndCreate(scanner.nextDouble());
     }
+    
     @Override
     public Resonance getSecondSpecificResonance(Scanner scanner)
     {
@@ -24,5 +24,4 @@ public class AmideNitrogenProtonFactory extends AbsFactory
         return AmideNitrogenProtonTitrationPoint.validateAndCreate(ligandConc, receptorConc, 
                 firstCoordinate, secondCoordinate);
     }
-
 }

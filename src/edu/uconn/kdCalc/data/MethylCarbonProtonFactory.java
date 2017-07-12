@@ -5,12 +5,12 @@ import java.util.Scanner;
 
 public class MethylCarbonProtonFactory extends AbsFactory
 {
-
     @Override
     public Resonance getFirstSpecificResonance(Scanner scanner)
     {
         return MethylCarbon.validateAndCreate(scanner.nextDouble());
     }
+    
     @Override
     public Resonance getSecondSpecificResonance(Scanner scanner)
     {

@@ -11,6 +11,10 @@
 *
 * edited by Alex Ri on 170704 and 170706 to use a Template method to create the dataset.
 *
+* edited by Alex R on 170712 to remove duplicate code for creating point and resonances 
+*     from the subclass by making abstract methods in this class and delegating specifics
+*     to overriden methods in subclasses
+*
 *
 *  class RawData has: 
 *     private final ArrayList<Path> dataFiles;
