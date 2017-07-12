@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,7 +31,7 @@ public class InputGUIController implements Initializable
 {   
     @FXML private ComboBox<String> typeOfTitration; 
     @FXML private ComboBox<String> resonanceOrderSelector;
-    @FXML TextField multiplier;
+    @FXML TextField multiplierTextField;
     
     @FXML private Button chooser1;
     @FXML private Button chooser2;
@@ -131,16 +132,22 @@ public class InputGUIController implements Initializable
         addLigandConcTextFieldsToList();  // create the List<TextField>
         addReceptorConcTextFieldsToList();  // also creates List<TextField>
         addFilesToList();  // create List<File>
-        createListPathFromListFile();
+        //createListPathFromListFile();
     }    
     
     public void typeOfTitrationSelected(ActionEvent event)
     {
         if(typeOfTitration.getValue().equals("1H-15N HSQC"))
+        {
             resonanceOrderSelector.setItems(FXCollections.observableArrayList("Nitrogen Proton", "Proton Nitrogen"));
+            multiplierTextField.setText("0.1");
+        }
         
         if(typeOfTitration.getValue().equals("1H-13C methyl HMQC"))
+        {
             resonanceOrderSelector.setItems(FXCollections.observableArrayList("Carbon Proton", "Proton Carbon"));
+            multiplierTextField.setText("0.25");
+        }
     }
     
     private void addChoosersToList()
@@ -219,11 +226,14 @@ public class InputGUIController implements Initializable
         fileList.add(selection15); 
     }
     
+    /*
     private void createListPathFromListFile()
     {
-        
+        pathList.addAll(fileList.stream()
+                                .map(File::toPath)
+                                .collect(Collectors.toList()));
     }
-    
+    */
     public void Button1pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
