@@ -135,6 +135,8 @@ public class InputGUIController implements Initializable
         //createListPathFromListFile();
     }    
     
+    // this code is coupled to specific titration information. this must be updated if new types of tirations
+    //     are added
     public void typeOfTitrationSelected(ActionEvent event)
     {
         if(typeOfTitration.getValue().equals("1H-15N HSQC"))
