@@ -130,7 +130,7 @@
       <Button mnemonicParsing="false" text="Save" GridPane.columnIndex="3" GridPane.rowIndex="20" />
       <Button mnemonicParsing="false" text="Clear form" GridPane.rowIndex="3" />
       <ComboBox fx:id="resonanceOrderSelector" prefWidth="150.0" promptText="Select order" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-      <Label text="Label" GridPane.columnIndex="4" GridPane.rowIndex="19" />
+      <Label fx:id="errorLabel" GridPane.columnIndex="4" GridPane.columnSpan="2147483647" GridPane.rowIndex="19" />
       <Label text="Multiplier" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
       <TextField fx:id="multiplierTextField" promptText="Enter multiplier" GridPane.columnIndex="5" GridPane.rowIndex="1" />
    </children>

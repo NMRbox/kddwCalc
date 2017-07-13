@@ -81,22 +81,6 @@ public class InputGUIController implements Initializable
     @FXML TextField ligandConc14;
     @FXML TextField ligandConc15;
     
-    private File selection1 = null;
-    private File selection2 = null;
-    private File selection3 = null;
-    private File selection4 = null;
-    private File selection5 = null;
-    private File selection6 = null;
-    private File selection7 = null;
-    private File selection8 = null;
-    private File selection9 = null;
-    private File selection10 = null;
-    private File selection11 = null;
-    private File selection12 = null;
-    private File selection13 = null;
-    private File selection14 = null;
-    private File selection15 = null; 
-    
     @FXML private TextField fileName1;    
     @FXML private TextField fileName2;   
     @FXML private TextField fileName3;   
@@ -113,11 +97,13 @@ public class InputGUIController implements Initializable
     @FXML private TextField fileName14;  
     @FXML private TextField fileName15;
     
-    private final List<Button> chooserButtonList = new ArrayList<>();
-    private final List<File> fileList = new ArrayList<>();
-    private final List<Path> pathList = new ArrayList<>();
-    private final List<TextField> ligandConcTextFieldList = new ArrayList<>();
-    private final List<TextField> receptorConcTextFieldList = new ArrayList<>();
+    @FXML private Label errorLabel;
+    
+    private final List<Button> chooserButtonList = new ArrayList<>(15);
+    private final List<File> fileList = new ArrayList<>(15);
+    private final List<Path> pathList = new ArrayList<>(15);
+    private final List<TextField> ligandConcTextFieldList = new ArrayList<>(15);
+    private final List<TextField> receptorConcTextFieldList = new ArrayList<>(15);
     
     private final List<Double> ligandConcList = new ArrayList<>();
     private final List<Double> receptorConcList = new ArrayList<>();
@@ -131,9 +117,86 @@ public class InputGUIController implements Initializable
         addChoosersToList(); // create the List<Button>, these are pressed to bring up file chooser for data
         addLigandConcTextFieldsToList();  // create the List<TextField>
         addReceptorConcTextFieldsToList();  // also creates List<TextField>
-        addFilesToList();  // create List<File>
-        //createListPathFromListFile();
-    }    
+        //addFilesToList();  // create List<File>
+        
+    } 
+    
+    public void executeButtonPressed(ActionEvent event)
+    {   
+        removeNullFilesAndMakePaths();
+        
+        makeSureConcsCanBeParsed();
+        
+        makeSureEqualNumFilesAndConcs();
+        
+        
+        
+        
+        
+        
+    }
+    
+    private void removeNullFilesAndMakePaths()
+    {
+        pathList.addAll(fileList.stream()
+                                .filter(file -> file != null)
+                                .map(File::toPath)
+                                .collect(Collectors.toList()));
+    }
+    
+    private void convertTextFieldsToConcsAndTruncate()
+    {
+        ligandConcList.addAll(ligandConcTextFieldList.stream()
+                                                 .map(TextField::getText) // get the string from each text field
+                                                 .filter(text -> !(text.equals(""))) // deletes blank text fields
+                                                 .map(Double::valueOf)      // turn string to a double
+                                                 .collect(Collectors.toList()));
+        receptorConcList.addAll(receptorConcTextFieldList.stream()
+                                                 .map(TextField::getText) // get the string from each text field
+                                                 .filter(text -> !(text.equals(""))) // deletes blank text fields
+                                                 .map(Double::valueOf)      // turn string to a double
+                                                 .collect(Collectors.toList()));  
+    }
+    
+    private void makeSureConcsCanBeParsed()
+    {
+        // if text fields have something that cant be parsed, this will catch that
+        //    and give an error message in a label that printed to user
+        try
+        {
+            convertTextFieldsToConcsAndTruncate();
+        }
+        catch(NumberFormatException e)
+        {
+            System.err.println(e);
+            errorLabel.setText("Conc cant be parsed");
+        }
+    }
+    
+    private void makeSureEqualNumFilesAndConcs()
+    {
+        try
+        {
+            if (pathList.size() != ligandConcList.size()
+              ||pathList.size() != receptorConcList.size()
+              ||ligandConcList.size() != receptorConcList.size())
+            {
+                throw new IllegalArgumentException();
+            }
+        }
+        catch(IllegalArgumentException e)
+        {
+            System.err.println("Dont have same number of files and concentrations");
+            errorLabel.setText("Dif number of files and concs");
+            
+            // reset some of the objects
+            ligandConcList.clear();
+            receptorConcList.clear();
+            pathList.clear();
+            
+        }
+    }
+   
     
     // this code is coupled to specific titration information. this must be updated if new types of tirations
     //     are added
@@ -209,172 +272,140 @@ public class InputGUIController implements Initializable
         receptorConcTextFieldList.add(receptorConc15);   
     }
     
-    private void addFilesToList()
-    {
-        fileList.add(selection1);
-        fileList.add(selection2);
-        fileList.add(selection3);
-        fileList.add(selection4);
-        fileList.add(selection5);
-        fileList.add(selection6);
-        fileList.add(selection7);
-        fileList.add(selection8);
-        fileList.add(selection9);
-        fileList.add(selection10);
-        fileList.add(selection11);
-        fileList.add(selection12);
-        fileList.add(selection13);
-        fileList.add(selection14);
-        fileList.add(selection15); 
-    }
-    
-    /*
-    private void createListPathFromListFile()
-    {
-        pathList.addAll(fileList.stream()
-                                .map(File::toPath)
-                                .collect(Collectors.toList()));
-    }
-    */
     public void Button1pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        selection1 = chooser.showOpenDialog(null);
+        fileList.add(0, chooser.showOpenDialog(null));
         
-        if(selection1 != null)
-            fileName1.setText(selection1.getName());
+        if(fileList.get(0) != null)
+            fileName1.setText(fileList.get(0).getName());
     }
     
     public void Button2pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        selection2 = chooser.showOpenDialog(null);
+        fileList.add(1, chooser.showOpenDialog(null));
         
-        if(selection2 != null)
-            fileName2.setText(selection2.getName());
+        if(fileList.get(1) != null)
+            fileName1.setText(fileList.get(1).getName());
     }
     
     public void Button3pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        selection3 = chooser.showOpenDialog(null);
+        fileList.add(2, chooser.showOpenDialog(null));
         
-        if(selection3 != null)
-            fileName3.setText(selection3.getName());
+        if(fileList.get(2) != null)
+            fileName1.setText(fileList.get(2).getName());
     }
     
     public void Button4pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        selection4 = chooser.showOpenDialog(null);
+        fileList.add(3, chooser.showOpenDialog(null));
         
-        if(selection4 != null)
-            fileName4.setText(selection4.getName());
+        if(fileList.get(3) != null)
+            fileName1.setText(fileList.get(3).getName());
     }
     
     public void Button5pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        selection5 = chooser.showOpenDialog(null);
+        fileList.add(4, chooser.showOpenDialog(null));
         
-        if(selection5 != null)
-            fileName5.setText(selection5.getName());
+        if(fileList.get(4) != null)
+            fileName1.setText(fileList.get(4).getName());
     }
     
     public void Button6pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        selection6 = chooser.showOpenDialog(null);
+        fileList.add(5, chooser.showOpenDialog(null));
         
-        if(selection6 != null)
-            fileName6.setText(selection6.getName());
+        if(fileList.get(5) != null)
+            fileName1.setText(fileList.get(5).getName());
     }
     
     public void Button7pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        selection7 = chooser.showOpenDialog(null);
+        fileList.add(6, chooser.showOpenDialog(null));
         
-        if(selection7 != null)
-            fileName7.setText(selection7.getName());
+        if(fileList.get(6) != null)
+            fileName1.setText(fileList.get(6).getName());
     }
     
     public void Button8pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        selection8 = chooser.showOpenDialog(null);
+        fileList.add(7, chooser.showOpenDialog(null));
         
-        if(selection8 != null)
-            fileName8.setText(selection8.getName());
+        if(fileList.get(7) != null)
+            fileName1.setText(fileList.get(7).getName());
     }
     
     public void Button9pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        selection9 = chooser.showOpenDialog(null);
+        fileList.add(8, chooser.showOpenDialog(null));
         
-        if(selection9 != null)
-            fileName9.setText(selection9.getName());
+        if(fileList.get(8) != null)
+            fileName1.setText(fileList.get(8).getName());
     }
     
     public void Button10pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        selection10 = chooser.showOpenDialog(null);
+        fileList.add(9, chooser.showOpenDialog(null));
         
-        if(selection10 != null)
-            fileName10.setText(selection10.getName());
+        if(fileList.get(9) != null)
+            fileName1.setText(fileList.get(9).getName());
     }
     
     public void Button11pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        selection11 = chooser.showOpenDialog(null);
+        fileList.add(10, chooser.showOpenDialog(null));
         
-        if(selection11 != null)
-            fileName11.setText(selection11.getName());
+        if(fileList.get(10) != null)
+            fileName1.setText(fileList.get(10).getName());
     }
     
     public void Button12pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        selection12 = chooser.showOpenDialog(null);
+        fileList.add(11, chooser.showOpenDialog(null));
         
-        if(selection12 != null)
-            fileName12.setText(selection12.getName());
+        if(fileList.get(11) != null)
+            fileName1.setText(fileList.get(11).getName());
     }
     
     public void Button13pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        selection13 = chooser.showOpenDialog(null);
+        fileList.add(12, chooser.showOpenDialog(null));
         
-        if(selection13 != null)
-            fileName13.setText(selection13.getName());
+        if(fileList.get(12) != null)
+            fileName1.setText(fileList.get(12).getName());
     }
     
     public void Button14pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        selection14 = chooser.showOpenDialog(null);
+        fileList.add(13, chooser.showOpenDialog(null));
         
-        if(selection14 != null)
-            fileName14.setText(selection14.getName());
+        if(fileList.get(13) != null)
+            fileName1.setText(fileList.get(13).getName());
     }
     
     public void Button15pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        selection15 = chooser.showOpenDialog(null);
+        fileList.add(14, chooser.showOpenDialog(null));
         
-        if(selection15 != null)
-            fileName15.setText(selection15.getName());
+        if(fileList.get(14) != null)
+            fileName1.setText(fileList.get(14).getName());
     }
     
-    // 
-    public void executeButtonPressed(ActionEvent event)
-    {
-        
-    }
-   
+    
 } // end class InputGUIController
