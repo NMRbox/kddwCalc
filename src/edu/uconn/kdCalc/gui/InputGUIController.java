@@ -123,17 +123,24 @@ public class InputGUIController implements Initializable
     
     public void executeButtonPressed(ActionEvent event)
     {   
+        readUserDataAndRunValidation();
+        
+        
+        
+        
+        
+        
+        
+        
+    }
+    
+    private void readUserDataAndRunValidation()
+    {
         removeNullFilesAndMakePaths();
         
         makeSureConcsCanBeParsed();
         
         makeSureEqualNumFilesAndConcs();
-        
-        
-        
-        
-        
-        
     }
     
     private void removeNullFilesAndMakePaths()
@@ -278,7 +285,11 @@ public class InputGUIController implements Initializable
         fileList.add(0, chooser.showOpenDialog(null));
         
         if(fileList.get(0) != null)
+        {
             fileName1.setText(fileList.get(0).getName());
+            chooser2.setDisable(false);
+            receptorConc1.setEditable(true);
+        }
     }
     
     public void Button2pressed(ActionEvent event)
@@ -287,7 +298,12 @@ public class InputGUIController implements Initializable
         fileList.add(1, chooser.showOpenDialog(null));
         
         if(fileList.get(1) != null)
-            fileName1.setText(fileList.get(1).getName());
+        {
+            fileName2.setText(fileList.get(1).getName());
+            chooser3.setDisable(false);
+            receptorConc2.setEditable(true);
+            ligandConc2.setEditable(true);
+        }
     }
     
     public void Button3pressed(ActionEvent event)
@@ -296,7 +312,12 @@ public class InputGUIController implements Initializable
         fileList.add(2, chooser.showOpenDialog(null));
         
         if(fileList.get(2) != null)
-            fileName1.setText(fileList.get(2).getName());
+        {
+            fileName3.setText(fileList.get(2).getName());
+            chooser4.setDisable(false);
+            receptorConc3.setEditable(true);
+            ligandConc3.setEditable(true);
+        }
     }
     
     public void Button4pressed(ActionEvent event)
@@ -305,7 +326,12 @@ public class InputGUIController implements Initializable
         fileList.add(3, chooser.showOpenDialog(null));
         
         if(fileList.get(3) != null)
-            fileName1.setText(fileList.get(3).getName());
+        {
+            fileName4.setText(fileList.get(3).getName());
+            chooser5.setDisable(false);
+            receptorConc4.setEditable(true);
+            ligandConc4.setEditable(true);
+        }
     }
     
     public void Button5pressed(ActionEvent event)
@@ -314,7 +340,12 @@ public class InputGUIController implements Initializable
         fileList.add(4, chooser.showOpenDialog(null));
         
         if(fileList.get(4) != null)
-            fileName1.setText(fileList.get(4).getName());
+        {
+            fileName5.setText(fileList.get(4).getName());
+            chooser6.setDisable(false);
+            receptorConc5.setEditable(true);
+            ligandConc5.setEditable(true);
+        }
     }
     
     public void Button6pressed(ActionEvent event)
@@ -323,7 +354,12 @@ public class InputGUIController implements Initializable
         fileList.add(5, chooser.showOpenDialog(null));
         
         if(fileList.get(5) != null)
-            fileName1.setText(fileList.get(5).getName());
+        {
+            fileName6.setText(fileList.get(5).getName());
+            chooser7.setDisable(false);
+            receptorConc6.setEditable(true);
+            ligandConc6.setEditable(true);
+        }
     }
     
     public void Button7pressed(ActionEvent event)
@@ -332,7 +368,12 @@ public class InputGUIController implements Initializable
         fileList.add(6, chooser.showOpenDialog(null));
         
         if(fileList.get(6) != null)
-            fileName1.setText(fileList.get(6).getName());
+        {
+            fileName7.setText(fileList.get(6).getName());
+            chooser8.setDisable(false);
+            receptorConc7.setEditable(true);
+            ligandConc7.setEditable(true);
+        }
     }
     
     public void Button8pressed(ActionEvent event)
@@ -341,7 +382,12 @@ public class InputGUIController implements Initializable
         fileList.add(7, chooser.showOpenDialog(null));
         
         if(fileList.get(7) != null)
-            fileName1.setText(fileList.get(7).getName());
+        {
+            fileName8.setText(fileList.get(7).getName());
+            chooser9.setDisable(false);
+            receptorConc8.setEditable(true);
+            ligandConc8.setEditable(true);
+        }
     }
     
     public void Button9pressed(ActionEvent event)
@@ -350,7 +396,12 @@ public class InputGUIController implements Initializable
         fileList.add(8, chooser.showOpenDialog(null));
         
         if(fileList.get(8) != null)
-            fileName1.setText(fileList.get(8).getName());
+        {
+            fileName9.setText(fileList.get(8).getName());
+            chooser10.setDisable(false);
+            receptorConc9.setEditable(true);
+            ligandConc9.setEditable(true);
+        }
     }
     
     public void Button10pressed(ActionEvent event)
@@ -359,7 +410,12 @@ public class InputGUIController implements Initializable
         fileList.add(9, chooser.showOpenDialog(null));
         
         if(fileList.get(9) != null)
-            fileName1.setText(fileList.get(9).getName());
+        {
+            fileName10.setText(fileList.get(9).getName());
+            chooser11.setDisable(false);
+            receptorConc10.setEditable(true);
+            ligandConc10.setEditable(true);
+        }
     }
     
     public void Button11pressed(ActionEvent event)
@@ -368,7 +424,12 @@ public class InputGUIController implements Initializable
         fileList.add(10, chooser.showOpenDialog(null));
         
         if(fileList.get(10) != null)
-            fileName1.setText(fileList.get(10).getName());
+        {
+            fileName11.setText(fileList.get(10).getName());
+            chooser12.setDisable(false);
+            receptorConc11.setEditable(true);
+            ligandConc11.setEditable(true);
+        }
     }
     
     public void Button12pressed(ActionEvent event)
@@ -377,7 +438,12 @@ public class InputGUIController implements Initializable
         fileList.add(11, chooser.showOpenDialog(null));
         
         if(fileList.get(11) != null)
-            fileName1.setText(fileList.get(11).getName());
+        {
+            fileName12.setText(fileList.get(11).getName());
+            chooser13.setDisable(false);
+            receptorConc12.setEditable(true);
+            ligandConc12.setEditable(true);
+        }
     }
     
     public void Button13pressed(ActionEvent event)
@@ -386,7 +452,12 @@ public class InputGUIController implements Initializable
         fileList.add(12, chooser.showOpenDialog(null));
         
         if(fileList.get(12) != null)
-            fileName1.setText(fileList.get(12).getName());
+        {
+            fileName13.setText(fileList.get(12).getName());
+            chooser14.setDisable(false);
+            receptorConc13.setEditable(true);
+            ligandConc13.setEditable(true);
+        }
     }
     
     public void Button14pressed(ActionEvent event)
@@ -395,7 +466,12 @@ public class InputGUIController implements Initializable
         fileList.add(13, chooser.showOpenDialog(null));
         
         if(fileList.get(13) != null)
-            fileName1.setText(fileList.get(13).getName());
+        {
+            fileName14.setText(fileList.get(13).getName());
+            chooser15.setDisable(false);
+            receptorConc14.setEditable(true);
+            ligandConc14.setEditable(true);
+        }
     }
     
     public void Button15pressed(ActionEvent event)
@@ -404,7 +480,11 @@ public class InputGUIController implements Initializable
         fileList.add(14, chooser.showOpenDialog(null));
         
         if(fileList.get(14) != null)
-            fileName1.setText(fileList.get(14).getName());
+        {
+            fileName15.setText(fileList.get(14).getName());
+            receptorConc15.setEditable(true);
+            ligandConc15.setEditable(true);
+        }
     }
     
     
