@@ -5,10 +5,16 @@
 
 package edu.uconn.kdCalc.gui;
 
+import edu.uconn.kdCalc.data.AbsFactory;
+import edu.uconn.kdCalc.data.FactoryMaker;
+import edu.uconn.kdCalc.data.RawData;
+import edu.uconn.kdCalc.data.TitrationSeries;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -32,6 +38,7 @@ public class InputGUIController implements Initializable
     @FXML private ComboBox<String> typeOfTitration; 
     @FXML private ComboBox<String> resonanceOrderSelector;
     @FXML TextField multiplierTextField;
+    private double multiplier;
     
     @FXML private Button chooser1;
     @FXML private Button chooser2;
@@ -100,13 +107,15 @@ public class InputGUIController implements Initializable
     @FXML private Label errorLabel;
     
     private final List<Button> chooserButtonList = new ArrayList<>(15);
-    private final List<File> fileList = new ArrayList<>(15);
+    private final List<File> fileList = new ArrayList<File>(Arrays.asList(new File[15]));
     private final List<Path> pathList = new ArrayList<>(15);
     private final List<TextField> ligandConcTextFieldList = new ArrayList<>(15);
     private final List<TextField> receptorConcTextFieldList = new ArrayList<>(15);
     
     private final List<Double> ligandConcList = new ArrayList<>();
     private final List<Double> receptorConcList = new ArrayList<>();
+    
+    private boolean resonanceReversal = false;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) 
@@ -117,30 +126,41 @@ public class InputGUIController implements Initializable
         addChoosersToList(); // create the List<Button>, these are pressed to bring up file chooser for data
         addLigandConcTextFieldsToList();  // create the List<TextField>
         addReceptorConcTextFieldsToList();  // also creates List<TextField>
-        //addFilesToList();  // create List<File>
-        
     } 
     
     public void executeButtonPressed(ActionEvent event)
     {   
-        readUserDataAndRunValidation();
+        getPrelimDataAndRunValidation();
         
+        // create factory subclass using the string from the combobox
+        AbsFactory factory = FactoryMaker.createFactory(typeOfTitration.getValue());
         
+        RawData rawDataInstance = createRawDataObject();
         
+        TitrationSeries series = factory.analyzeDataFiles(rawDataInstance);
         
-        
-        
-        
-        
+        series.printTitrationSeries();
+  
     }
     
-    private void readUserDataAndRunValidation()
+    private void getPrelimDataAndRunValidation()
     {
+        makeSureComboBoxesAreSelected();
+        
         removeNullFilesAndMakePaths();
         
         makeSureConcsCanBeParsed();
         
         makeSureEqualNumFilesAndConcs();
+        
+        makeSureMultiplierCanBeParsed();
+        
+        determineResonanceReversal();
+    }
+    
+    private void makeSureComboBoxesAreSelected()
+    {
+        //if(typeOfTitration.getValue())
     }
     
     private void removeNullFilesAndMakePaths()
@@ -202,6 +222,46 @@ public class InputGUIController implements Initializable
             pathList.clear();
             
         }
+    }
+    
+    private void makeSureMultiplierCanBeParsed()
+    {
+        try
+        {
+            multiplier = Double.valueOf(multiplierTextField.getText());
+        }
+        catch(NumberFormatException e)
+        {
+            errorLabel.setText("Multplier can't be parsed");
+        }
+    }
+    
+    private RawData createRawDataObject()
+    {
+        RawData rawDataInstance = null;
+        
+        try
+        {
+            rawDataInstance = RawData.createRawData(pathList, ligandConcList, 
+                receptorConcList, multiplier, resonanceReversal);
+        }
+        catch(IOException e)
+        {
+            
+        }
+        catch(IllegalArgumentException e)
+        {
+            errorLabel.setText("Resonances are out of range. Reversal?");
+        }
+        
+        return rawDataInstance;
+    }
+    
+    private void determineResonanceReversal()
+    {
+        if(resonanceOrderSelector.getValue().equalsIgnoreCase("Proton Nitrogen")
+        || resonanceOrderSelector.getValue().equalsIgnoreCase("Proton Carbon"))
+                resonanceReversal = true;
     }
    
     
@@ -282,7 +342,7 @@ public class InputGUIController implements Initializable
     public void Button1pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        fileList.add(0, chooser.showOpenDialog(null));
+        this.fileList.set(0, chooser.showOpenDialog(null));
         
         if(fileList.get(0) != null)
         {
@@ -295,7 +355,7 @@ public class InputGUIController implements Initializable
     public void Button2pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        fileList.add(1, chooser.showOpenDialog(null));
+        fileList.set(1, chooser.showOpenDialog(null));
         
         if(fileList.get(1) != null)
         {
@@ -309,7 +369,8 @@ public class InputGUIController implements Initializable
     public void Button3pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        fileList.add(2, chooser.showOpenDialog(null));
+        
+        fileList.set(2, chooser.showOpenDialog(null));
         
         if(fileList.get(2) != null)
         {
@@ -323,7 +384,7 @@ public class InputGUIController implements Initializable
     public void Button4pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        fileList.add(3, chooser.showOpenDialog(null));
+        fileList.set(3, chooser.showOpenDialog(null));
         
         if(fileList.get(3) != null)
         {
@@ -337,7 +398,7 @@ public class InputGUIController implements Initializable
     public void Button5pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        fileList.add(4, chooser.showOpenDialog(null));
+        fileList.set(4, chooser.showOpenDialog(null));
         
         if(fileList.get(4) != null)
         {
@@ -351,7 +412,7 @@ public class InputGUIController implements Initializable
     public void Button6pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        fileList.add(5, chooser.showOpenDialog(null));
+        fileList.set(5, chooser.showOpenDialog(null));
         
         if(fileList.get(5) != null)
         {
@@ -365,7 +426,7 @@ public class InputGUIController implements Initializable
     public void Button7pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        fileList.add(6, chooser.showOpenDialog(null));
+        fileList.set(6, chooser.showOpenDialog(null));
         
         if(fileList.get(6) != null)
         {
@@ -379,7 +440,7 @@ public class InputGUIController implements Initializable
     public void Button8pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        fileList.add(7, chooser.showOpenDialog(null));
+        fileList.set(7, chooser.showOpenDialog(null));
         
         if(fileList.get(7) != null)
         {
@@ -393,7 +454,7 @@ public class InputGUIController implements Initializable
     public void Button9pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        fileList.add(8, chooser.showOpenDialog(null));
+        fileList.set(8, chooser.showOpenDialog(null));
         
         if(fileList.get(8) != null)
         {
@@ -407,7 +468,7 @@ public class InputGUIController implements Initializable
     public void Button10pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        fileList.add(9, chooser.showOpenDialog(null));
+        fileList.set(9, chooser.showOpenDialog(null));
         
         if(fileList.get(9) != null)
         {
@@ -421,7 +482,7 @@ public class InputGUIController implements Initializable
     public void Button11pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        fileList.add(10, chooser.showOpenDialog(null));
+        fileList.set(10, chooser.showOpenDialog(null));
         
         if(fileList.get(10) != null)
         {
@@ -435,7 +496,7 @@ public class InputGUIController implements Initializable
     public void Button12pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        fileList.add(11, chooser.showOpenDialog(null));
+        fileList.set(11, chooser.showOpenDialog(null));
         
         if(fileList.get(11) != null)
         {
@@ -449,7 +510,7 @@ public class InputGUIController implements Initializable
     public void Button13pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        fileList.add(12, chooser.showOpenDialog(null));
+        fileList.set(12, chooser.showOpenDialog(null));
         
         if(fileList.get(12) != null)
         {
@@ -463,7 +524,7 @@ public class InputGUIController implements Initializable
     public void Button14pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        fileList.add(13, chooser.showOpenDialog(null));
+        fileList.set(13, chooser.showOpenDialog(null));
         
         if(fileList.get(13) != null)
         {
@@ -477,7 +538,7 @@ public class InputGUIController implements Initializable
     public void Button15pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
-        fileList.add(14, chooser.showOpenDialog(null));
+        fileList.set(14, chooser.showOpenDialog(null));
         
         if(fileList.get(14) != null)
         {
@@ -485,6 +546,11 @@ public class InputGUIController implements Initializable
             receptorConc15.setEditable(true);
             ligandConc15.setEditable(true);
         }
+    }
+    
+    public void clearButtonPressed(ActionEvent event)
+    {
+        
     }
     
     

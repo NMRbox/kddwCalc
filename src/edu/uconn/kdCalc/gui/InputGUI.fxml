@@ -124,7 +124,7 @@
       <Label text="File name" GridPane.columnIndex="3" GridPane.rowIndex="3" />
       <TextArea editable="false" focusTraversable="false" prefHeight="322.0" prefWidth="150.0" text="1) Choose type of&#10;titration &#10;&#10;2) Make sure order&#10;displayed is the&#10;same as order in&#10;data files&#10;&#10;3) Choose files with&#10;the data&#10;&#10;4) Enter [protein]&#10;note: receptor is&#10;the labeled species" wrapText="true" GridPane.rowIndex="6" GridPane.rowSpan="11" />
       <Button mnemonicParsing="false" text="Save" GridPane.columnIndex="3" GridPane.rowIndex="20" />
-      <Button mnemonicParsing="false" text="Clear form" GridPane.rowIndex="3" />
+      <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clearButtonPressed" text="Clear form" GridPane.rowIndex="3" />
       <ComboBox fx:id="resonanceOrderSelector" prefWidth="150.0" promptText="Select order" GridPane.columnIndex="3" GridPane.rowIndex="1" />
       <Label fx:id="errorLabel" GridPane.columnIndex="4" GridPane.columnSpan="2147483647" GridPane.rowIndex="19" />
       <Label text="Multiplier" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
