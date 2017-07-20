@@ -127,7 +127,7 @@ public abstract class AbsFactory
        return twoResonances;   
     }
     
-    // delegates creation of amide nitrogen or methyl carbon resonances to subclass
+    // creation of amide nitrogen or methyl carbon resonances occurs in factory subclass
     public abstract Resonance getFirstSpecificResonance(Scanner scanner);
     
     // delegates create of methyl or amide proton resonances to sublass

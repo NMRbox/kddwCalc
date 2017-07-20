@@ -35,11 +35,6 @@ import javafx.stage.FileChooser;
  */
 public class InputGUIController implements Initializable 
 {   
-    @FXML private ComboBox<String> typeOfTitration; 
-    @FXML private ComboBox<String> resonanceOrderSelector;
-    @FXML TextField multiplierTextField;
-    private double multiplier;
-    
     @FXML private Button chooser1;
     @FXML private Button chooser2;
     @FXML private Button chooser3;
@@ -104,6 +99,13 @@ public class InputGUIController implements Initializable
     @FXML private TextField fileName14;  
     @FXML private TextField fileName15;
     
+    @FXML private ComboBox<String> typeOfTitration; 
+    @FXML private ComboBox<String> resonanceOrderSelector;
+    
+    @FXML TextField multiplierTextField;
+    
+    private double multiplier;
+    
     @FXML private Label errorLabel;
     
     private final List<Button> chooserButtonList = new ArrayList<>(15);
@@ -123,7 +125,7 @@ public class InputGUIController implements Initializable
         typeOfTitration.setItems(FXCollections.observableArrayList("1H-15N HSQC", "1H-13C methyl HMQC"));
         resonanceOrderSelector.setItems(FXCollections.observableArrayList("Please select type of spectrum first"));
         
-        addChoosersToList(); // create the List<Button>, these are pressed to bring up file chooser for data
+        addChoosersToList(); // create the List<Button>, these are pressed to bring up file chooser for dat
         addLigandConcTextFieldsToList();  // create the List<TextField>
         addReceptorConcTextFieldsToList();  // also creates List<TextField>
     } 
@@ -282,6 +284,31 @@ public class InputGUIController implements Initializable
         }
     }
     
+    // make a generic method to remove the redundancy from lower 
+    private <T> List<T> makeListOfObjects(T... object)
+    {   
+        /*
+        List<T> someList = new ArrayList<>();
+        
+        someList.addAll(Arrays.asList(object));
+        
+        return someList;
+        */
+        return new ArrayList<>(Arrays.asList(object));
+        
+    }
+    
+    /////////////////////////////
+    /////////////////////////////
+    /////////////////////////////
+    /////////////////////////////
+    /////////////////////////////
+    /////////////////////////////
+    /////////////////////////////
+    
+    
+    
+    
     private void addChoosersToList()
     {
         chooserButtonList.add(chooser1);
@@ -300,6 +327,7 @@ public class InputGUIController implements Initializable
         chooserButtonList.add(chooser14);
         chooserButtonList.add(chooser15);  
     }
+    
     
     private void addLigandConcTextFieldsToList()
     {
@@ -338,6 +366,13 @@ public class InputGUIController implements Initializable
         receptorConcTextFieldList.add(receptorConc14);
         receptorConcTextFieldList.add(receptorConc15);   
     }
+    
+    
+    //////////////////
+    //////////////////
+    //////////////////
+    //////////////////
+    //////////////////
     
     public void Button1pressed(ActionEvent event)
     {
