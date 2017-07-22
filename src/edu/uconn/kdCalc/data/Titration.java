@@ -55,10 +55,10 @@ public class Titration
     
     public void printTitration()
     {
-        System.out.printf("Titration with multiplier of %.2f%n"
-            + "LigandConc     ReceptorConc    Resonance1      Resonance2%n", multiplier);
+        System.out.printf("Titration with multiplier of %.2f%nCSPs: %s%n"
+            + "LigandConc     ReceptorConc    Resonance1      Resonance2%n", multiplier, getCSPsFrom2DPoints().toString());
         
-        titration.stream()
+        titration.stream() // results in a Stream<TitrationPoint>
                  .forEach(System.out::println);
   
     }
