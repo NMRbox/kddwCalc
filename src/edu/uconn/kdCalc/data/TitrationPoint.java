@@ -62,7 +62,7 @@ public abstract class TitrationPoint
     @Override 
     public String toString()
     {
-        return String.format("%10.2f %13.2f %11.2f %12.2f",
+        return String.format("%10.3f %10.3f %19.6f %13.6f",
             ligandConc, receptorConc, resonance1.getResonance(), resonance2.getResonance());
     }
     

@@ -17,7 +17,7 @@ public class Titration
     
     private final double multiplier;
     
-   
+    
     
     
     
@@ -56,11 +56,28 @@ public class Titration
     public void printTitration()
     {
         System.out.printf("Titration with multiplier of %.2f%n"
-            + "LigandConc  ReceptorConc  Resonance1  Resonance 2%n", multiplier);
+            + "LigandConc     ReceptorConc    Resonance1      Resonance2%n", multiplier);
         
         titration.stream()
                  .forEach(System.out::println);
   
     }
+    
+    
+    private List<Double> getCSPsFrom2DPoints()
+    {
+        final List<Double> csps = new ArrayList<>();
+        
+        for(int ctr = 0; ctr < titration.size(); ctr++)
+        {
+            csps.add(Math.sqrt(Math.pow(titration.get(ctr).getResonance2().getResonance() 
+                - titration.get(0).getResonance2().getResonance(), 2.0)
+                + Math.pow(multiplier * (titration.get(ctr).getResonance1().getResonance() 
+                - titration.get(0).getResonance1().getResonance()), 2.0)));
+        }
+
+        return csps;
+    }
+    
     
 }
