@@ -14,7 +14,7 @@ public abstract class Resonance
     }
     
     // GETTER
-    public double getResonance()
+    public double getChemShift()
     {
         return chemShift;
     }

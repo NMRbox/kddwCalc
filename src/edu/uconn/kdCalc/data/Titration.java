@@ -3,11 +3,22 @@
 // This class represents the data for a full titration curve of a single residue (i.e. peak).
 // Thus, it contains a Collection of TitrationPoints
 
+/*
+
+edited by Alex R. on 170722 
+added methods getCSPsFrom2DPoints, getReceptorConcList, and getLigandConcList.
+they might not be necessary in the end.
+
+*/
+
+
+
 package edu.uconn.kdCalc.data;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class Titration
@@ -64,20 +75,34 @@ public class Titration
     }
     
     
+    
     private List<Double> getCSPsFrom2DPoints()
     {
         final List<Double> csps = new ArrayList<>();
         
         for(int ctr = 0; ctr < titration.size(); ctr++)
         {
-            csps.add(Math.sqrt(Math.pow(titration.get(ctr).getResonance2().getResonance() 
-                - titration.get(0).getResonance2().getResonance(), 2.0)
-                + Math.pow(multiplier * (titration.get(ctr).getResonance1().getResonance() 
-                - titration.get(0).getResonance1().getResonance()), 2.0)));
+            csps.add(Math.sqrt(Math.pow(titration.get(ctr).getResonance2().getChemShift() 
+                - titration.get(0).getResonance2().getChemShift(), 2.0)
+                + Math.pow(multiplier * (titration.get(ctr).getResonance1().getChemShift() 
+                - titration.get(0).getResonance1().getChemShift()), 2.0)));
         }
 
         return csps;
     }
     
+    private List<Double> getReceptorConcList()
+    {
+        return titration.stream()
+                        .map(TitrationPoint::getReceptorConc)
+                        .collect(Collectors.toList());
+    }
     
+    private List<Double> getLigandConcList()
+    {
+        return titration.stream()
+                        .map(TitrationPoint::getLigandConc)
+                        .collect(Collectors.toList());
+    }
+
 }
