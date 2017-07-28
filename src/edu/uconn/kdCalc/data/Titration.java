@@ -28,10 +28,6 @@ public class Titration
     
     private final double multiplier;
     
-    
-    
-    
-    
     // one argument constructor
     public Titration(double multiplier)
     {
@@ -52,18 +48,6 @@ public class Titration
     }
 */
     
-    /*
-    @Override
-    public String toString()
-    {
-        return String.format("%nTitration:%nLigandConc  ReceptorConc  Resonance1  Resonance 2"
-            + titration.stream()
-                       .map(TitrationPoint::toString)
-                       .reduce("", (x, y) -> String.format("%s%n%s", x, y)));
-    }
-    
-    */
-    
     public void printTitration()
     {
         System.out.printf("Titration with multiplier of %.2f%nCSPs: %s%n"
@@ -74,9 +58,30 @@ public class Titration
   
     }
     
+    public List<Double> getReceptorConcList()
+    {
+        return titration.stream()
+                        .map(TitrationPoint::getReceptorConc)
+                        .collect(Collectors.toList());
+    }
+    
+    public List<Double> getLigandConcList()
+    {
+        return titration.stream()
+                        .map(TitrationPoint::getLigandConc)
+                        .collect(Collectors.toList());
+    }
     
     
-    private List<Double> getCSPsFrom2DPoints()
+    // this method takes the 2D points and calculates distance between them using
+    //
+    // sqrt((x1-x2)^2 + (y1-y2)^2)
+    // 
+    // the multiplier scales the values to proton ppm values (as of 170724).
+    //     note how getResonance1() and getResonance2() are used below.
+    //     this is a dependcy between this class and class Resonance
+    
+    public List<Double> getCSPsFrom2DPoints()
     {
         final List<Double> csps = new ArrayList<>();
         
@@ -89,20 +94,6 @@ public class Titration
         }
 
         return csps;
-    }
-    
-    private List<Double> getReceptorConcList()
-    {
-        return titration.stream()
-                        .map(TitrationPoint::getReceptorConc)
-                        .collect(Collectors.toList());
-    }
-    
-    private List<Double> getLigandConcList()
-    {
-        return titration.stream()
-                        .map(TitrationPoint::getLigandConc)
-                        .collect(Collectors.toList());
     }
 
 }

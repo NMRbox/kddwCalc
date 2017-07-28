@@ -120,8 +120,16 @@ public class ResonanceTest
         
         TitrationSeries series = factory.analyzeDataFiles(rawData);
         
-        series.printTitrationSeries();
+        //series.printTitrationSeries();
+        
+        //series.getCumulativeShifts().stream()
+        //                            .forEach(System.out::println);
+        
+        
+        series.writeToFileForExcel();
         
         
     }
+    
+    
 }
