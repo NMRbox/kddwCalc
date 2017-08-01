@@ -39,8 +39,9 @@ public class TitrationSeries
                        });
     }
     
-    public List<Double> getCumulativeShifts()
+    public double[] getCumulativeShifts()
     {
+
         List<List<Double>> cumulativeCSPintermediate = titrationSeries.stream()  // now have Stream<Titration>
                                             .map(Titration::getCSPsFrom2DPoints) // now have Stream<List<Double>>
                                             .collect(Collectors.toList());        
@@ -63,7 +64,16 @@ public class TitrationSeries
             }
         }
         
-        return cumulativeCSPs;   
+        
+        // target array in least squaures solver must be double[] not List<Double>
+        double[] cumShiftsArray = new double[cumulativeCSPs.size()];
+        
+        for(int ctr = 0; ctr < cumShiftsArray.length; ctr++)
+        {
+            cumShiftsArray[ctr] = cumulativeCSPs.get(ctr);
+        }
+        
+        return cumShiftsArray;   
         
     } // end method GetCumulativeShifts()
     
@@ -113,14 +123,14 @@ public class TitrationSeries
     {
         List<Double> ligandConcList = getLigandConcList();
         List<Double> receptorConcList = getReceptorConcList();
-        List<Double> cumShifts = getCumulativeShifts();
+        double[] cumShifts = getCumulativeShifts();
         
         output.format("P0\tL0\tCSP%n");
         
         for(int ctr = 0; ctr < getLigandConcList().size(); ctr++)
         {
             output.format("%6.3f\t%6.3f\t%6.5f%n", receptorConcList.get(ctr), ligandConcList.get(ctr),
-                    cumShifts.get(ctr));
+                    cumShifts[ctr]);
         }
         
     }

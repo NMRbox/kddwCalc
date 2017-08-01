@@ -1,5 +1,6 @@
 package edu.uconn.kdCalc.data;
 
+import java.util.List;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresBuilder;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresProblem;
@@ -15,8 +16,8 @@ import org.apache.commons.math3.util.Pair;
 
 public class LeastSquaresFitter 
 {
-    public static CumResults fitCumulativeData(double[] ligandConcArray,
-                                               double[] receptorConcArray,
+    public static CumResults fitCumulativeData(List<Double> ligandConcList,
+                                               List<Double> receptorConcList,
                                                double[] cumCSPsArray)
     {
         
@@ -27,13 +28,13 @@ public class LeastSquaresFitter
             double kd = paramPoint.getEntry(0);
             double dw = paramPoint.getEntry(1);
             
-            RealVector value = new ArrayRealVector(ligandConcArray.length);
-            RealMatrix jacobian = new Array2DRowRealMatrix(ligandConcArray.length, 2);
+            RealVector value = new ArrayRealVector(ligandConcList.size());
+            RealMatrix jacobian = new Array2DRowRealMatrix(ligandConcList.size(), 2);
             
-            for(int ctr = 0; ctr < ligandConcArray.length; ctr++)
+            for(int ctr = 0; ctr < ligandConcList.size(); ctr++)
             {
-                double L0 = ligandConcArray[ctr];
-                double P0 = receptorConcArray[ctr];
+                double L0 = ligandConcList.get(ctr);
+                double P0 = receptorConcList.get(ctr);
                 
                 value.setEntry(ctr, calcModel(P0, L0, kd, dw));
                 
@@ -60,7 +61,10 @@ public class LeastSquaresFitter
     
     }
     
-    private static double calcModel(double P0, double L0, double kd, double dw)
+    private static double calcModel(double P0, 
+                                    double L0, 
+                                    double kd, 
+                                    double dw)
         {
             // test of this equation worked using known values. unlikely issue is here
             return dw / (2 * P0) * ((kd + L0 + P0) - Math.sqrt(Math.pow(kd + L0 + P0, 2) - 4 * P0 * L0));
@@ -79,9 +83,8 @@ public class LeastSquaresFitter
                                                 double dw)
     {
         return dw / (2 * P0) * (1 - ((kd + L0 + P0) / Math.sqrt((Math.pow(kd + L0 + P0, 2) - 4 * L0 * P0))));
-    }
-        
-        
-        
-    }
+    }        
 }
+
+    
+

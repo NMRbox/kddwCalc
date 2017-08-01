@@ -122,12 +122,21 @@ public class ResonanceTest
         
         //series.printTitrationSeries();
         
+        /* code doesnt work becaues i made getCumulativeShifts return a double[] for least squrae target array
+              //  this was originally to test the function that makes cumulative shifts array. it worked
         series.getCumulativeShifts().stream()
                                     .forEach(System.out::println);
-        
+        */ 
         
         //series.writeToFileForExcel();
         
+        CumResults results = LeastSquaresFitter.fitCumulativeData(series.getLigandConcList(), 
+                                                                  series.getReceptorConcList(), 
+                                                                  series.getCumulativeShifts());
+        
+        System.out.printf("kd = %.6f%n", results.getKd());
+        System.out.printf("percent bound = %.6f%n", results.getPercentBound());
+            
         
     }
     

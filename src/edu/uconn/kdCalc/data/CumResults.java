@@ -27,4 +27,14 @@ public class CumResults
         
         return new CumResults(kd, percentBound); 
     }
+    
+    public double getKd()
+    {
+        return kd;
+    }
+    
+    public double getPercentBound()
+    {
+        return percentBound;
+    }
 }

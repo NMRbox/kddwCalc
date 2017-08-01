@@ -6,6 +6,7 @@
 package edu.uconn.kdCalc.gui;
 
 import edu.uconn.kdCalc.data.AbsFactory;
+import edu.uconn.kdCalc.data.CumResults;
 import edu.uconn.kdCalc.data.FactoryMaker;
 import edu.uconn.kdCalc.data.LeastSquaresFitter;
 import edu.uconn.kdCalc.data.RawData;
