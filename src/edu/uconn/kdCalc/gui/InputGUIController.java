@@ -7,6 +7,7 @@ package edu.uconn.kdCalc.gui;
 
 import edu.uconn.kdCalc.data.AbsFactory;
 import edu.uconn.kdCalc.data.FactoryMaker;
+import edu.uconn.kdCalc.data.LeastSquaresFitter;
 import edu.uconn.kdCalc.data.RawData;
 import edu.uconn.kdCalc.data.TitrationSeries;
 import java.io.File;
@@ -142,6 +143,12 @@ public class InputGUIController implements Initializable
         TitrationSeries series = factory.analyzeDataFiles(rawDataInstance);
         
         series.printTitrationSeries();
+        
+        CumResults cumResults = LeastSquaresFitter.fitCumulativeData(series.getLigandConcList(),
+                                                                     series.getReceptorConcList(),
+                                                                     series.getCumulativeShifts());
+        
+        
   
     }
     
@@ -285,17 +292,8 @@ public class InputGUIController implements Initializable
     }
     
     // make a generic method to remove the redundancy from lower 
-    private <T> List<T> makeListOfObjects(T... object)
-    {   
-        /*
-        List<T> someList = new ArrayList<>();
-        
-        someList.addAll(Arrays.asList(object));
-        
-        return someList;
-        */
+    private <T> List<T> makeListOfObjects(T... object) {   
         return new ArrayList<>(Arrays.asList(object));
-        
     }
     
     /////////////////////////////

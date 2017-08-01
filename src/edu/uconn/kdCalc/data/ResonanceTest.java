@@ -122,11 +122,11 @@ public class ResonanceTest
         
         //series.printTitrationSeries();
         
-        //series.getCumulativeShifts().stream()
-        //                            .forEach(System.out::println);
+        series.getCumulativeShifts().stream()
+                                    .forEach(System.out::println);
         
         
-        series.writeToFileForExcel();
+        //series.writeToFileForExcel();
         
         
     }

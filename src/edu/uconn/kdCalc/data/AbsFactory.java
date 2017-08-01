@@ -9,12 +9,15 @@
 // the first titration point. these are the data from teh first line of the
 // GUI that requests the data
 *
-* edited by Alex Ri on 170704 and 170706 to use a Template method to create the dataset.
+* edited by Alex Ri on 170704 and 170706 
 *
 * edited by Alex R on 170712 to remove duplicate code for creating point and resonances 
 *     from the subclass by making abstract methods in this class and delegating specifics
 *     to overriden methods in subclasses
 *
+       essentially the factories take the data from the user and break it up 
+    //     into individual titrations by residue. Titration class represents a single 
+    //     residue and contains all the information needed to calculate kd and dw
 *
 *  class RawData has: 
 *     private final ArrayList<Path> dataFiles;
@@ -37,12 +40,8 @@ public abstract class AbsFactory
 {
     // no-argument default constructor is only construtor
     
-    // essentially the factories take the data from the user and break it up 
-    //     into individual titrations by residue. titration curve for a single 
-    //     residue contains all the information needed to calculate kd and dw
-    // 
-    // this is meant to use the Template method pattern, where creation of each point and resonance is
-    //   delated to overriden method in a subclass
+    //
+    
     public final TitrationSeries analyzeDataFiles(RawData dataObject)
     {
         final TitrationSeries dataSet = new TitrationSeries();
@@ -98,18 +97,23 @@ public abstract class AbsFactory
         return scanners;
     }
     
-    public TitrationPoint makeTitrationPoint(Scanner scanner, double ligandConc,
-        double receptorConc, boolean resonanceReversal)
+    public TitrationPoint makeTitrationPoint(Scanner scanner, 
+                                             double ligandConc, 
+                                             double receptorConc, 
+                                             boolean resonanceReversal)
     {
         final Resonance[] twoCoordinates = makeTwoResonances(scanner, resonanceReversal);
 
-        final TitrationPoint point = makeSpecificTypeOfPoint(ligandConc, receptorConc, 
-                twoCoordinates[0], twoCoordinates[1]);
+        final TitrationPoint point = makeSpecificTypeOfPoint(ligandConc, 
+                                                             receptorConc, 
+                                                             twoCoordinates[0], 
+                                                             twoCoordinates[1]);
 
         return point;
     }
     
-    public Resonance[] makeTwoResonances(Scanner scanner, boolean resonanceReversal)
+    public Resonance[] makeTwoResonances(Scanner scanner, 
+                                         boolean resonanceReversal)
     {
        final Resonance[] twoResonances = new Resonance[2];
        
@@ -134,8 +138,10 @@ public abstract class AbsFactory
     public abstract Resonance getSecondSpecificResonance(Scanner scanner);
     
     // delegates creation of methyl or amide titration point to subclass
-    public abstract TitrationPoint makeSpecificTypeOfPoint(double ligandConc, double receptorConc, 
-                Resonance firstCoordinate, Resonance secondCoordinate);
+    public abstract TitrationPoint makeSpecificTypeOfPoint(double ligandConc,  
+                                                           double receptorConc, 
+                                                           Resonance firstCoordinate, 
+                                                           Resonance secondCoordinate);
 
     private void closeFiles(List<Scanner> scanners)
     {
