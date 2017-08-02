@@ -133,11 +133,28 @@ public class ResonanceTest
         CumResults results = LeastSquaresFitter.fitCumulativeData(series.getLigandConcList(), 
                                                                   series.getReceptorConcList(), 
                                                                   series.getCumulativeShifts());
+        double kd = results.getKd();
         
-        System.out.printf("kd = %.6f%n", results.getKd());
+        System.out.printf("kd = %.6f%n", kd);
         System.out.printf("percent bound = %.6f%n", results.getPercentBound());
+        
+        
+        
+        List<Double> ligandList = series.getLigandConcList();
+        List<Double> receptorList = series.getReceptorConcList();
+        
+        double[] cspArrayByResidue = series.getCSPbyResidueArray(kd);
+        
             
         
+        System.out.println();
+        System.out.println("And the CSPs by residue:");
+        
+        for(int ctr = 0; ctr < cspArrayByResidue.length; ctr++)
+        {
+            System.out.println(cspArrayByResidue[ctr]);
+        }
+ 
     }
     
     

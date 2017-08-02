@@ -9,9 +9,9 @@ public class CumResults
 {
     double kd; 
     double percentBound;
-    double rms;
-    double iterations;
-    double evaluations;
+    //double rms;
+    //double iterations;
+    //double evaluations;
         
     
     public CumResults(double kd, double percentBound)

@@ -141,7 +141,22 @@ public class TitrationSeries
             output.close();
     }
             
-        
+    public List<Titration> getTitrationSeries()
+    {
+        return titrationSeries;
+    }
+
+    double[] getCSPbyResidueArray(double kd) 
+    {
+        return titrationSeries.parallelStream() // now have Stream<Titration>
+                               .mapToDouble((Titration titr) -> 
+                               {    return LeastSquaresFitter.fitDwForAResidue(getLigandConcList(), 
+                                                                               getReceptorConcList(), 
+                                                                               titr.getCSPsByResidueArray(), 
+                                                                               kd);
+                                       })
+                                       .toArray(); 
+    }
         
     
 } // end class TitrationSeries

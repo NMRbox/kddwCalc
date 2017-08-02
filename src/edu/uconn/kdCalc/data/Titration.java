@@ -95,5 +95,12 @@ public class Titration
 
         return csps;
     }
-
+    
+    
+    public double[] getCSPsByResidueArray()
+    {
+        return getCSPsFrom2DPoints().stream()
+                                    .mapToDouble(Double::doubleValue)
+                                    .toArray();
+    }
 }
