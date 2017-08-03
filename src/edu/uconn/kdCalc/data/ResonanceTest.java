@@ -130,6 +130,11 @@ public class ResonanceTest
         
         //series.writeToFileForExcel();
         
+        
+        /*
+        
+        // want to change so LeastSquaresFitter.fit(series) return dataobject
+        
         CumResults results = LeastSquaresFitter.fitCumulativeData(series.getLigandConcList(), 
                                                                   series.getReceptorConcList(), 
                                                                   series.getCumulativeShifts());
@@ -154,6 +159,12 @@ public class ResonanceTest
         {
             System.out.println(cspArrayByResidue[ctr]);
         }
+        
+        */
+        
+        Results results = LeastSquaresFitter.fit(series);
+        
+        results.writeResultsToDisk();
  
     }
     

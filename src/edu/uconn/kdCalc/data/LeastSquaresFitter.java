@@ -16,6 +16,36 @@ import org.apache.commons.math3.util.Pair;
 
 public class LeastSquaresFitter 
 {
+    public static Results fit(TitrationSeries series)
+    {
+        List<Double> ligandConcList = series.getLigandConcList();
+        List<Double> receptorConcList = series.getReceptorConcList();
+        
+        double[] cumCSPs = series.getCumulativeShifts();
+        
+        CumResults cumResultsObject = fitCumulativeData(ligandConcList, receptorConcList, cumCSPs);
+        
+        double kd = cumResultsObject.getKd();
+        double percentBound = cumResultsObject.getPercentBound();
+        
+        double[] boundCSPArrayByResidue =
+                     series.getTitrationSeries().parallelStream() // now have Stream<Titration>
+                               .mapToDouble((Titration titr) -> 
+                               {    return LeastSquaresFitter.fitDwForAResidue(ligandConcList, 
+                                                                               receptorConcList, 
+                                                                               titr.getCSPsByResidueArray(), 
+                                                                               kd);
+                               })
+                               .toArray(); 
+        
+        
+        return Results.makeResultsObject(kd, percentBound, boundCSPArrayByResidue);
+    }
+        
+        
+        
+    
+    
     public static CumResults fitCumulativeData(List<Double> ligandConcList,
                                                List<Double> receptorConcList,
                                                double[] cumCSPsArray)
