@@ -27,6 +27,7 @@ public class LeastSquaresFitter
         
         double kd = cumResultsObject.getKd();
         double percentBound = cumResultsObject.getPercentBound();
+        double[][] presentationFit = cumResultsObject.getPresentationFit();
         
         double[] boundCSPArrayByResidue =
                      series.getTitrationSeries().parallelStream() // now have Stream<Titration>
@@ -39,7 +40,7 @@ public class LeastSquaresFitter
                                .toArray(); 
         
         
-        return Results.makeResultsObject(kd, percentBound, boundCSPArrayByResidue);
+        return Results.makeResultsObject(kd, percentBound, boundCSPArrayByResidue, presentationFit);
     }
         
         
@@ -157,7 +158,25 @@ public class LeastSquaresFitter
                                                          double dwMax,
                                                          double[] cumCSPsArray)
     {
+        if (ligandConcList.size() != cumCSPsArray.length || receptorConcList.size() != cumCSPsArray.length
+         || ligandConcList.size() != receptorConcList.size())
+            throw new IllegalArgumentException("List and CumCSPsArray dont have same length"
+                + "in makeArrayOfPresentationFit");
         
+        double [][] presentationFit = new double[ligandConcList.size()][2];
+        
+        for(int ctr = 0; ctr < ligandConcList.size(); ctr++)
+        {
+            presentationFit[ctr][0] = ligandConcList.get(ctr) / receptorConcList.get(ctr);
+        }
+        
+        for(int ctr = 0; ctr < cumCSPsArray.length; ctr++)
+
+        {
+            presentationFit[ctr][1] = 
+                calcModel(receptorConcList.get(ctr), ligandConcList.get(ctr), kd, dwMax);
+        }
+        return presentationFit;
     }
     
     private static double calcModel(double P0, 
@@ -183,7 +202,7 @@ public class LeastSquaresFitter
     {
         return dw / (2 * P0) * (1 - ((kd + L0 + P0) / Math.sqrt((Math.pow(kd + L0 + P0, 2) - 4 * L0 * P0))));
     }        
-}
+} // end class LeastSquaresFitter
 
     
 

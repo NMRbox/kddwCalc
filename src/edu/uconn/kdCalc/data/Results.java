@@ -11,20 +11,24 @@ class Results
     double kd;
     double percentBound;
     double[] boundCSPArray;
+    double[][] presentationFit;
     
     
     private Results(double kd, 
                     double percentBound, 
-                    double[] boundCSPArray)
+                    double[] boundCSPArray,
+                    double[][] presentationFit)
     {
         this.kd = kd;
         this.percentBound = percentBound;
         this.boundCSPArray = boundCSPArray;
+        this.presentationFit = presentationFit;
     }
     
     public static Results makeResultsObject(double kd, 
                                             double percentBound, 
-                                            double[] boundCSPArray)
+                                            double[] boundCSPArray,
+                                            double[][] presentationFit)
     {
         if (kd < 0.0 || percentBound < 0.0)
             throw new IllegalArgumentException("negative kd or %bound in Results");
@@ -35,7 +39,7 @@ class Results
                 throw new IllegalArgumentException("negative csp in Results");
         }
         
-        return new Results(kd, percentBound, boundCSPArray);
+        return new Results(kd, percentBound, boundCSPArray, presentationFit);
     }
     
     public double getKd()
@@ -102,6 +106,18 @@ class Results
             
             Arrays.stream(getBoundCSPArray())
                   .forEach(csp -> output.format("%.6f%n", csp));
+            
+            output.format("%nModel points [ligand radio, csp 1H ppm]%n");
+            
+            for(int ctr = 0; ctr < presentationFit.length; ctr++)
+            {
+                for(int ctr2 = 0; ctr2 < presentationFit[ctr].length; ctr2++)
+                {
+                    output.format("%f\t", presentationFit[ctr][ctr2]);
+                }
+                output.format("%n");
+            }
+            
         }
         catch(FormatterClosedException | NoSuchElementException e)
         {

@@ -42,4 +42,9 @@ public class CumResults
     {
         return percentBound;
     }
+    
+    public double[][] getPresentationFit()
+    {
+        return presentationFit;
+    }
 } // end class CumResults
