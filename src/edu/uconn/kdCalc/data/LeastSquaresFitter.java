@@ -81,8 +81,21 @@ public class LeastSquaresFitter
         
         LeastSquaresOptimizer.Optimum optimum = buildAndGetOptimum(startingGuess, function, cumCSPsArray);
         
-        return CumResults.makeCumResults(optimum.getPoint().getEntry(0), 
-                                         cumCSPsArray[cumCSPsArray.length - 1] / optimum.getPoint().getEntry(1));
+        double kd =  optimum.getPoint().getEntry(0);   
+        
+        double dwMax =  optimum.getPoint().getEntry(1);  // at fully bound
+        double dwAtHighestPoint = cumCSPsArray[cumCSPsArray.length - 1];
+        
+        double[][] presentationFit = makeArrayOfPresentationFit(ligandConcList, 
+                                                                receptorConcList, 
+                                                                kd, 
+                                                                dwMax, 
+                                                                cumCSPsArray);
+        
+        
+        
+                
+        return CumResults.makeCumResults(kd, dwAtHighestPoint / dwMax, presentationFit);
     
     }
     
@@ -136,6 +149,15 @@ public class LeastSquaresFitter
                                 build();
         
         return  new LevenbergMarquardtOptimizer().optimize(problem);
+    }
+    
+    private static double[][] makeArrayOfPresentationFit(List<Double> ligandConcList, 
+                                                         List<Double> receptorConcList, 
+                                                         double kd, 
+                                                         double dwMax,
+                                                         double[] cumCSPsArray)
+    {
+        
     }
     
     private static double calcModel(double P0, 
