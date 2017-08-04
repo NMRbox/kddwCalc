@@ -174,7 +174,7 @@ public class LeastSquaresFitter
 
         {
             presentationFit[ctr][1] = 
-                calcModel(receptorConcList.get(ctr), ligandConcList.get(ctr), kd, dwMax);
+                calcModel(receptorConcList.get(ctr), ligandConcList.get(ctr), kd, dwMax) / dwMax;
         }
         return presentationFit;
     }
