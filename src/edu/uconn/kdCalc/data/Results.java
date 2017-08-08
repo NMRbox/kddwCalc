@@ -107,7 +107,7 @@ class Results
             Arrays.stream(getBoundCSPArray())
                   .forEach(csp -> output.format("%.6f%n", csp));
             
-            output.format("%nModel points [ligand radio, csp 1H ppm]%n");
+            output.format("%nModel points [ligand radio, percent bound]%n");
             
             for(int ctr = 0; ctr < presentationFit.length; ctr++)
             {

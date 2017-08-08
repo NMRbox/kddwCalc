@@ -77,14 +77,14 @@ public class TitrationSeries
         
     } // end method GetCumulativeShifts()
     
-    public List<Double> getReceptorConcList()
+    public double[] getReceptorConcArray()
     {
-        return titrationSeries.get(0).getReceptorConcList();
+        return titrationSeries.get(0).getReceptorConcArray();
     }
     
-    public List<Double> getLigandConcList()
+    public double[] getLigandConcArray()
     {
-        return titrationSeries.get(0).getLigandConcList();
+        return titrationSeries.get(0).getLigandConcArray();
                 
     }
     
@@ -121,15 +121,15 @@ public class TitrationSeries
     
     private void writeFile(Formatter output)
     {
-        List<Double> ligandConcList = getLigandConcList();
-        List<Double> receptorConcList = getReceptorConcList();
+        double[] ligandConcArray = getLigandConcArray();
+        double[] receptorConcArray = getReceptorConcArray();
         double[] cumShifts = getCumulativeShifts();
         
         output.format("P0\tL0\tCSP%n");
         
-        for(int ctr = 0; ctr < getLigandConcList().size(); ctr++)
+        for(int ctr = 0; ctr < getLigandConcArray().length; ctr++)
         {
-            output.format("%6.3f\t%6.3f\t%6.5f%n", receptorConcList.get(ctr), ligandConcList.get(ctr),
+            output.format("%6.3f\t%6.3f\t%6.5f%n", receptorConcArray[ctr], ligandConcArray[ctr],
                     cumShifts[ctr]);
         }
         
@@ -148,14 +148,14 @@ public class TitrationSeries
 
     double[] getCSPbyResidueArray(double kd) 
     {
-        return titrationSeries.parallelStream() // now have Stream<Titration>
+        return titrationSeries.stream() // now have Stream<Titration>
                                .mapToDouble((Titration titr) -> 
-                               {    return LeastSquaresFitter.fitDwForAResidue(getLigandConcList(), 
-                                                                               getReceptorConcList(), 
+                               {    return LeastSquaresFitter.fitDwForAResidue(getLigandConcArray(), 
+                                                                               getReceptorConcArray(), 
                                                                                titr.getCSPsByResidueArray(), 
                                                                                kd);
-                                       })
-                                       .toArray(); 
+                               })
+                               .toArray(); 
     }
         
     

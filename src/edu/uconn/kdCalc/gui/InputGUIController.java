@@ -145,9 +145,7 @@ public class InputGUIController implements Initializable
         
         series.printTitrationSeries();
         
-        CumResults cumResults = LeastSquaresFitter.fitCumulativeData(series.getLigandConcList(),
-                                                                     series.getReceptorConcList(),
-                                                                     series.getCumulativeShifts());
+        
         
         
   

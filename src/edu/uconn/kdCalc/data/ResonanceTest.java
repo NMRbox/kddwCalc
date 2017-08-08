@@ -162,9 +162,16 @@ public class ResonanceTest
         
         */
         
-        Results results = LeastSquaresFitter.fit(series);
+        //Results results = LeastSquaresFitter.fit(series);
         
-        results.writeResultsToDisk();
+        //results.writeResultsToDisk();
+        
+        boolean isValid = ArrayLengthValidator.isValidLengths(series.getCumulativeShifts(),
+                                                             series.getLigandConcArray());
+        
+        
+        System.out.println(isValid);
+        
  
     }
     

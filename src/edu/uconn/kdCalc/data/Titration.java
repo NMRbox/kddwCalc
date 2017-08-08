@@ -58,6 +58,8 @@ public class Titration
   
     }
     
+    // deprecated by a smiliar method that returns a double[]
+    /*
     public List<Double> getReceptorConcList()
     {
         return titration.stream()
@@ -65,13 +67,29 @@ public class Titration
                         .collect(Collectors.toList());
     }
     
+    
+    
     public List<Double> getLigandConcList()
     {
         return titration.stream()
                         .map(TitrationPoint::getLigandConc)
                         .collect(Collectors.toList());
     }
+    */
     
+    public double[] getReceptorConcArray()
+    {
+        return titration.stream()
+                        .mapToDouble(TitrationPoint::getReceptorConc)
+                        .toArray();
+    }
+    
+    public double[] getLigandConcArray()
+    {
+        return titration.stream()
+                        .mapToDouble(TitrationPoint::getLigandConc)
+                        .toArray();
+    }
     
     // this method takes the 2D points and calculates distance between them using
     //

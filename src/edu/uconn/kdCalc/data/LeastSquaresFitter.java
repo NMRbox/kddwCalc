@@ -18,22 +18,22 @@ public class LeastSquaresFitter
 {
     public static Results fit(TitrationSeries series)
     {
-        List<Double> ligandConcList = series.getLigandConcList();
-        List<Double> receptorConcList = series.getReceptorConcList();
+        final double[] ligandConcArray = series.getLigandConcArray();
+        final double[] receptorConcArray = series.getReceptorConcArray();
         
-        double[] cumCSPs = series.getCumulativeShifts();
+        final double[] cumCSPs = series.getCumulativeShifts();
         
-        CumResults cumResultsObject = fitCumulativeData(ligandConcList, receptorConcList, cumCSPs);
+        CumResults cumResultsObject = fitCumulativeData(ligandConcArray, receptorConcArray, cumCSPs);
         
         double kd = cumResultsObject.getKd();
         double percentBound = cumResultsObject.getPercentBound();
         double[][] presentationFit = cumResultsObject.getPresentationFit();
         
         double[] boundCSPArrayByResidue =
-                     series.getTitrationSeries().parallelStream() // now have Stream<Titration>
+                     series.getTitrationSeries().stream() // now have Stream<Titration>
                                .mapToDouble((Titration titr) -> 
-                               {    return LeastSquaresFitter.fitDwForAResidue(ligandConcList, 
-                                                                               receptorConcList, 
+                               {    return LeastSquaresFitter.fitDwForAResidue(ligandConcArray, 
+                                                                               receptorConcArray, 
                                                                                titr.getCSPsByResidueArray(), 
                                                                                kd);
                                })
@@ -47,8 +47,8 @@ public class LeastSquaresFitter
         
     
     
-    public static CumResults fitCumulativeData(List<Double> ligandConcList,
-                                               List<Double> receptorConcList,
+    public static CumResults fitCumulativeData(double[] ligandConcArray,
+                                               double[] receptorConcArray,
                                                double[] cumCSPsArray)
     {
         
@@ -59,13 +59,13 @@ public class LeastSquaresFitter
             double kd = paramPoint.getEntry(0);
             double dw = paramPoint.getEntry(1);
             
-            RealVector value = new ArrayRealVector(ligandConcList.size());
-            RealMatrix jacobian = new Array2DRowRealMatrix(ligandConcList.size(), 2);
+            RealVector value = new ArrayRealVector(ligandConcArray.length);
+            RealMatrix jacobian = new Array2DRowRealMatrix(ligandConcArray.length, 2);
             
-            for(int ctr = 0; ctr < ligandConcList.size(); ctr++)
+            for(int ctr = 0; ctr < ligandConcArray.length; ctr++)
             {
-                double L0 = ligandConcList.get(ctr);
-                double P0 = receptorConcList.get(ctr);
+                double L0 = ligandConcArray[ctr];
+                double P0 = receptorConcArray[ctr];
                 
                 value.setEntry(ctr, calcModel(P0, L0, kd, dw));
                 
@@ -87,8 +87,8 @@ public class LeastSquaresFitter
         double dwMax =  optimum.getPoint().getEntry(1);  // at fully bound
         double dwAtHighestPoint = cumCSPsArray[cumCSPsArray.length - 1];
         
-        double[][] presentationFit = makeArrayOfPresentationFit(ligandConcList, 
-                                                                receptorConcList, 
+        double[][] presentationFit = makeArrayOfPresentationFit(ligandConcArray, 
+                                                                receptorConcArray, 
                                                                 kd, 
                                                                 dwMax, 
                                                                 cumCSPsArray);
@@ -100,8 +100,8 @@ public class LeastSquaresFitter
     
     }
     
-    public static double fitDwForAResidue(List<Double> ligandConcList,
-                                          List<Double> receptorConcList,
+    public static double fitDwForAResidue(double[] ligandConcArray,
+                                          double[] receptorConcArray,
                                           double[] cspArray,
                                           double kdFromCumData)
     {
@@ -111,13 +111,13 @@ public class LeastSquaresFitter
         MultivariateJacobianFunction function = (final RealVector paramPoint) -> {
             final double dw = paramPoint.getEntry(0);
             
-            RealVector value = new ArrayRealVector(ligandConcList.size());
-            RealMatrix jacobian = new Array2DRowRealMatrix(ligandConcList.size(), 2);
+            RealVector value = new ArrayRealVector(ligandConcArray.length);
+            RealMatrix jacobian = new Array2DRowRealMatrix(ligandConcArray.length, 2);
             
-            for(int ctr = 0; ctr < ligandConcList.size(); ctr++)
+            for(int ctr = 0; ctr < ligandConcArray.length; ctr++)
             {
-                double L0 = ligandConcList.get(ctr);
-                double P0 = receptorConcList.get(ctr);
+                double L0 = ligandConcArray[ctr];
+                double P0 = receptorConcArray[ctr];
                 
                 value.setEntry(ctr, calcModel(P0, L0, kdFromCumData, dw));
                 
@@ -152,29 +152,24 @@ public class LeastSquaresFitter
         return  new LevenbergMarquardtOptimizer().optimize(problem);
     }
     
-    private static double[][] makeArrayOfPresentationFit(List<Double> ligandConcList, 
-                                                         List<Double> receptorConcList, 
+    private static double[][] makeArrayOfPresentationFit(double[] ligandConcArray, 
+                                                         double[] receptorConcArray, 
                                                          double kd, 
                                                          double dwMax,
                                                          double[] cumCSPsArray)
-    {
-        if (ligandConcList.size() != cumCSPsArray.length || receptorConcList.size() != cumCSPsArray.length
-         || ligandConcList.size() != receptorConcList.size())
-            throw new IllegalArgumentException("List and CumCSPsArray dont have same length"
-                + "in makeArrayOfPresentationFit");
+    {    
+        double [][] presentationFit = new double[ligandConcArray.length][2];
         
-        double [][] presentationFit = new double[ligandConcList.size()][2];
-        
-        for(int ctr = 0; ctr < ligandConcList.size(); ctr++)
+        for(int ctr = 0; ctr < ligandConcArray.length; ctr++)
         {
-            presentationFit[ctr][0] = ligandConcList.get(ctr) / receptorConcList.get(ctr);
+            presentationFit[ctr][0] = ligandConcArray[ctr] / receptorConcArray[ctr];
         }
         
         for(int ctr = 0; ctr < cumCSPsArray.length; ctr++)
 
         {
             presentationFit[ctr][1] = 
-                calcModel(receptorConcList.get(ctr), ligandConcList.get(ctr), kd, dwMax) / dwMax;
+                calcModel(receptorConcArray[ctr], ligandConcArray[ctr], kd, dwMax) / dwMax;
         }
         return presentationFit;
     }
