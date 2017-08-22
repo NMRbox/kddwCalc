@@ -28,7 +28,6 @@ import org.apache.commons.math3.util.Pair;
  * @see TitrationSeries
  * @see Results
  * 
- * since 1.8
  */
 public class LeastSquaresFitter {
     
