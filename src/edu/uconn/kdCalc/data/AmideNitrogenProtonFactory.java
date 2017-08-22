@@ -3,6 +3,7 @@ package edu.uconn.kdCalc.data;
 import java.util.List;
 import java.util.Scanner;
 
+
 public class AmideNitrogenProtonFactory extends AbsFactory
 {
     @Override
