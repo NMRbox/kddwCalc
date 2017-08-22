@@ -121,10 +121,8 @@ public final class RawData {
         
     }
 
-    
-    // GETTERS
     /**
-     * Gets the dataFiles.
+     * Gets the <code>Path</code> for the location of the text files with the NMR chemical shift data.
      * 
      * @return a <code>List{@literal <}Path{@literal >}</code> object with the location of the peak lists
      */
@@ -132,24 +130,44 @@ public final class RawData {
         return dataFiles;
     }
     
-    public final List<Double> getLigandConcs()
-    {
+    /**
+     * Gets the ligand concentrations
+     * 
+     * @return the ligand concentrations
+     */
+    public final List<Double> getLigandConcs() {
         return ligandConcs;
     }
     
-    public final List<Double> getReceptorConcs()
-    {
+    /**
+     * Gets the receptor concentrations. The receptor is the labeled (observed) species
+     * 
+     * @return the receptor concentrations
+     */
+    public final List<Double> getReceptorConcs() {
         return receptorConcs;
     }
     
-    public final double getMultiplier()
-    {
+    /**
+     * Get the multiplier, which is the value used to scale the two different nuclei. This value
+     * was provided by the user
+     * 
+     * @return the multiplier value
+     */
+    public final double getMultiplier() {
         return multiplier;
     }
     
-    public final boolean getResonanceReversal()
-    {
+    /**
+     * Gets the resonance reversal flag. This is a way to keep track of the order that the 
+     * nuclei are listed in the peak lists. For instance, CCPNmr Analysis exports peak lists in the order
+     * [nitrogen, proton], so if the peak lists are in this order, this value should be false. If the order
+     * in the text file is [proton, nitrogen], this flag should be true. A better way to manage this
+     * probably exists but its done now. 
+     * 
+     * @return the resonance reversal flag
+     */
+    public final boolean getResonanceReversal() {
         return resonanceReversal;
     }
-    
 }

@@ -97,9 +97,9 @@ public class Titration {
     
     /**
      * Turns the <code> List{@literal <}Double{@literal >}</code> from <code>getCSPsFrom2DPoints</code>
-     * and turns it into <code>double[]</code>
+     * and turns it into <code>double[]</code>.
      * 
-     * @return array of <code>double</code> with the chemical shift perturbations
+     * @return array of <code>double</code> with the chemical shift perturbations as 1H-ppm
      */
     public double[] getCSPsByResidueArray() {
         return getCSPsFrom2DPoints().stream()

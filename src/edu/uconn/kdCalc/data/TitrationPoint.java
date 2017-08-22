@@ -49,7 +49,7 @@ public abstract class TitrationPoint {
         return resonance2;
     }
     
-    public static boolean isValidConc (double ligandConc, double receptorConc,
+    public static boolean isValidData (double ligandConc, double receptorConc,
         Resonance resonance1, Resonance resonance2)
     {
         if (ligandConc < 0 || receptorConc < 0)
