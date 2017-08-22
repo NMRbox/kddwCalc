@@ -1,4 +1,4 @@
-package edu.uconn.kdCalc.data;
+package edu.uconn.kddwcalc.data;
 
 /**
  * A subclass of <code>Resonance</code> for a methyl proton nucleus. This class also performs validation 

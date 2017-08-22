@@ -1,4 +1,4 @@
-package edu.uconn.kdCalc.data;
+package edu.uconn.kddwcalc.data;
 
 /**
  * A class holding the data fom a single residue at a single concentration.

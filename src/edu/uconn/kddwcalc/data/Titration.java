@@ -1,4 +1,4 @@
-package edu.uconn.kdCalc.data;
+package edu.uconn.kddwcalc.data;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package edu.uconn.kdCalc.data;
+package edu.uconn.kddwcalc.data;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;

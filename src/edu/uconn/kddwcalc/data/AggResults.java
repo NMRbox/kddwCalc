@@ -1,4 +1,4 @@
-package edu.uconn.kdCalc.data;
+package edu.uconn.kddwcalc.data;
 
 /**
  * A class that holds the results from a cumulative chemical shift perturbation fitting of 

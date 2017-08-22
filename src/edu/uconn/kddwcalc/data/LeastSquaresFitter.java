@@ -1,4 +1,4 @@
-package edu.uconn.kdCalc.data;
+package edu.uconn.kddwcalc.data;
 
 import java.util.List;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresBuilder;

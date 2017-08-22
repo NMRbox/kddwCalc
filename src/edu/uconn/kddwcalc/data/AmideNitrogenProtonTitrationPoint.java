@@ -1,4 +1,4 @@
-package edu.uconn.kdCalc.data;
+package edu.uconn.kddwcalc.data;
 
 /**
  * A class representing an experiment titration point in a 1H-15N HSQC. This point contains the data

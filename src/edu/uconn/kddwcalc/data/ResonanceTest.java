@@ -1,6 +1,10 @@
-package edu.uconn.kdCalc.data;
+package edu.uconn.kddwcalc.data;
 
 
+import edu.uconn.kddwcalc.data.AbsFactory;
+import edu.uconn.kddwcalc.data.AmideNitrogenProtonFactory;
+import edu.uconn.kddwcalc.data.LeastSquaresFitter;
+import edu.uconn.kddwcalc.data.TitrationSeries;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;

@@ -1,4 +1,6 @@
-package edu.uconn.kdCalc.data;
+package edu.uconn.kddwcalc.data;
+
+//package edu.uconn.kdcalc.data;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -76,7 +78,7 @@ public class TitrationSeries
     /**
      * Gets the array of receptor concentrations
      * 
-     * @return 
+     * @return the receptor concentrations
      */
     public double[] getReceptorConcArray() {
         return titrationSeries.get(0).getReceptorConcArray();

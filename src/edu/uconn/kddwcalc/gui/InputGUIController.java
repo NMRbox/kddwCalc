@@ -3,15 +3,15 @@
 // i need a better way to process the button and lines
 
 
-package edu.uconn.kdCalc.gui;
+package edu.uconn.kddwcalc.gui;
 
-import edu.uconn.kdCalc.data.AbsFactory;
-import edu.uconn.kdCalc.data.AggResults;
-import edu.uconn.kdCalc.data.FactoryMaker;
-import edu.uconn.kdCalc.data.LeastSquaresFitter;
-import edu.uconn.kdCalc.data.RawData;
-import edu.uconn.kdCalc.data.Results;
-import edu.uconn.kdCalc.data.TitrationSeries;
+import edu.uconn.kddwcalc.data.AbsFactory;
+import edu.uconn.kddwcalc.data.AggResults;
+import edu.uconn.kddwcalc.data.FactoryMaker;
+import edu.uconn.kddwcalc.data.LeastSquaresFitter;
+import edu.uconn.kddwcalc.data.RawData;
+import edu.uconn.kddwcalc.data.Results;
+import edu.uconn.kddwcalc.data.TitrationSeries;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

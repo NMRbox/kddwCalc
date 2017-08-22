@@ -1,6 +1,6 @@
 // created by AR. edited on 170807 when linking GUI to data input (data inputing was just tested successfully)
 
-package edu.uconn.kdCalc.gui;
+package edu.uconn.kddwcalc.gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

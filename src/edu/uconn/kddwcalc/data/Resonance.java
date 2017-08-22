@@ -1,4 +1,4 @@
-package edu.uconn.kdCalc.data;
+package edu.uconn.kddwcalc.data;
 
 /**
  * An abstract class that holds an NMR chemical shift as a <code>double</code>. 
