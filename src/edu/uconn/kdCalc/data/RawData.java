@@ -23,17 +23,34 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public final class RawData 
-{
+/**
+ * A class that contains raw data and the location of raw data from the user.
+ * 
+ * @author Alex R.
+ * 
+ * @since 1.8
+ */
+public final class RawData {
     private final List<Path> dataFiles;
     private final List<Double> ligandConcs;
     private final List<Double> receptorConcs;
     private final double multiplier;
     private final boolean resonanceReversal;
     
-    private RawData(List<Path> dataFiles, List<Double> ligandConcs,
-        List<Double> receptorConcs, double multiplier, boolean resonanceReversal)
-    {
+    /**
+     * RawData constructor
+     * 
+     * @param dataFiles Location on disk of peak list data from user
+     * @param ligandConcs Total ligand concentrations
+     * @param receptorConcs Total receptor concentration
+     * @param multiplier A number to scale two different nuclei
+     * @param resonanceReversal A flag that helps keep track of resonance ordering in data files
+     */
+    private RawData(List<Path> dataFiles, 
+                    List<Double> ligandConcs,
+                    List<Double> receptorConcs, 
+                    double multiplier, 
+                    boolean resonanceReversal) {
         this.dataFiles = dataFiles;
         this.ligandConcs = ligandConcs;
         this.receptorConcs = receptorConcs;
@@ -41,36 +58,54 @@ public final class RawData
         this.resonanceReversal = resonanceReversal;
     }
     
-    public final static RawData createRawData(List<Path> dataFiles, List<Double> ligandConcs,
-        List<Double> receptorConcs, double multiplier, boolean resonanceReversal) throws IOException
-    {
-        
+    /**
+     * A static simple factory that contains validation for creation of a RawData object. 
+     * The dataFiles, ligandConcs, and receptorConcs lists/array must have the same length. Similarly,
+     * the text files scanned in from dataFiles must all have the same number of lines.
+     * 
+     * @param dataFiles Location on disk of peak list data from user
+     * @param ligandConcs Total ligand concentrations
+     * @param receptorConcs Total receptor concentration
+     * @param multiplier A number to scale two different nuclei
+     * @param resonanceReversal A flag that helps keep track of resonance ordering in data files
+     * 
+     * @return A <code>RawDataObject</code> with unsorted peak lists and other info from user
+     * 
+     * @throws IOException if an I/O error occurs opening dataFiles
+     * @throws IllegalArgumentException if the lists are not the same length
+     * @throws IllegalArgumentException if the underlying text files in dataFiles have a different number of lines
+     */
+    public final static RawData createRawData(List<Path> dataFiles, 
+                                              List<Double> ligandConcs,
+                                              List<Double> receptorConcs, 
+                                              double multiplier, 
+                                              boolean resonanceReversal) 
+                                              throws IOException {
         // bit of code to make sure user entered and equal number of dataFiles, ligand conccentrations...
-        if (dataFiles.size() != ligandConcs.size()
-            || ligandConcs.size() != receptorConcs.size()
-            || dataFiles.size() != receptorConcs.size())
-        {
+        // TODO insert the exception to check list lengths here
+        
+        if (dataFiles.size()   !=  ligandConcs.size()
+         || ligandConcs.size() !=  receptorConcs.size()
+         || dataFiles.size()   !=  receptorConcs.size()) {
             throw new IllegalArgumentException("The size of ArrayLists for dataFiles, ligandConcs"
                 + " and receptorConcs do not have the same length. They must.");
         }
         
         
 
-      // validation to ensure equal number of lines in each data file
+        // validation to ensure equal number of lines in each data file
         
         // this array holds the number of lines in each file
         long[] numLines = new long[dataFiles.size()];
         
         // now count the number of lines in each file
-        try
-        {
+        try {
             for (int ctr = 0; ctr < dataFiles.size(); ctr++)
             {
                 numLines[ctr] = Files.lines(dataFiles.get(ctr)).count();
             }
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
             System.err.println("Error when opening file in class RawData");
 
         
@@ -88,8 +123,12 @@ public final class RawData
 
     
     // GETTERS
-    public final List<Path> getDataFiles()
-    {
+    /**
+     * Gets the dataFiles.
+     * 
+     * @return a <code>List{@literal <}Path{@literal >}</code> object with the location of the peak lists
+     */
+    public final List<Path> getDataFiles() {
         return dataFiles;
     }
     

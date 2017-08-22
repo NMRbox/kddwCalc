@@ -81,6 +81,8 @@ public class ResonanceTest
         //TitrationSeries series = 
         //series.printTitrationSeries();
         
+        // this code fits 15N ubz at 50 uM to LB-ubiquitin
+        
         List<Path> paths = new ArrayList<>();
         paths.add(Paths.get("0.txt"));
         paths.add(Paths.get("0.25.txt"));
@@ -113,6 +115,44 @@ public class ResonanceTest
         receptorConcs.add(47.199);
         receptorConcs.add(45.914);
         receptorConcs.add(44.696);
+        
+        // end of whats required for 15NUBZ + LB-ub fitting
+        
+        /*
+        List<Path> paths = new ArrayList<>();
+        paths.add(Paths.get("d221a/0.txt"));
+        paths.add(Paths.get("d221a/0.25.txt"));
+        paths.add(Paths.get("d221a/0.5.txt"));
+        paths.add(Paths.get("d221a/0.75.txt"));
+        paths.add(Paths.get("d221a/1.txt"));
+        paths.add(Paths.get("d221a/1.5.txt"));
+        paths.add(Paths.get("d221a/2.txt"));
+        paths.add(Paths.get("d221a/3.txt"));
+        paths.add(Paths.get("d221a/4.txt"));
+        
+        List<Double> ligandConcs = new ArrayList<>();
+        ligandConcs.add(0.0);
+        ligandConcs.add(87.0);
+        ligandConcs.add(165.0);
+        ligandConcs.add(235.0);
+        ligandConcs.add(298.0);
+        ligandConcs.add(408.0);
+        ligandConcs.add(499.0);
+        ligandConcs.add(644.0);
+        ligandConcs.add(753.0);
+        
+        List<Double> receptorConcs = new ArrayList<>();
+        receptorConcs.add(200.0);
+        receptorConcs.add(188.0);
+        receptorConcs.add(178.0);
+        receptorConcs.add(169.0);
+        receptorConcs.add(160.0);
+        receptorConcs.add(146.0);
+        receptorConcs.add(134.0);
+        receptorConcs.add(115.0);
+        receptorConcs.add(101.0);
+        
+        */
         
         RawData rawData = RawData.createRawData(paths, ligandConcs, receptorConcs, 0.1 , false);
         
@@ -162,15 +202,10 @@ public class ResonanceTest
         
         */
         
-        //Results results = LeastSquaresFitter.fit(series);
+        Results results = LeastSquaresFitter.fit(series);
         
-        //results.writeResultsToDisk();
+        results.writeResultsToDisk();
         
-        boolean isValid = ArrayLengthValidator.isValidLengths(series.getCumulativeShifts(),
-                                                             series.getLigandConcArray());
-        
-        
-        System.out.println(isValid);
         
  
     }

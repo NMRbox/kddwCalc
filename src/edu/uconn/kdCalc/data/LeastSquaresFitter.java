@@ -13,48 +13,89 @@ import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.util.Pair;
 
 
-
-public class LeastSquaresFitter 
-{
-    public static Results fit(TitrationSeries series)
-    {
+/**
+ * This class performs nonlinear least squares fitting of NMR fast exchange data
+ * using the Apache Commons Mathematics Library. 
+ * 
+ * Clients of this class will pass in a TitrationSeries
+ * object which contains all the data necessary for fitting and receive a Results object back which contains
+ * all the results needed.
+ * 
+ * Note that <code>fit</code> is the only public interface in this class
+ * 
+ * @author Alex R.
+ *
+ * @see TitrationSeries
+ * @see Results
+ * 
+ */
+public class LeastSquaresFitter {
+    
+    /**
+     * A static method to get a <code>Results</code> object from a 
+     * <code>TitrationSeries</code>
+     * 
+     * @param series contains all the data needed for fitting
+     * 
+     * @see Results
+     * @see AggResults
+     * 
+     * @return a <code>Results</code> object containing Kd and other values from the fitting
+     */
+    public static Results fit(TitrationSeries series) {
         final double[] ligandConcArray = series.getLigandConcArray();
         final double[] receptorConcArray = series.getReceptorConcArray();
         
         final double[] cumCSPs = series.getCumulativeShifts();
         
-        CumResults cumResultsObject = fitCumulativeData(ligandConcArray, receptorConcArray, cumCSPs);
+        // TODO add array length validation here
         
-        double kd = cumResultsObject.getKd();
-        double percentBound = cumResultsObject.getPercentBound();
-        double[][] presentationFit = cumResultsObject.getPresentationFit();
+        AggResults aggResultsObject = fitCumulativeData(ligandConcArray, receptorConcArray, cumCSPs);
+        
+        double kd = aggResultsObject.getKd();
+        double percentBound = aggResultsObject.getPercentBound();
+        double[][] presentationFit = aggResultsObject.getPresentationFit();
         
         double[] boundCSPArrayByResidue =
                      series.getTitrationSeries().stream() // now have Stream<Titration>
-                               .mapToDouble((Titration titr) -> 
-                               {    return LeastSquaresFitter.fitDwForAResidue(ligandConcArray, 
-                                                                               receptorConcArray, 
-                                                                               titr.getCSPsByResidueArray(), 
-                                                                               kd);
+                               .mapToDouble((Titration titr) ->  {
+                                   return LeastSquaresFitter.fitDwForAResidue(ligandConcArray, 
+                                                                              receptorConcArray, 
+                                                                              titr.getCSPsByResidueArray(), 
+                                                                              kd);
                                })
                                .toArray(); 
         
         
         return Results.makeResultsObject(kd, percentBound, boundCSPArrayByResidue, presentationFit);
-    }
-        
-        
-        
+    }   
     
-    
-    public static CumResults fitCumulativeData(double[] ligandConcArray,
-                                               double[] receptorConcArray,
-                                               double[] cumCSPsArray)
-    {
+    /**
+     * A static method to fit both Kd (affinity) and dw (delta-omega) using
+     * the cumulative chemical shifts. 
+     * 
+     * This method contains within it an Override of the method:
+     * <code> public Pair<RealVector, RealMatrix>> value (final RealVector paramPoint) </code>
+     * 
+     * In this case, RealVector paramPoint is a two element vector (array) where the first
+     * element is the kd and the second element is dw
+     * 
+     * @param ligandConcArray contains total ligand concentrations (L0)
+     * @param receptorConcArray contains total receptor (labeled species) concentrations (P0)
+     * @param aggCSPsArray contains the cumulative chemical shift perturbations
+     * 
+     * @see AggResults
+     * @see #makeArrayOfPresentationFit
+     * 
+     * @return a <code>AggResults</code> object with Kd, percent bound, and presentation fitting
+     * 
+     */
+    private static AggResults fitCumulativeData(double[] ligandConcArray,
+                                                double[] receptorConcArray,
+                                                double[] aggCSPsArray) {
         
         // TODO add code to make sure arrays are all same size
-        
-        
+
         MultivariateJacobianFunction function = (final RealVector paramPoint) -> {
             double kd = paramPoint.getEntry(0);
             double dw = paramPoint.getEntry(1);
@@ -62,8 +103,7 @@ public class LeastSquaresFitter
             RealVector value = new ArrayRealVector(ligandConcArray.length);
             RealMatrix jacobian = new Array2DRowRealMatrix(ligandConcArray.length, 2);
             
-            for(int ctr = 0; ctr < ligandConcArray.length; ctr++)
-            {
+            for(int ctr = 0; ctr < ligandConcArray.length; ctr++) {
                 double L0 = ligandConcArray[ctr];
                 double P0 = receptorConcArray[ctr];
                 
@@ -77,34 +117,50 @@ public class LeastSquaresFitter
         };
         
         // iniial guess is 10 uM with a cumulative shift of 5. i might try to dw 
-        //  change based on number of residues. maybe not
+        //  change based on number of residues. later edit: maybe not. seems to be robust over a range of kd
         final double[] startingGuess = {10, 5};
         
-        LeastSquaresOptimizer.Optimum optimum = buildAndGetOptimum(startingGuess, function, cumCSPsArray);
+        LeastSquaresOptimizer.Optimum optimum = buildAndGetOptimum(startingGuess, function, aggCSPsArray);
         
         double kd =  optimum.getPoint().getEntry(0);   
         
         double dwMax =  optimum.getPoint().getEntry(1);  // at fully bound
-        double dwAtHighestPoint = cumCSPsArray[cumCSPsArray.length - 1];
+        double dwAtHighestPoint = aggCSPsArray[aggCSPsArray.length - 1];
         
         double[][] presentationFit = makeArrayOfPresentationFit(ligandConcArray, 
                                                                 receptorConcArray, 
                                                                 kd, 
                                                                 dwMax, 
-                                                                cumCSPsArray);
+                                                                aggCSPsArray);
         
         
         
                 
-        return CumResults.makeCumResults(kd, dwAtHighestPoint / dwMax, presentationFit);
+        return AggResults.makeCumResults(kd, dwAtHighestPoint / dwMax, presentationFit);
     
     }
     
-    public static double fitDwForAResidue(double[] ligandConcArray,
-                                          double[] receptorConcArray,
-                                          double[] cspArray,
-                                          double kdFromCumData)
-    {
+    /**
+     * A static helper method that uses the Kd from the cumulative fit to determine total dw
+     * between free and bound states for a residue using least squares.
+     * 
+     * This method contains within it a lambda expression that overrides the method:
+     * <code> public Pair<RealVector, RealMatrix>> value (final RealVector paramPoint) </code>
+     * 
+     * In this case, RealVector paramPoint is a one element vector (array) where the only
+     * element is dw (kd is fixed to cumulative value)
+     * 
+     * @param ligandConcArray Total ligand concentrations
+     * @param receptorConcArray Total protein concentrations (labeled species)
+     * @param cspArray Contains chemical shift perturbations of an individual residues
+     * @param kdFromCumData The affinity constant (Kd)
+     * 
+     * @return Value of the total CSP between free and fully bound for a single residue
+     */
+    private static double fitDwForAResidue(double[] ligandConcArray,
+                                           double[] receptorConcArray,
+                                           double[] cspArray,
+                                           double kdFromCumData) {
         // TODO add code to make sure arrays are all same size
         
         
@@ -114,8 +170,7 @@ public class LeastSquaresFitter
             RealVector value = new ArrayRealVector(ligandConcArray.length);
             RealMatrix jacobian = new Array2DRowRealMatrix(ligandConcArray.length, 2);
             
-            for(int ctr = 0; ctr < ligandConcArray.length; ctr++)
-            {
+            for(int ctr = 0; ctr < ligandConcArray.length; ctr++) {
                 double L0 = ligandConcArray[ctr];
                 double P0 = receptorConcArray[ctr];
                 
@@ -136,10 +191,23 @@ public class LeastSquaresFitter
     }
     
     
+    /**
+     * A static helper method that uses LeastSquaresBuilder to create a <code>LeastSquaresProblem</code>
+     * which is then evaluated using LM minimization. Note that this is used for both the two-parameter (kd, dw)
+     * cumulative fit and the one-parameter per-residue (dw) fit.
+     * 
+     * @param startingGuess Initial values for parameters. 
+     * @param function The function to minimize
+     * @param target The experimental chemical shifts that function tries to optimize toward
+     * 
+     * @see #fitCumulativeData
+     * @see #fitDwForAResidue
+     * 
+     * @return A <code>LeastSquaresOptimizer.Optimum</code> object containing results
+     */
     private static LeastSquaresOptimizer.Optimum buildAndGetOptimum(double[] startingGuess, 
                                                                     MultivariateJacobianFunction function, 
-                                                                    double[] target)
-    {
+                                                                    double[] target) {
         LeastSquaresProblem problem = new LeastSquaresBuilder().
                                 start(startingGuess).
                                 model(function).
@@ -149,52 +217,106 @@ public class LeastSquaresFitter
                                 maxIterations(10000).
                                 build();
         
-        return  new LevenbergMarquardtOptimizer().optimize(problem);
+        return new LevenbergMarquardtOptimizer().optimize(problem);
     }
     
+    /**
+     * A static helper method that creates a two-column array of data that are [x,y] values
+     * for plotting the data. X-axis is ligand ratio (ligand / receptor) and y-axis is percent bound
+     * which is from modelCSP / dwMax
+     * 
+     * @param ligandConcArray
+     * @param receptorConcArray
+     * @param kd
+     * @param dwMax
+     * @param cumCSPsArray
+     * 
+     * @see #calcModel
+     * 
+     * @return A 2 column array containing 
+     */
     private static double[][] makeArrayOfPresentationFit(double[] ligandConcArray, 
                                                          double[] receptorConcArray, 
                                                          double kd, 
                                                          double dwMax,
-                                                         double[] cumCSPsArray)
-    {    
+                                                         double[] cumCSPsArray) {    
         double [][] presentationFit = new double[ligandConcArray.length][2];
         
-        for(int ctr = 0; ctr < ligandConcArray.length; ctr++)
-        {
+        for(int ctr = 0; ctr < ligandConcArray.length; ctr++) {
             presentationFit[ctr][0] = ligandConcArray[ctr] / receptorConcArray[ctr];
         }
         
-        for(int ctr = 0; ctr < cumCSPsArray.length; ctr++)
-
-        {
+        for(int ctr = 0; ctr < cumCSPsArray.length; ctr++) {
             presentationFit[ctr][1] = 
                 calcModel(receptorConcArray[ctr], ligandConcArray[ctr], kd, dwMax) / dwMax;
         }
         return presentationFit;
+        
+        // TODO this method needs to be a 3 column array that also gives exprimental values
     }
     
+    /**
+     * A method that evaluates the model (ie the equation to be fit).
+     * 
+     * @param P0 The total receptor concentration (labeled species)
+     * @param L0 The total ligand concentration
+     * @param kd The affinity
+     * @param dw Delta-omega between free and bound states
+     * 
+     * @see #calcModelDerivativeDw 
+     * @see #calcModelDerivativeKd
+     * 
+     * @return Value of the model for the given parameters. Ostensibly, the return value
+     * is a chemical shift perturbation (be it cumulative or for a single residue only)
+     */
     private static double calcModel(double P0, 
                                     double L0, 
                                     double kd, 
-                                    double dw)
-        {
+                                    double dw) {
             // test of this equation worked using known values. unlikely issue is here
             return dw / (2 * P0) * ((kd + L0 + P0) - Math.sqrt(Math.pow(kd + L0 + P0, 2) - 4 * P0 * L0));
         }
     
+    /**
+     * A method that evaluates the first derivative with respect to dw (dM/d(dw))
+     * of the equation in method <code>calcModel</code>. This is required for the
+     * Jacobian matrix in LM minimization
+     * 
+     * @param P0 The total receptor concentration (labeled species)
+     * @param L0 The total ligand concentration
+     * @param kd The affinity
+     * 
+     * @see #calcModel
+     * @see #calcModelDerivativeKd
+     * 
+     * @return Value of the model derivative for the given parameters
+     */
     private static double calcModelDerivativeDw(double P0, 
                                                 double L0, 
-                                                double kd) 
-    {
+                                                double kd) {
         return 1 / (2 * P0) * ((kd + L0 + P0) - Math.sqrt(Math.pow(kd + L0 + P0, 2) - 4 * P0 * L0));
     }
     
+    
+    /**
+     * A method that evaluates the first derivative with respect to Kd (dM/d(kd)) 
+     * of the equation in method <code>calcModel</code>. This is required for the
+     * Jacobian matrix in LV minimization
+     * 
+     * @param P0 The total receptor concentration (labeled species)
+     * @param L0 The total ligand concentration
+     * @param kd The affinity
+     * @param dw Delta-omega between free and bound states
+     * 
+     * @see #calcModel
+     * @see #calcModelDerivativeDw
+     * 
+     * @return Value of the model derivative for the given parameters
+     */
     private static double calcModelDerivativeKd(double P0, 
                                                 double L0, 
                                                 double kd, 
-                                                double dw)
-    {
+                                                double dw) {
         return dw / (2 * P0) * (1 - ((kd + L0 + P0) / Math.sqrt((Math.pow(kd + L0 + P0, 2) - 4 * L0 * P0))));
     }        
 } // end class LeastSquaresFitter

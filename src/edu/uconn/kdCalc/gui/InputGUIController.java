@@ -6,10 +6,11 @@
 package edu.uconn.kdCalc.gui;
 
 import edu.uconn.kdCalc.data.AbsFactory;
-import edu.uconn.kdCalc.data.CumResults;
+import edu.uconn.kdCalc.data.AggResults;
 import edu.uconn.kdCalc.data.FactoryMaker;
 import edu.uconn.kdCalc.data.LeastSquaresFitter;
 import edu.uconn.kdCalc.data.RawData;
+import edu.uconn.kdCalc.data.Results;
 import edu.uconn.kdCalc.data.TitrationSeries;
 import java.io.File;
 import java.io.IOException;
@@ -127,6 +128,7 @@ public class InputGUIController implements Initializable
         typeOfTitration.setItems(FXCollections.observableArrayList("1H-15N HSQC", "1H-13C methyl HMQC"));
         resonanceOrderSelector.setItems(FXCollections.observableArrayList("Please select type of spectrum first"));
         
+        // TODO too many global variables here
         addChoosersToList(); // create the List<Button>, these are pressed to bring up file chooser for dat
         addLigandConcTextFieldsToList();  // create the List<TextField>
         addReceptorConcTextFieldsToList();  // also creates List<TextField>
@@ -143,7 +145,11 @@ public class InputGUIController implements Initializable
         
         TitrationSeries series = factory.analyzeDataFiles(rawDataInstance);
         
-        series.printTitrationSeries();
+        //series.printTitrationSeries();
+        
+        Results results = LeastSquaresFitter.fit(series);
+        
+        results.writeResultsToDisk();
         
         
         

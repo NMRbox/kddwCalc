@@ -2,13 +2,7 @@ package edu.uconn.kdCalc.data;
 
 import java.util.Arrays;
 
-/**
- * @author Alex Rizzo
- * @param arrays will contain Ligand, Receptor, and CSP or model points. 
- *               these must always be the same length.
- * @
- *          
-*/
+       
 
 public class ArrayLengthValidator 
 {

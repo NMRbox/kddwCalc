@@ -1,23 +1,26 @@
-// created by AR on 170626
-
 package edu.uconn.kdCalc.data;
 
-
-
-public abstract class TitrationPoint
-{   
-    // concentrations of the two proteins.
-    // the receptor is the labeled species.
-    // units are micromol (uM)
-    private final double ligandConc;
-    private final double receptorConc;
+/**
+ * A class holding the data fom a single residue at a single concentration.
+ * 
+ * Units of receptor and ligand concentration are uM (micromolar in all cases)
+ * 
+ * @author Rizzo
+ * 
+ * @see Resonance
+ * @see Titration
+ * @see TitrationSeries
+ */
+public abstract class TitrationPoint {   
+    private final double ligandConc;  
+    private final double receptorConc;   // the labeled protein
     
     private final Resonance resonance1;
     private final Resonance resonance2;
     
+    
     public TitrationPoint(double ligandConc, double receptorConc,
-        Resonance resonance1, Resonance resonance2)
-    {
+        Resonance resonance1, Resonance resonance2) {
         this.ligandConc = ligandConc;
         this.receptorConc = receptorConc;
         

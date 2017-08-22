@@ -1,21 +1,39 @@
-// created by Alex Rizzo on 170625
-
 package edu.uconn.kdCalc.data;
 
-public class AmideNitrogen extends Resonance
-{
+/**
+ * A subclass of <code>Resonance</code> for an amide nitrogen nucleus. This class also performs validation 
+ * of the chemical shift to ensure it is within an expected range using a simple static factory.
+ * 
+ * @author Alex R
+ * 
+ * @see AbsFactory
+ * @see AmideNitrogenProtonFactory
+ * @see AmideNitrogenProtonTitrationPoint
+ * @see AmideProton
+ * 
+ * @since 1.8
+ */
+public class AmideNitrogen extends Resonance {
     private static final int AMIDE_NITROGEN_MAX_SHIFT = 150;
     private static final int AMIDE_NITROGEN_MIN_SHIFT = 80;
 
-    // one-argument constructor. 
-    // validation has already been performed in validateAndCreate method
-    private AmideNitrogen(double chemShift) 
-    {
+    /**
+     * Initializes an instance of the class with an NMR chemical shift value
+     * 
+     * @param chemShift an NMR chemical shift for an amide nitrogen nucleus
+     */
+    private AmideNitrogen(double chemShift) {
         super(chemShift);
     }
 
-    public static AmideNitrogen validateAndCreate(double chemShift)
-    {
+    /**
+     * A static simple factory to validate and create a instance of class <code>AmideNitrogen</code>.
+     * 
+     * @param chemShift an NMR chemical shift for an amide nitrogen nucleus
+     * 
+     * @return an instance of <code>AmideNitrogen</code> that has been initialized with a chemical shift
+     */
+    public static AmideNitrogen validateAndCreate(double chemShift) {
         if (isWithinLegitRange(chemShift, AMIDE_NITROGEN_MAX_SHIFT, AMIDE_NITROGEN_MIN_SHIFT))
             return new AmideNitrogen(chemShift);
         

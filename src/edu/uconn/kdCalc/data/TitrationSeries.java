@@ -19,26 +19,6 @@ public class TitrationSeries
         titrationSeries.add(titration);
     }
     
-    /*
-    @Override
-    public String toString()
-    {
-        return titrationSeries.stream() 
-                              .map(Titration::toString)
-                              .reduce("", (x, y) -> String.format("%s%n%s", x, y));
-    }
-    */
-    
-    public void printTitrationSeries()
-    {
-        titrationSeries.stream()
-                       .forEach(titr ->
-                       {
-                           titr.printTitration();
-                           System.out.println();
-                       });
-    }
-    
     public double[] getCumulativeShifts()
     {
 
@@ -146,6 +126,7 @@ public class TitrationSeries
         return titrationSeries;
     }
 
+    /* this functionality was moved to class LeastSquaresFitter to reduce coupling between classes
     double[] getCSPbyResidueArray(double kd) 
     {
         return titrationSeries.stream() // now have Stream<Titration>
@@ -157,6 +138,6 @@ public class TitrationSeries
                                })
                                .toArray(); 
     }
-        
+    */    
     
 } // end class TitrationSeries

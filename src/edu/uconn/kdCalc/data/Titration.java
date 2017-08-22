@@ -1,91 +1,64 @@
-// created 170626 by Alex R.
-
-// This class represents the data for a full titration curve of a single residue (i.e. peak).
-// Thus, it contains a Collection of TitrationPoints
-
-/*
-
-edited by Alex R. on 170722 
-added methods getCSPsFrom2DPoints, getReceptorConcList, and getLigandConcList.
-they might not be necessary in the end.
-
-*/
-
-
-
 package edu.uconn.kdCalc.data;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
-
-public class Titration
-{
+/**
+ * A class that contains all the data from a fast exchange NMR titration *for a single residue* to determine affinity, 
+ * delta-omega (dw) and other parameters
+ * 
+ * @see AbsFactory
+ * @see TitrationSeries
+ * @see TitrationPoint
+ * 
+ * @author Alex R.
+ * 
+ * @since 1.8
+ */
+public class Titration {
     
     private final List<TitrationPoint> titration = new ArrayList<>();
-    
     private final double multiplier;
     
-    // one argument constructor
-    public Titration(double multiplier)
-    {
+    /**
+     * Initializes a <code>Titration</code> instance with a multiplier from the user. After this is 
+     * performed, the <code>List{@literal <}TitrationPoint{@literal >}</code> is empty. 
+     * 
+     * @param multiplier the value from the user that indicates how to scale the two nuclei into 1H-ppm
+     */
+    public Titration(double multiplier) {
         this.multiplier = multiplier;
     }
     
-    public final void addPoint(TitrationPoint pnt)
-    {
+    /**
+     * Adds a <code>TitrationPoint</code> to the instance variable <code>titration</code>
+     * 
+     * @param pnt contains the information for one peak from one spectrum 
+     * (ligand and receptor concentrations and two chemical shifts (subclasses of <code>Resonance</code>)
+     * 
+     * @see AbsFactory
+     */
+    public final void addPoint(TitrationPoint pnt) {
         titration.add(pnt);
     }
     
-    // TODO code me
-    /*public ResultsObject calculateResults()
-    {
-        ResultsObject result = null;
-        
-        return result;
-    }
-*/
-    
-    public void printTitration()
-    {
-        System.out.printf("Titration with multiplier of %.2f%nCSPs: %s%n"
-            + "LigandConc     ReceptorConc    Resonance1      Resonance2%n", multiplier, getCSPsFrom2DPoints().toString());
-        
-        titration.stream() // results in a Stream<TitrationPoint>
-                 .forEach(System.out::println);
-  
-    }
-    
-    // deprecated by a smiliar method that returns a double[]
-    /*
-    public List<Double> getReceptorConcList()
-    {
-        return titration.stream()
-                        .map(TitrationPoint::getReceptorConc)
-                        .collect(Collectors.toList());
-    }
-    
-    
-    
-    public List<Double> getLigandConcList()
-    {
-        return titration.stream()
-                        .map(TitrationPoint::getLigandConc)
-                        .collect(Collectors.toList());
-    }
-    */
-    
-    public double[] getReceptorConcArray()
-    {
+    /**
+     * Gets the receptor concentrations.
+     * 
+     * @return an array containing the receptor concentrations
+     */
+    public double[] getReceptorConcArray() {
         return titration.stream()
                         .mapToDouble(TitrationPoint::getReceptorConc)
                         .toArray();
     }
     
-    public double[] getLigandConcArray()
-    {
+    /**
+     * Gets the ligand concentrations.
+     * 
+     * @return an array containing the ligand concentrations
+     */
+    public double[] getLigandConcArray() {
         return titration.stream()
                         .mapToDouble(TitrationPoint::getLigandConc)
                         .toArray();
@@ -99,12 +72,20 @@ public class Titration
     //     note how getResonance1() and getResonance2() are used below.
     //     this is a dependcy between this class and class Resonance
     
-    public List<Double> getCSPsFrom2DPoints()
-    {
+    /**
+     * Takes the two <code>Resonance</code> variables from <code>titration</code> and extracts the 
+     * chemical shift perturbation. Effectively, this uses the equation for distance
+     * [sqrt((xn-x0)^2 + (yn-y0)^2)] with scaling based on the multiplier. The first point should have a CSP = 0,
+     * while the remaining points are calculated from the first point with free receptor.
+     * 
+     * Note the use of <code>getResonance1</code> and <code>getResonance2</code>. This introduces coupling between this class and others.
+     * 
+     * @return the chemical shift perturbations as 1H-ppm (because of scaling)
+     */
+    public List<Double> getCSPsFrom2DPoints() {
         final List<Double> csps = new ArrayList<>();
         
-        for(int ctr = 0; ctr < titration.size(); ctr++)
-        {
+        for(int ctr = 0; ctr < titration.size(); ctr++) {
             csps.add(Math.sqrt(Math.pow(titration.get(ctr).getResonance2().getChemShift() 
                 - titration.get(0).getResonance2().getChemShift(), 2.0)
                 + Math.pow(multiplier * (titration.get(ctr).getResonance1().getChemShift() 
@@ -114,9 +95,13 @@ public class Titration
         return csps;
     }
     
-    
-    public double[] getCSPsByResidueArray()
-    {
+    /**
+     * Turns the <code> List{@literal <}Double{@literal >}</code> from <code>getCSPsFrom2DPoints</code>
+     * and turns it into <code>double[]</code>
+     * 
+     * @return array of <code>double</code> with the chemical shift perturbations
+     */
+    public double[] getCSPsByResidueArray() {
         return getCSPsFrom2DPoints().stream()
                                     .mapToDouble(Double::doubleValue)
                                     .toArray();

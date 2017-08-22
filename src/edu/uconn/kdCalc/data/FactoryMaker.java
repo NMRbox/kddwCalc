@@ -11,10 +11,8 @@
 
 package edu.uconn.kdCalc.data;
 
-public class FactoryMaker 
-{
-    public static AbsFactory createFactory(String type)
-    {
+public class FactoryMaker {
+    public static AbsFactory createFactory(String type) {
         AbsFactory absFactory = null;
    
         

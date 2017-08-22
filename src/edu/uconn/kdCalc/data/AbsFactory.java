@@ -36,6 +36,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * 
+ * 
+ * 
+ * @author home
+ */
+
 public abstract class AbsFactory 
 {
     // no-argument default constructor is only construtor
