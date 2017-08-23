@@ -12,8 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class ResonanceTest
-{
+/**
+ * A class with data hard-coded for testing the application
+ * 
+ * @author Alex R.
+ */
+public class ResonanceTest {
     public static void main(String[] args) throws IOException
     {
         /*

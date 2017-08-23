@@ -1,17 +1,30 @@
-/* created by Alex Ri on 170704
-*
-* Somewhere, the program has to make a decision on what type of spectrum is being analyzed (here)
-*
-* This class takes the info from teh GUI and uses a switch statement to instantiate a 
-* subclass of the abstract factory.
-*
-* method createFactory:
-*  the String paramater is the text from the comboBox is the GUI where user choose spectrum type.
-*/
-
 package edu.uconn.kddwcalc.data;
 
+/**
+ * A class containing a single simple static factory to instantiate a subclass of <code>AbsFactory</code>.
+ * The switch statement using a <code>String</code> that came from
+ * <code>InputGUIController.typeOfTitration</code>. These string must match. I probably should have used enums
+ * but its done now.
+ * 
+ * @author Alex R.
+ * 
+ * @see AbsFactory
+ * @see TitrationSeries
+ * @see edu.uconn.kddwcalc.gui.InputGUIController
+ * 
+ * 
+ * @since 1.8
+ */
 public class FactoryMaker {
+    
+    /**
+     * @param type the type of titration (chosen by user in GUI)
+     * 
+     * @return a subclass of <code>AbsFactory</code>
+     * 
+     * @throws IllegalArgumentException if the variable <code>absFactory</code> is not initialized in the
+     * switch statement.
+     */
     public static AbsFactory createFactory(String type) {
         AbsFactory absFactory = null;
    

@@ -133,12 +133,13 @@ public abstract class AbsFactory {
                                              double ligandConc, 
                                              double receptorConc, 
                                              boolean resonanceReversal) {
+        
         final Resonance[] twoCoordinates = makeTwoResonances(scanner, resonanceReversal);
 
-        final TitrationPoint point = makeSpecificTypeOfPoint(ligandConc, 
-                                                             receptorConc, 
-                                                             twoCoordinates[0], 
-                                                             twoCoordinates[1]);
+        final TitrationPoint point = makeTitrationPointSubclass(ligandConc, 
+                                                                receptorConc, 
+                                                                twoCoordinates[0], 
+                                                                twoCoordinates[1]);
         return point;
     }
     
@@ -146,7 +147,9 @@ public abstract class AbsFactory {
      * A method that reads two <code>Resonance</code> objects from a data file. These two should
      * be from the same line. 
      * 
-     * Note: this method ultimately handles the issue of how the nuclei are ordered in the peak lists
+     * Note: this method ultimately handles the issue of how the nuclei are ordered in the peak lists.
+     * As of 170823, first <code>Resonance</code> is either a nitrogen or carbon and second 
+     * <code>Resonance</code> is the matching proton.
      * 
      * Note: call the methods that are overridden in subclass to get correct <code>Resoonance</code> subclass
      * 
@@ -160,47 +163,75 @@ public abstract class AbsFactory {
      * by <code>multiplier</code> and used to calculate chemical shift perturbations
      */
     public Resonance[] makeTwoResonances(Scanner scanner, 
-                                         boolean resonanceReversal)
-    {
+                                         boolean resonanceReversal) {
+       
        final Resonance[] twoResonances = new Resonance[2];
        
-       if(resonanceReversal == false)
-       {
-           twoResonances[0] = getFirstSpecificResonance(scanner);
-           twoResonances[1] = getSecondSpecificResonance(scanner);
+       if(!resonanceReversal) {
+           twoResonances[0] = getFirstResonanceSubclass(scanner);
+           twoResonances[1] = getSecondResonanceSubclass(scanner);
        }
-       else if (resonanceReversal == true)
-       {
-           twoResonances[1] = getSecondSpecificResonance(scanner);
-           twoResonances[0] = getFirstSpecificResonance(scanner); 
+       else if (resonanceReversal) {
+           twoResonances[1] = getSecondResonanceSubclass(scanner);
+           twoResonances[0] = getFirstResonanceSubclass(scanner); 
        }
        
        return twoResonances;   
     }
-    
-    
-    // creation of amide nitrogen or methyl carbon resonances occurs in factory subclass
-    
+
     /**
-     * A method to read (as of 170822) 
+     * A method to read in a chemical shift. Note that the actual creation of the <code>Resonance</code>
+     * is delegated to subclass to make concrete <code>AmideNitrogen</code> or <code>MethylCarbon</code> 
+     * <code>Resonance</code>.
      * 
      * @param scanner instance to read chemical shift data from peak list
      * 
-     * @return a subclass of <code>Resoonance</code> based on overridden method call
+     * @see Resonance
+     * @see AmideNitrogen
+     * @see MethylCarbon
+
+     * @return a concrete subclass of <code>Resonance</code> based on overridden method call
      */
-    public abstract Resonance getFirstSpecificResonance(Scanner scanner);
+    public abstract Resonance getFirstResonanceSubclass(Scanner scanner);
     
-    // delegates create of methyl or amide proton resonances to sublass
-    public abstract Resonance getSecondSpecificResonance(Scanner scanner);
+    /**
+     * An abstract method to read in a chemical shift. Note that the actual creation of the <code>Resonance</code>
+     * is delegated to subclass to make concrete <code>AmideProton</code> or <code>MethylProton</code> 
+     * <code>Resonance</code> objects.
+     * 
+     * @param scanner instance to read chemical shift data from peak list
+     * 
+     * @see Resonance
+     * @see AmideProton
+     * @see MethylProton
+     * 
+     * @return a concrete subclass of <code>Resonance</code> based on overridden method call
+     */
+    public abstract Resonance getSecondResonanceSubclass(Scanner scanner);
     
     // delegates creation of methyl or amide titration point to subclass
-    public abstract TitrationPoint makeSpecificTypeOfPoint(double ligandConc,  
-                                                           double receptorConc, 
-                                                           Resonance firstCoordinate, 
-                                                           Resonance secondCoordinate);
+    /**
+     * An abstract method to create a concrete subclass of <code>TitrationPoint</code>. Note how creation of the 
+     * concrete subclasses is done with overridden methods in subclasses of <code>AbsFactory</code>
+     * 
+     * @param ligandConc the ligand concentration
+     * @param receptorConc the receptor concentration
+     * @param firstCoordinate an NMR chemical shift
+     * @param secondCoordinate an NMR chemical shift
+     * 
+     * @return an instance of <code>TitrationPoint</code> with all variables initialized
+     */
+    public abstract TitrationPoint makeTitrationPointSubclass(double ligandConc,  
+                                                              double receptorConc, 
+                                                              Resonance firstCoordinate, 
+                                                              Resonance secondCoordinate);
 
-    private void closeFiles(List<Scanner> scanners)
-    {
+    /**
+     * Closes a <code>Scanner</code> object
+     * 
+     * @param scanners the object to close
+     */
+    private void closeFiles(List<Scanner> scanners) {
         scanners.stream()
                 .forEach(Scanner::close);
     }
