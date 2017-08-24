@@ -1,7 +1,7 @@
 package edu.uconn.kddwcalc.data;
 
 /**
- * A subclass of <code>Resonance</code> for an amide nitrogen nucleus. This class also performs validation 
+ * A subclass of {@link Resonance} for an amide nitrogen nucleus. This class also performs validation 
  * of the chemical shift to ensure it is within an expected range using a simple static factory.
  * 
  * @author Alex R
@@ -31,7 +31,7 @@ public class AmideNitrogen extends Resonance {
      * 
      * @param chemShift an NMR chemical shift for an amide nitrogen nucleus
      * 
-     * @return an instance of <code>AmideNitrogen</code> that has been initialized with a chemical shift
+     * @return an instance of {@link AmideNitrogen} that has been initialized with a chemical shift
      */
     public static AmideNitrogen validateAndCreate(double chemShift) {
         if (isWithinLegitRange(chemShift, AMIDE_NITROGEN_MAX_SHIFT, AMIDE_NITROGEN_MIN_SHIFT))

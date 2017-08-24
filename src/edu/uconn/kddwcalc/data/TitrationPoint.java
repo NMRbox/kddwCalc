@@ -1,11 +1,11 @@
 package edu.uconn.kddwcalc.data;
 
 /**
- * A class holding the data fom a single residue at a single concentration.
+ * A class representing the data from a single residue at a single concentration.
  * 
  * Units of receptor and ligand concentration are uM (micromolar in all cases)
  * 
- * @author Rizzo
+ * @author Alex R.
  * 
  * @see Resonance
  * @see Titration
@@ -18,9 +18,18 @@ public abstract class TitrationPoint {
     private final Resonance resonance1;
     private final Resonance resonance2;
     
-    
-    public TitrationPoint(double ligandConc, double receptorConc,
-        Resonance resonance1, Resonance resonance2) {
+    /**
+     * Initializes four instance variables; should only be called after extensive validation.
+     * 
+     * @param ligandConc the total ligand concentration
+     * @param receptorConc the total receptor concentration
+     * @param resonance1 the first {@link Resonance}
+     * @param resonance2 the second {@link Resonance}
+     */
+    public TitrationPoint(double ligandConc, 
+                          double receptorConc,
+                          Resonance resonance1, 
+                          Resonance resonance2) {
         this.ligandConc = ligandConc;
         this.receptorConc = receptorConc;
         
@@ -28,27 +37,56 @@ public abstract class TitrationPoint {
         this.resonance2 = resonance2;
     }
     
-    // GETTERS
+    /**
+     * Gets the ligand concentration
+     * 
+     * @return the ligand concentration
+     */
     public double getLigandConc()
     {
         return ligandConc;
     }
     
+    /**
+     * Gets the receptor concentration
+     * 
+     * @return the receptor concentration 
+     */
     public double getReceptorConc()
     {
         return receptorConc;
     }
     
+    /**
+     * Gets the first resonance. As of 170824 (AR) this is amide nitrogen or methyl carbon
+     * 
+     * @return the first resonance object
+     */
     public Resonance getResonance1()
     {
         return resonance1;
     }
     
+    /**
+     * Gets the second resonance. As of 170824 (AR) this is amide proton or methyl proton
+     * 
+     * @return the second resonance objct 
+     */
     public Resonance getResonance2()
     {
         return resonance2;
     }
     
+    /**
+     * Performs certain validations of the data
+     * 
+     * @param ligandConc the total ligand concentration
+     * @param receptorConc the total receptor concentration
+     * @param resonance1 the first {@link Resonance}
+     * @param resonance2 the second {@link Resonance}
+     * 
+     * @return <code>true</code> if validation is passed, <code>false</code> if values don't pass 
+     */
     public static boolean isValidData (double ligandConc, double receptorConc,
         Resonance resonance1, Resonance resonance2)
     {
@@ -62,6 +100,11 @@ public abstract class TitrationPoint {
         return true;    
     }
     
+    /**
+     * Gets a string with the data for this {@link TitrationPoint}
+     * 
+     * @return a {@link String} with the ligand and receptor concentration and the two chemical shifts 
+     */
     @Override 
     public String toString()
     {

@@ -38,7 +38,8 @@ public final class RawData {
     private final boolean resonanceReversal;
     
     /**
-     * RawData constructor
+     * Four argument {@link RawData} constructor. Should only reach this point after quite a bit of validation has been
+     * done.
      * 
      * @param dataFiles Location on disk of peak list data from user
      * @param ligandConcs Total ligand concentrations
@@ -59,7 +60,7 @@ public final class RawData {
     }
     
     /**
-     * A static simple factory that contains validation for creation of a RawData object. 
+     * A static simple factory that contains validation for creation of a {@link RawData} object. 
      * The dataFiles, ligandConcs, and receptorConcs lists/array must have the same length. Similarly,
      * the text files scanned in from dataFiles must all have the same number of lines.
      * 
@@ -69,7 +70,7 @@ public final class RawData {
      * @param multiplier A number to scale two different nuclei
      * @param resonanceReversal A flag that helps keep track of resonance ordering in data files
      * 
-     * @return A <code>RawDataObject</code> with unsorted peak lists and other info from user
+     * @return A {@link RawData} with unsorted peak lists and other info from user
      * 
      * @throws IOException if an I/O error occurs opening dataFiles
      * @throws IllegalArgumentException if the lists are not the same length
@@ -122,7 +123,7 @@ public final class RawData {
     }
 
     /**
-     * Gets the <code>Path</code> for the location of the text files with the NMR chemical shift data.
+     * Gets the {@link java.nio.file.Path Path} for the location of the text files with the NMR chemical shift data.
      * 
      * @return a <code>List{@literal <}Path{@literal >}</code> object with the location of the peak lists
      */

@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 /**
  * A concrete factory class used to create the read in 1H-13C methyl HMQC NMR titration data. Note that the first resonance 
- * is a <code>MethylCarbon</code> and the second resonance is a <code>MethylProton</code>.
+ * is a {@link MethylCarbon} and the second resonance is a {@link MethylProton}.
  * 
  * @author Alex R.
  * 
@@ -21,11 +21,11 @@ import java.util.Scanner;
 public class MethylCarbonProtonFactory extends AbsFactory {
     
     /**
-     * A method to read a <code>MethylCarbon</code> chemical shift from a peak list
+     * A method to read a {@link MethylCarbon} chemical shift from a peak list
      * 
      * @param scanner the object to read in the data from the peak list file
      * 
-     * @return a <code>MethylCarbon</code> subclass of <code>Resonance</code>
+     * @return a {@link MethylCarbon} subclass of {@link Resonance}
      */
     @Override
     public Resonance getFirstResonanceSubclass(Scanner scanner) {
@@ -33,11 +33,11 @@ public class MethylCarbonProtonFactory extends AbsFactory {
     }
     
      /**
-     * A method to read a <code>MethylProton</code> chemical shift from a peak list
+     * A method to read a {@link MethylProton} chemical shift from a peak list
      * 
      * @param scanner the object to read in the data from the peak list file
      * 
-     * @return a <code>MethylProton</code> subclass of <code>Resonance</code>
+     * @return a {@link MethylProton} subclass of {@link Resonance}
      */
     @Override
     public Resonance getSecondResonanceSubclass(Scanner scanner) {
@@ -45,16 +45,16 @@ public class MethylCarbonProtonFactory extends AbsFactory {
     }
     
     /**
-     * A method to create a concrete <code>MethylCarbonTitrationPoint</code> subclass of
-     * <code>TitrationPoint</code>
+     * A method to create a concrete {@link MethylCarbonProtonTitrationPoint} subclass of
+     * {@link TitrationPoint}
      * 
      * @param ligandConc the ligand concentration
      * @param receptorConc the receptor concentration
-     * @param firstCoordinate the first <code>Resonance</code>, here is a <code>MethylCarbon</code>
-     * @param secondCoordinate the first <code>Resonance</code>, here is a <code>MethylProton</code>
+     * @param firstCoordinate the first {@link Resonance}, here is a {@link MethylCarbon}
+     * @param secondCoordinate the first {@link Resonance}, here is a {@link MethylProton}
      * 
-     * @return a fully initialized <code>MethylCarbonProtonTitrationPoint</code> concrete subclass of
-     * <code>Resonance</code>
+     * @return a fully initialized {@link MethylCarbonProtonTitrationPoint} concrete subclass of
+     * {@link Resonance}
      */
     @Override
     public TitrationPoint makeTitrationPointSubclass(double ligandConc, 

@@ -1,7 +1,7 @@
 package edu.uconn.kddwcalc.data;
 
 /**
- * A subclass of <code>Resonance</code> for an amide proton nucleus. This class also performs validation 
+ * A subclass of {@link Resonance} representing an an amide proton nucleus. This class also performs validation 
  * of the chemical shift to ensure it is within an expected range using a simple static factory.
  * 
  * @author Alex R
@@ -27,11 +27,11 @@ public class AmideProton extends Resonance {
     }
     
     /**
-     * A static simple factory to validate and create a instance of class <code>AmideProton</code>.
+     * A static simple factory to validate and create a instance of class {@link AmideProton}.
      * 
      * @param chemShift an NMR chemical shift for an amide proton nucleus
      * 
-     * @return an instance of <code>AmideProton</code> that has been initialized with a chemical shift
+     * @return an instance of {@link AmideProton} that has been initialized with a chemical shift
      */
     public static AmideProton validateAndCreate(double chemShift) {
         if (isWithinLegitRange(chemShift, AMIDE_PROTON_MAX_SHIFT, AMIDE_PROTON_MIN_SHIFT))

@@ -21,26 +21,25 @@ import org.apache.commons.math3.util.Pair;
  * object which contains all the data necessary for fitting and receive a Results object back which contains
  * all the results needed.
  * 
- * Note that <code>fit</code> is the only public interface in this class
+ * Note that {@link #fit} is the only public interface in this class
  * 
  * @author Alex R.
  *
  * @see TitrationSeries
  * @see Results
- * 
  */
 public class LeastSquaresFitter {
     
     /**
-     * A static method to get a <code>Results</code> object from a 
-     * <code>TitrationSeries</code>
+     * A static method to get a {@link Results} object from a 
+     * {@link TitrationSeries}
      * 
      * @param series contains all the data needed for fitting
      * 
      * @see Results
      * @see AggResults
      * 
-     * @return a <code>Results</code> object containing Kd and other values from the fitting
+     * @return a {@link Results} object containing Kd and other values from the fitting
      */
     public static Results fit(TitrationSeries series) {
         final double[] ligandConcArray = series.getLigandConcArray();
@@ -87,7 +86,7 @@ public class LeastSquaresFitter {
      * @see AggResults
      * @see #makeArrayOfPresentationFit
      * 
-     * @return a <code>AggResults</code> object with Kd, percent bound, and presentation fitting
+     * @return a {@link AggResults} object with Kd, percent bound, and presentation fitting
      * 
      */
     private static AggResults fitCumulativeData(double[] ligandConcArray,
@@ -192,7 +191,7 @@ public class LeastSquaresFitter {
     
     
     /**
-     * A static helper method that uses LeastSquaresBuilder to create a <code>LeastSquaresProblem</code>
+     * A static helper method that uses {@link LeastSquaresBuilder} to create a {@link LeastSquaresProblem}
      * which is then evaluated using LM minimization. Note that this is used for both the two-parameter (kd, dw)
      * cumulative fit and the one-parameter per-residue (dw) fit.
      * 
@@ -203,7 +202,7 @@ public class LeastSquaresFitter {
      * @see #fitCumulativeData
      * @see #fitDwForAResidue
      * 
-     * @return A <code>LeastSquaresOptimizer.Optimum</code> object containing results
+     * @return A {@link LeastSquaresOptimizer.Optimum} object containing results
      */
     private static LeastSquaresOptimizer.Optimum buildAndGetOptimum(double[] startingGuess, 
                                                                     MultivariateJacobianFunction function, 
@@ -279,7 +278,7 @@ public class LeastSquaresFitter {
     
     /**
      * A method that evaluates the first derivative with respect to dw (dM/d(dw))
-     * of the equation in method <code>calcModel</code>. This is required for the
+     * of the equation in method {@link #calcModel}. This is required for the
      * Jacobian matrix in LM minimization
      * 
      * @param P0 The total receptor concentration (labeled species)
@@ -300,7 +299,7 @@ public class LeastSquaresFitter {
     
     /**
      * A method that evaluates the first derivative with respect to Kd (dM/d(kd)) 
-     * of the equation in method <code>calcModel</code>. This is required for the
+     * of the equation in method {@link #calcModel}. This is required for the
      * Jacobian matrix in LV minimization
      * 
      * @param P0 The total receptor concentration (labeled species)

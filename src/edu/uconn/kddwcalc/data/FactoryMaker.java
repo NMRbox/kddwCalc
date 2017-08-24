@@ -18,11 +18,19 @@ package edu.uconn.kddwcalc.data;
 public class FactoryMaker {
     
     /**
+     * Construction of {@link FactoryMaker} object is unnecessary; call the static method {@link #createFactory}. 
+     */
+    private FactoryMaker() {
+        }
+
+    /**
+     * Creates a concrete implementation of <code>AbsFactory</code>.
+     * 
      * @param type the type of titration (chosen by user in GUI)
      * 
-     * @return a subclass of <code>AbsFactory</code>
+     * @return a concrete subclass of {@link AbsFactory}
      * 
-     * @throws IllegalArgumentException if the variable <code>absFactory</code> is not initialized in the
+     * @throws IllegalArgumentException if the variable <code>AbsFactory</code> is not initialized in the
      * switch statement.
      */
     public static AbsFactory createFactory(String type) {

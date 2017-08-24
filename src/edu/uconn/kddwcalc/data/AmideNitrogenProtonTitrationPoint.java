@@ -18,7 +18,7 @@ package edu.uconn.kddwcalc.data;
 public class AmideNitrogenProtonTitrationPoint extends TitrationPoint {
     /**
      * Initializes an instance of the class by calling the four-argument constructor from 
-     * superclass <code>TitrationPoint</code>
+     * superclass {@link TitrationPoint}
      * 
      * @param ligandConc the ligand concentration
      * @param receptorConc the receptor concentration
@@ -43,13 +43,13 @@ public class AmideNitrogenProtonTitrationPoint extends TitrationPoint {
      * 
      * @see TitrationPoint#isValidData 
      * 
-     * @return an instance of class <code>AmideNitrogenProtonTitrationPoint</code> with all instance
+     * @return an instance of class {@link AmideNitrogenProtonTitrationPoint} with all instance
      * variables initialized
      * 
-     * @throws IllegalArgumentException if <code>resonance1 </code> is not nitrogen 
-     * or  <code>resonance2 </code> is not proton
+     * @throws IllegalArgumentException if <code>resonance1</code> is not nitrogen 
+     * or <code>resonance2</code> is not proton
      * 
-     * @throws IllegalArgumentException if <code>TitrationPoint.isValidData</code> returns false
+     * @throws IllegalArgumentException if {@link TitrationPoint#isValidData} returns false
      */
     public static AmideNitrogenProtonTitrationPoint validateAndCreate(double ligandConc, 
                                                                       double receptorConc,

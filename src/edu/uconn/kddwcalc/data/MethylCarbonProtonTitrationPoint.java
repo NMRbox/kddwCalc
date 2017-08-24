@@ -19,7 +19,7 @@ public class MethylCarbonProtonTitrationPoint extends TitrationPoint {
     
     /**
      * Initializes an instance of the class by calling the four-argument constructor from 
-     * superclass <code>TitrationPoint</code>
+     * superclass {@link TitrationPoint}
      * 
      * @param ligandConc the ligand concentration
      * @param receptorConc the receptor concentration
@@ -45,13 +45,13 @@ public class MethylCarbonProtonTitrationPoint extends TitrationPoint {
      * 
      * @see TitrationPoint#isValidData 
      * 
-     * @return an instance of class <code>MethylCarbonProtonTitrationPoint</code> with all instance
+     * @return an instance of class {@link MethylCarbonProtonTitrationPoint} with all instance
      * variables initialized
      * 
-     * @throws IllegalArgumentException if <code>resonance1 </code> is not proton 
-     * or  <code>resonance2 </code> is not carbon
+     * @throws IllegalArgumentException if <code>resonance1</code> is not proton 
+     * or  <code>resonance2</code> is not carbon
      * 
-     * @throws IllegalArgumentException if <code>TitrationPoint.isValidData</code> returns false
+     * @throws IllegalArgumentException if {@link TitrationPoint#isValidData} returns false
      */
     public static MethylCarbonProtonTitrationPoint validateAndCreate(double ligandConc, 
                                                                      double receptorConc,

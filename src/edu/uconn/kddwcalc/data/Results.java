@@ -32,9 +32,9 @@ public class Results {
      * @param kd the binding affinity for the receptor and ligand
      * @param percentBound the percent bound at the highest ligand:receptor ratio (i.e. the final titration point)
      * @param boundCSPArray contains per-residue dw between free and bound with the kd fixed to the value
-     * from the cumulative fitting in <code>AggResults</code>
+     * from the cumulative fitting in {@link AggResults}
      * @param presentationFit [x,y] coordinates as [ligand ratio, percent bound] for publication figure
-     * from <code>AggResults</code>
+     * from {@link AggResults}
      */
     private Results(double kd, 
                     double percentBound, 
@@ -47,16 +47,16 @@ public class Results {
     }
     
     /**
-     * A simple static factory to create a <code>Results</code> object with validation
+     * A simple static factory to create a {@link Results} object with validation
      * 
      * @param kd the binding affinity for the receptor and ligand
      * @param percentBound the percent bound at the highest ligand:receptor ratio (i.e. the final titration point)
      * @param boundCSPArray contains per-residue dw between free and bound with the kd fixed to the value
-     * from the cumulative fitting in <code>AggResults</code>
+     * from the cumulative fitting in {@link AggResults}
      * @param presentationFit [x,y] coordinates as [ligand ratio, percent bound] for publication figure
-     * from <code>AggResults</code>
+     * from {@link AggResults}
      * 
-     * @return a <code>Results</code> instance with all instance variables initialized
+     * @return a {@link Results} instance with all instance variables initialized
      */
     public static Results makeResultsObject(double kd, 
                                             double percentBound, 
@@ -101,7 +101,7 @@ public class Results {
     }
     
     /**
-     * Gets the per-residue chemical shift perturbations (dw) using the Kd from <code>AggResults</code>
+     * Gets the per-residue chemical shift perturbations (dw) using the Kd from {@link AggResults}
      * 
      * @return an array containing the per-residue chemical shift perturbations (dw)
      * 
@@ -126,7 +126,7 @@ public class Results {
     /**
      * A method to open a file (ie create a new <code>Formatter</code>
      * 
-     * @return a <code>Formatter</code> instance where the result will be written to disk
+     * @return a {@link java.util.Formatter Formatter} instance where the result will be written to disk
      */
     private Formatter openFile() {
         Formatter output = null;
@@ -147,7 +147,7 @@ public class Results {
     /**
      * A method to write the text file with the results to disk
      * 
-     * @param output the <code>Formatter</code> used to write the results to disk
+     * @param output the {@link java.util.Formatter Formatter} used to write the results to disk
      */
     private void writeResults(Formatter output) {
         try {
@@ -177,9 +177,9 @@ public class Results {
     }
     
     /**
-     * Closes an open <code>Formatter</code>
+     * Closes an open {@link java.util.Formatter Formatter}
      * 
-     * @param output the <code>Formatter</code> to close
+     * @param output the {@link java.util.Formatter Formatter} to close
      */
     private void closeFile(Formatter output) {
         if (output != null)

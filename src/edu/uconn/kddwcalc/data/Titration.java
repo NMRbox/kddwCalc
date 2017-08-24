@@ -21,7 +21,7 @@ public class Titration {
     private final double multiplier;
     
     /**
-     * Initializes a <code>Titration</code> instance with a multiplier from the user. After this is 
+     * Initializes a {@link Titration} instance with a multiplier from the user. After this is 
      * performed, the <code>List{@literal <}TitrationPoint{@literal >}</code> is empty. 
      * 
      * @param multiplier the value from the user that indicates how to scale the two nuclei into 1H-ppm
@@ -31,10 +31,10 @@ public class Titration {
     }
     
     /**
-     * Adds a <code>TitrationPoint</code> to the instance variable <code>titration</code>
+     * Adds a {@link TitrationPoint} to the instance variable <code>titration</code>
      * 
      * @param pnt contains the information for one peak from one spectrum 
-     * (ligand and receptor concentrations and two chemical shifts (subclasses of <code>Resonance</code>)
+     * (ligand and receptor concentrations and two chemical shifts (subclasses of {@link Resonance})
      * 
      * @see AbsFactory
      */
@@ -64,21 +64,14 @@ public class Titration {
                         .toArray();
     }
     
-    // this method takes the 2D points and calculates distance between them using
-    //
-    // sqrt((x1-x2)^2 + (y1-y2)^2)
-    // 
-    // the multiplier scales the values to proton ppm values (as of 170724).
-    //     note how getResonance1() and getResonance2() are used below.
-    //     this is a dependcy between this class and class Resonance
-    
     /**
-     * Takes the two <code>Resonance</code> variables from <code>titration</code> and extracts the 
+     * Takes the two {@link Resonance} variables from instance variable <code>titration</code> and extracts the 
      * chemical shift perturbation. Effectively, this uses the equation for distance
      * [sqrt((xn-x0)^2 + (yn-y0)^2)] with scaling based on the multiplier. The first point should have a CSP = 0,
      * while the remaining points are calculated from the first point with free receptor.
      * 
-     * Note the use of <code>getResonance1</code> and <code>getResonance2</code>. This introduces coupling between this class and others.
+     * Note the use of {@link TitrationPoint#getResonance1}  and {@link TitrationPoint#getResonance2}. 
+     * This introduces coupling between this class and others.
      * 
      * @return the chemical shift perturbations as 1H-ppm (because of scaling)
      */
@@ -96,7 +89,7 @@ public class Titration {
     }
     
     /**
-     * Turns the <code> List{@literal <}Double{@literal >}</code> from <code>getCSPsFrom2DPoints</code>
+     * Turns the <code>List{@literal <}Double{@literal >}</code> from {@link #getCSPsFrom2DPoints}
      * and turns it into <code>double[]</code>.
      * 
      * @return array of <code>double</code> with the chemical shift perturbations as 1H-ppm

@@ -14,7 +14,7 @@ public abstract class Resonance {
     private final double chemShift;
     
     /**
-     * Initializes an instance of <code>Resonance</code> with an NMR chemical shift value
+     * Initializes an instance of {@link Resonance} with an NMR chemical shift value
      * 
      * @param chemShift an NMR chemical shift value
      */
@@ -37,8 +37,8 @@ public abstract class Resonance {
      * times where incorrect nuclei have been specified
      * 
      * @param chemShift the NMR chemical shift
-     * @param max the maximum possible of <code>chemShift</code> value allowed
-     * @param min the minimum possible of <code>chemShift</code> value allowed
+     * @param max the maximum possible of {@link chemShift} value allowed
+     * @param min the minimum possible of {@link chemShift} value allowed
      * 
      * @return whether of not the chemical shift is within the range specified in subclass 
      */

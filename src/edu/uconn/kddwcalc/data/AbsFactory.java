@@ -8,10 +8,10 @@ import java.util.Scanner;
 
 /**
  * Abstract superclass in an abstract factory pattern hierarchy. In the template method 
- * <code>analyzeDataFile</code> the unsorted data comes from the user and is sorted into 
- * a <code>List{@literal <}Titration{@literal >}</code>. A <code>Titration</code> is composed of a 
- * a <code>List{@literal <}TitrationPoint{@literal >}</code>. A <code>TitrationPoint</code> is composed
- * of two <code>Resonance</code>. 
+ * {@link #analyzeDataFiles analyzeDataFiles} the unsorted data comes from the user and is sorted into 
+ * a <code>List{@literal <}Titration{@literal >}</code>. A {@link Titration} is composed of a 
+ * a <code>List{@literal <}TitrationPoint{@literal >}</code>. A {@link TitrationPoint} is composed
+ * of two {@link Resonance} objects. 
  * 
  * Where appropriate for creation of implementation specifics, abstract
  * methods are called which are overridden in the subclasses.
@@ -28,11 +28,11 @@ import java.util.Scanner;
 public abstract class AbsFactory {
     
     /**
-     * A <code>RawData</code> instance is analyzed to return a <code>TitrationSeries</code>. 
+     * A {@link RawData} instance is sorted by residue to return a {@link TitrationSeries}. 
      * 
      * @param dataObject contains the unsorted peak lists and protein concentrations
      * 
-     * @return a <code>TitrationSeries</code> containing protein concentrations and chemical shifts (all
+     * @return a {@link TitrationSeries} containing protein concentrations and chemical shifts (all
      * data required for fitting)
      */
     public final TitrationSeries analyzeDataFiles(RawData dataObject) {
@@ -69,11 +69,11 @@ public abstract class AbsFactory {
     }    
     
     /**
-     * Takes the <code>Path</code> objects from the user and converts them to <code>Scanner</code> objects
+     * Takes the {@link java.nio.file.Path} objects from the user and converts them to {@link Scanner} objects
      * 
      * @param paths the location of the text files with peak lists
      * 
-     * @return <code>Scanner</code> instances to begin reading peak list data
+     * @return {@link Scanner} instances to begin reading peak list data
      */
     private List<Scanner> makeScannersFromPaths(List<Path> paths) {
         final List<Scanner> scanners = new ArrayList<>();
@@ -114,14 +114,14 @@ public abstract class AbsFactory {
     }
     
     /**
-     * A method that reads two <code>Resonance</code> objects from a data file. These two should
-     * be from the same line. 
+     * A method that reads two {@link Resonance} objects from a data file. These two should
+     * be from the same line and thus the same residue. 
      * 
      * Note: this method ultimately handles the issue of how the nuclei are ordered in the peak lists.
-     * As of 170823, first <code>Resonance</code> is either a nitrogen or carbon and second 
-     * <code>Resonance</code> is the matching proton.
+     * As of 170823, first {@link Resonance} is either a nitrogen or carbon and second 
+     * {@link Resonance} is the matching proton.
      * 
-     * Note: call the methods that are overridden in subclass to get correct <code>Resoonance</code> subclass
+     * Note: call the methods that are overridden in subclass to get correct {@link Resonance} subclass
      * 
      * @param scanner object used to read chemical shift data from peak lists
      * @param resonanceReversal the resonance reversal flag
@@ -150,9 +150,9 @@ public abstract class AbsFactory {
     }
 
     /**
-     * A method to read in a chemical shift. Note that the actual creation of the <code>Resonance</code>
-     * is delegated to subclass to make concrete <code>AmideNitrogen</code> or <code>MethylCarbon</code> 
-     * <code>Resonance</code>.
+     * A method to read in a chemical shift. Note that the actual creation of the {@link Resonance}
+     * is delegated to subclass to make concrete {@link AmideNitrogen} or {@link MethylCarbon} 
+     * {@link Resonance}.
      * 
      * @param scanner instance to read chemical shift data from peak list
      * 
@@ -160,14 +160,14 @@ public abstract class AbsFactory {
      * @see AmideNitrogen
      * @see MethylCarbon
 
-     * @return a concrete subclass of <code>Resonance</code> based on overridden method call
+     * @return a concrete subclass of {@link Resonance} based on overridden method call
      */
     public abstract Resonance getFirstResonanceSubclass(Scanner scanner);
     
     /**
-     * An abstract method to read in a chemical shift. Note that the actual creation of the <code>Resonance</code>
-     * is delegated to subclass to make concrete <code>AmideProton</code> or <code>MethylProton</code> 
-     * <code>Resonance</code> objects.
+     * An abstract method to read in a chemical shift. Note that the actual creation of the {@link Resonance}
+     * is delegated to subclass to make concrete {@link AmideProton} or {@link MethylProton} 
+     * {@link Resonance} objects.
      * 
      * @param scanner instance to read chemical shift data from peak list
      * 
@@ -179,10 +179,9 @@ public abstract class AbsFactory {
      */
     public abstract Resonance getSecondResonanceSubclass(Scanner scanner);
     
-    // delegates creation of methyl or amide titration point to subclass
     /**
-     * An abstract method to create a concrete subclass of <code>TitrationPoint</code>. Note how creation of the 
-     * concrete subclasses is done with overridden methods in subclasses of <code>AbsFactory</code>
+     * An abstract method to create a concrete subclass of {@link TitrationPoint}. Note how creation of the 
+     * concrete subclasses is done with overridden methods in subclasses of {@link AbsFactory}
      * 
      * @param ligandConc the ligand concentration
      * @param receptorConc the receptor concentration
@@ -197,7 +196,7 @@ public abstract class AbsFactory {
                                                               Resonance secondCoordinate);
 
     /**
-     * Closes a <code>Scanner</code> object
+     * Closes a {@link Scanner} object
      * 
      * @param scanners the object to close
      */

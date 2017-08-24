@@ -1,7 +1,7 @@
 package edu.uconn.kddwcalc.data;
 
 /**
- * A class that holds the results from a cumulative chemical shift perturbation fitting of 
+ * A class that represents the results from a cumulative chemical shift perturbation fitting of 
  * fast exchange NMR titration data.
  * 
  * @author Alex Ri
@@ -46,7 +46,7 @@ public class AggResults {
      * 
      * @see LeastSquaresFitter#fitCumulativeData
      * 
-     * @return an instance of <code>AggResults</code> (most likely for further processing)
+     * @return an instance of {@link AggResults}, (most likely for further processing)
      */
     public static AggResults makeCumResults(double kd, 
                                             double percentBound,

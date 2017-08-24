@@ -12,7 +12,7 @@ import java.util.Arrays;
  * @author Alex R.
  * 
  */
-public class ArrayLengthValidator  {
+public class ArrayLengthValidator {
     
     /**
      * Tests a variable number of arrays to make sure they have the same length
@@ -29,7 +29,7 @@ public class ArrayLengthValidator  {
         
         boolean isValidLength = false; // start by assuming the worst
         
-        if(num == 1) // because all the double[] arrays passed in have same length
+        if(num == 1) // will be true if the double[] arrays passed in have same length
             isValidLength = true;
         
         return isValidLength;    

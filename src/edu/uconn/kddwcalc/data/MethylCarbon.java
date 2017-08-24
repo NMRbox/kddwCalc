@@ -1,7 +1,7 @@
 package edu.uconn.kddwcalc.data;
 
 /**
- * A subclass of <code>Resonance</code> for a methyl carbon nucleus. This class also performs validation 
+ * A subclass of {@link Resonance} for a methyl carbon nucleus. This class also performs validation 
  * of the chemical shift to ensure it is within an expected range using a simple static factory.
  * 
  * @author Alex R.
@@ -27,11 +27,11 @@ public class MethylCarbon extends Resonance {
     }
 
     /**
-     * A static simple factory to validate and create a instance of class <code>MethylCarbon</code>.
+     * A static simple factory to validate and create a instance of class {@link MethylCarbon}.
      * 
      * @param chemShift an NMR chemical shift for a methyl carbon nucleus
      * 
-     * @return an instance of <code>MethylCarbon</code> that has been initialized with a chemical shift
+     * @return an instance of {@link MethylCarbon} that has been initialized with a chemical shift
      */
     public static MethylCarbon validateAndCreate(double chemShift) {
         if (isWithinLegitRange(chemShift, METHYL_CARBON_MAX_SHIFT, METHYL_CARBON_MIN_SHIFT))

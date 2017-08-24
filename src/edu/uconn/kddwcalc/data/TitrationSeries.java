@@ -1,7 +1,5 @@
 package edu.uconn.kddwcalc.data;
 
-//package edu.uconn.kdcalc.data;
-
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -10,7 +8,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * The <code>TitrationSeries</code> class holds a complete fast exchange NMR data to fit Kd, dw
+ * The {@link TitrationSeries} class holds a complete fast exchange NMR data to fit Kd, dw
  * and other parameters.
  * 
  * @author Alex R.
@@ -101,6 +99,5 @@ public class TitrationSeries
      */    
     public List<Titration> getTitrationSeries() {
         return titrationSeries;
-    }
-    
+    } 
 } // end class TitrationSeries
