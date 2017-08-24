@@ -1,8 +1,3 @@
-// major editing done on 170609 and 170610 by Alex Ri
-
-// i need a better way to process the button and lines
-
-
 package edu.uconn.kddwcalc.gui;
 
 import edu.uconn.kddwcalc.data.AbsFactory;

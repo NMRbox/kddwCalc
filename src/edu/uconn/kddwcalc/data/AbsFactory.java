@@ -1,33 +1,3 @@
-/* created by Alex Rizzo on 170701
-*
-*
-// 
-// important note:
-// for the three ArrayList objects, each index matches the same
-// indicies for the other two. for instance, index[0] has the 
-// receptor and ligand concentrations and the chemical shifts for
-// the first titration point. these are the data from teh first line of the
-// GUI that requests the data
-*
-* edited by Alex Ri on 170704 and 170706 
-*
-* edited by Alex R on 170712 to remove duplicate code for creating point and resonances 
-*     from the subclass by making abstract methods in this class and delegating specifics
-*     to overriden methods in subclasses
-*
-       essentially the factories take the data from the user and break it up 
-    //     into individual titrations by residue. Titration class represents a single 
-    //     residue and contains all the information needed to calculate kd and dw
-*
-*  class RawData has: 
-*     private final ArrayList<Path> dataFiles;
-*     private final ArrayList<Double> ligandConcs;
-*     private final ArrayList<Double> receptorConcs;
-*     private final double multiplier;
-*     private final boolean resonanceReversal;
-
-*/
-
 package edu.uconn.kddwcalc.data;
 
 import java.io.IOException;

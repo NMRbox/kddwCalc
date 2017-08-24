@@ -1,10 +1,5 @@
 package edu.uconn.kddwcalc.data;
 
-
-import edu.uconn.kddwcalc.data.AbsFactory;
-import edu.uconn.kddwcalc.data.AmideNitrogenProtonFactory;
-import edu.uconn.kddwcalc.data.LeastSquaresFitter;
-import edu.uconn.kddwcalc.data.TitrationSeries;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,8 +13,7 @@ import java.util.Scanner;
  * @author Alex R.
  */
 public class ResonanceTest {
-    public static void main(String[] args) throws IOException
-    {
+    public static void main(String[] args) throws IOException {
         /*
         Resonance amideNitro = AmideNitrogen.validateAndCreate(115.9);
         Resonance amideProton = AmideProton.validateAndCreate(8.1);
