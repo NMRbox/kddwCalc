@@ -30,24 +30,27 @@ public class FactoryMaker {
      * 
      * @return a concrete subclass of {@link AbsFactory}
      * 
-     * @throws IllegalArgumentException if the variable <code>AbsFactory</code> is not initialized in the
+     * @see TypesOfTitations
+     * @see AbsFactory
+     * 
+     * @throws NullPointerException if the variable {@Link AbsFactory} is not initialized in the
      * switch statement.
      */
-    public static AbsFactory createFactory(String type) {
+    public static AbsFactory createFactory(TypesOfTitrations type) {
+        
         AbsFactory absFactory = null;
-   
         
-        if (type.equalsIgnoreCase("1H-15N HSQC"))
+        if (type == TypesOfTitrations.AMIDEHSQC)
             absFactory = new AmideNitrogenProtonFactory();
         
-        else if (type.equalsIgnoreCase("1H-13C methyl HMQC"))
-            absFactory = new AmideNitrogenProtonFactory();
+        else if (type == TypesOfTitrations.METHYLHMQC)
+            absFactory = new MethylCarbonProtonFactory();
         
         
         if (absFactory == null)
             throw new NullPointerException("In class FactoryMaker, the variable absFactory"
                 + " was still null before return statement. Why didn't the if statement "
-                + "make a reference to a concrete factory class?");
+                + "make a reference to a concrete factory class when switching enums?");
         
         return absFactory;
     }

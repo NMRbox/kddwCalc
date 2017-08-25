@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER_RIGHT" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.uconn.kddwcalc.gui.SlowExchangeGUIController">
+   <children>
+      <HBox>
+         <children>
+            <SplitPane dividerPositions="0.5">
+               <items>
+                  <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <VBox alignment="CENTER">
+                                 <children>
+                                    <Label text="Which type of titration?">
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                    </Label>
+                                    <RadioButton contentDisplay="CENTER" mnemonicParsing="false" selected="true" text="1H-15N HSQC">
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </RadioButton>
+                                    <RadioButton contentDisplay="CENTER" mnemonicParsing="false" text="1H-13C methyl HMQC">
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </RadioButton>
+                                 </children>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="50.0" top="50.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <Label text="Order of nuclei in peak list?">
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                    </Label>
+                                    <RadioButton mnemonicParsing="false">
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                    </RadioButton>
+                                    <RadioButton mnemonicParsing="false">
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                    </RadioButton>
+                                 </children>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="50.0" top="50.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <Label text="Enter multiplier">
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                    </Label>
+                                    <TextField promptText="enter value...">
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                    </TextField>
+                                 </children>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="50.0" top="50.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <Button mnemonicParsing="false" text="Choose output...">
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                       <HBox.margin>
+                                          <Insets right="4.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <TextField>
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                       <HBox.margin>
+                                          <Insets left="4.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                 </children>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="50.0" top="50.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <GridPane hgap="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="986.0" vgap="14.0">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="146.0" minWidth="10.0" prefWidth="133.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="[Receptor] (uM)" GridPane.columnIndex="3" />
+                        <Label text="[Ligand] (uM)" GridPane.columnIndex="4" />
+                        <TextField fx:id="receptorConc1" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <TextField fx:id="ligandConc1" text="0.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                        <TextField fx:id="receptorConc4" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                        <TextField fx:id="receptorConc5" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                        <TextField fx:id="receptorConc6" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                        <TextField fx:id="receptorConc7" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+                        <TextField fx:id="receptorConc8" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+                        <TextField fx:id="receptorConc9" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="9" />
+                        <TextField fx:id="receptorConc10" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="10" />
+                        <TextField fx:id="receptorConc11" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="11" />
+                        <TextField fx:id="receptorConc12" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="12" />
+                        <TextField fx:id="receptorConc13" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="13" />
+                        <TextField fx:id="receptorConc14" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="14" />
+                        <TextField fx:id="ligandConc4" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                        <TextField fx:id="ligandConc5" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                        <TextField fx:id="ligandConc6" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                        <TextField fx:id="ligandConc7" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+                        <TextField fx:id="ligandConc8" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="8" />
+                        <TextField fx:id="ligandConc9" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="9" />
+                        <TextField fx:id="ligandConc10" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="10" />
+                        <TextField fx:id="ligandConc11" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="11" />
+                        <TextField fx:id="ligandConc12" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="12" />
+                        <TextField fx:id="ligandConc13" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="13" />
+                        <TextField fx:id="ligandConc14" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="14" />
+                        <Label text="Point 2" GridPane.rowIndex="2" />
+                        <Label text="Point 1 (free receptor)" GridPane.rowIndex="1" />
+                        <Label text="Point 3" GridPane.rowIndex="3" />
+                        <Label text="Point 4" GridPane.rowIndex="4" />
+                        <Label text="Point 5" GridPane.rowIndex="5" />
+                        <Label text="Point 6" GridPane.rowIndex="6" />
+                        <Label text="Point 7" GridPane.rowIndex="7" />
+                        <Label text="Point 8" GridPane.rowIndex="8" />
+                        <Label text="Point 9" GridPane.rowIndex="9" />
+                        <Label text="Point 10" GridPane.rowIndex="10" />
+                        <Label text="Point 11" GridPane.rowIndex="11" />
+                        <Label text="Point 12" GridPane.rowIndex="12" />
+                        <Label text="Point 13" GridPane.rowIndex="13" />
+                        <Label text="Point 14" GridPane.rowIndex="14" />
+                        <Label text="Point 15" GridPane.rowIndex="15" />
+                        <TextField fx:id="fileName1" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <TextField fx:id="fileName2" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <TextField fx:id="fileName3" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <TextField fx:id="fileName4" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <TextField fx:id="fileName5" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                        <TextField fx:id="fileName6" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                        <TextField fx:id="fileName7" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                        <TextField fx:id="fileName8" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                        <TextField fx:id="fileName9" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+                        <TextField fx:id="fileName10" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+                        <TextField fx:id="fileName11" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+                        <TextField fx:id="fileName12" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="12" />
+                        <TextField fx:id="fileName13" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="13" />
+                        <TextField fx:id="fileName14" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="14" />
+                        <TextField fx:id="fileName15" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="15" />
+                        <Button fx:id="chooser1" mnemonicParsing="false" onAction="#Button1pressed" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Button fx:id="chooser2" disable="true" mnemonicParsing="false" onAction="#Button2pressed" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Button fx:id="chooser3" disable="true" mnemonicParsing="false" onAction="#Button3pressed" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Button fx:id="chooser4" disable="true" mnemonicParsing="false" onAction="#Button4pressed" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Button fx:id="chooser5" disable="true" mnemonicParsing="false" onAction="#Button5pressed" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Button fx:id="chooser6" disable="true" mnemonicParsing="false" onAction="#Button6pressed" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <Button fx:id="chooser7" disable="true" mnemonicParsing="false" onAction="#Button7pressed" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                        <Button fx:id="chooser8" disable="true" mnemonicParsing="false" onAction="#Button8pressed" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                        <Button fx:id="chooser9" disable="true" mnemonicParsing="false" onAction="#Button9pressed" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                        <Button fx:id="chooser10" disable="true" mnemonicParsing="false" onAction="#Button10pressed" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                        <Button fx:id="chooser15" disable="true" mnemonicParsing="false" onAction="#Button15pressed" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="15" />
+                        <Button fx:id="chooser14" disable="true" mnemonicParsing="false" onAction="#Button14pressed" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="14" />
+                        <Button fx:id="chooser13" disable="true" mnemonicParsing="false" onAction="#Button13pressed" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="13" />
+                        <Button fx:id="chooser11" disable="true" mnemonicParsing="false" onAction="#Button11pressed" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                        <Button fx:id="chooser12" disable="true" mnemonicParsing="false" onAction="#Button12pressed" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                        <TextField fx:id="receptorConc2" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <TextField fx:id="ligandConc2" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                        <TextField fx:id="receptorConc15" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="15" />
+                        <TextField fx:id="ligandConc15" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="15" />
+                        <Label text="File name" GridPane.columnIndex="2" />
+                        <TextField fx:id="receptorConc3" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <TextField fx:id="ligandConc3" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Enter peak list locations and concentrations..." GridPane.columnSpan="2" />
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </GridPane>
+               </items>
+            </SplitPane>
+         </children>
+      </HBox>
+      <Button mnemonicParsing="false" prefWidth="200.0" text="Analyze">
+         <padding>
+            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+         </padding>
+         <VBox.margin>
+            <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+         </VBox.margin>
+      </Button>
+   </children>
+</VBox>

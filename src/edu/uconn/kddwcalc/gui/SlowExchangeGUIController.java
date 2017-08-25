@@ -1,7 +1,6 @@
 package edu.uconn.kddwcalc.gui;
 
 import edu.uconn.kddwcalc.data.AbsFactory;
-import edu.uconn.kddwcalc.data.AggResults;
 import edu.uconn.kddwcalc.data.FactoryMaker;
 import edu.uconn.kddwcalc.data.LeastSquaresFitter;
 import edu.uconn.kddwcalc.data.RawData;
@@ -22,17 +21,20 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
 /**
- *
- * @author home
+ * Controller class for input of slow exchange NMR titration data.
+ *  
+ * @author Alex R.
+ * 
+ * @since 1.8
  */
-public class ChemShiftsAndConcsGUIController implements Initializable 
+public class SlowExchangeGUIController implements Initializable 
 {   
+    // <editor-fold>
     @FXML private Button chooser1;
     @FXML private Button chooser2;
     @FXML private Button chooser3;
@@ -96,41 +98,27 @@ public class ChemShiftsAndConcsGUIController implements Initializable
     @FXML private TextField fileName13;  
     @FXML private TextField fileName14;  
     @FXML private TextField fileName15;
+    // </editor-fold>
     
-    @FXML private ComboBox<String> typeOfTitration; 
-    @FXML private ComboBox<String> resonanceOrderSelector;
     
-    @FXML TextField multiplierTextField;
-    
-    private double multiplier;
-    
-    @FXML private Label errorLabel;
-    
-    private final List<Button> chooserButtonList = new ArrayList<>(15);
-    private final List<File> fileList = new ArrayList<File>(Arrays.asList(new File[15]));
-    private final List<Path> pathList = new ArrayList<>(15);
-    private final List<TextField> ligandConcTextFieldList = new ArrayList<>(15);
-    private final List<TextField> receptorConcTextFieldList = new ArrayList<>(15);
-    
-    private final List<Double> ligandConcList = new ArrayList<>();
-    private final List<Double> receptorConcList = new ArrayList<>();
-    
-    private boolean resonanceReversal = false;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) 
     {
-        typeOfTitration.setItems(FXCollections.observableArrayList("1H-15N HSQC", "1H-13C methyl HMQC"));
-        resonanceOrderSelector.setItems(FXCollections.observableArrayList("Please select type of spectrum first"));
+        // when i had a combo box selecting
+        //typeOfTitration.setItems(FXCollections.observableArrayList("1H-15N HSQC", "1H-13C methyl HMQC"));
+        //resonanceOrderSelector.setItems(FXCollections.observableArrayList("Please select type of spectrum first"));
+
         
-        // TODO too many global variables here
-        addChoosersToList(); // create the List<Button>, these are pressed to bring up file chooser for dat
-        addLigandConcTextFieldsToList();  // create the List<TextField>
-        addReceptorConcTextFieldsToList();  // also creates List<TextField>
     } 
     
     public void executeButtonPressed(ActionEvent event)
     {   
+        // chooser buton list
+        // ligand conc list
+        //receptor conc list
+        //text field list
+        
         getPrelimDataAndRunValidation();
         
         // create factory subclass using the string from the combobox
@@ -154,7 +142,6 @@ public class ChemShiftsAndConcsGUIController implements Initializable
     
     private void getPrelimDataAndRunValidation()
     {
-        makeSureComboBoxesAreSelected();
         
         removeNullFilesAndMakePaths();
         
@@ -165,11 +152,6 @@ public class ChemShiftsAndConcsGUIController implements Initializable
         makeSureMultiplierCanBeParsed();
         
         determineResonanceReversal();
-    }
-    
-    private void makeSureComboBoxesAreSelected()
-    {
-        //if(typeOfTitration.getValue())
     }
     
     private void removeNullFilesAndMakePaths()
@@ -587,4 +569,4 @@ public class ChemShiftsAndConcsGUIController implements Initializable
     }
     
     
-} // end class ChemShiftsAndConcsGUIController
+} // end class SlowExchangeGUIController

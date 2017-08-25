@@ -158,7 +158,7 @@ public class ResonanceTest {
         
         RawData rawData = RawData.createRawData(paths, ligandConcs, receptorConcs, 0.1 , false);
         
-        AbsFactory factory = new AmideNitrogenProtonFactory();
+        AbsFactory factory = FactoryMaker.createFactory(TypesOfTitrations.AMIDEHSQC);
         
         TitrationSeries series = factory.analyzeDataFiles(rawData);
         
