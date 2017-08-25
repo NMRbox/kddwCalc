@@ -46,7 +46,7 @@ public class AggResults {
      * 
      * @see LeastSquaresFitter#fitCumulativeData
      * 
-     * @return an instance of {@link AggResults}, (most likely for further processing)
+     * @return an instance of <code>AggResults</code>, (most likely for further processing)
      */
     public static AggResults makeCumResults(double kd, 
                                             double percentBound,

@@ -31,7 +31,7 @@ import javafx.stage.FileChooser;
  *
  * @author home
  */
-public class InputGUIController implements Initializable 
+public class ChemShiftsAndConcsGUIController implements Initializable 
 {   
     @FXML private Button chooser1;
     @FXML private Button chooser2;
@@ -587,4 +587,4 @@ public class InputGUIController implements Initializable
     }
     
     
-} // end class InputGUIController
+} // end class ChemShiftsAndConcsGUIController

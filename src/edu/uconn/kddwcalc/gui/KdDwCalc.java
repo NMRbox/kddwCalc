@@ -15,7 +15,7 @@ public class KdDwCalc extends Application
     @Override
     public void start(Stage stage) throws Exception 
     {
-        Parent root = FXMLLoader.load(getClass().getResource("InputGUI.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("ChemShiftsAndConcsGUI.fxml"));
         
         Scene scene = new Scene(root);
         

@@ -8,10 +8,10 @@ import java.util.Scanner;
 
 /**
  * Abstract superclass in an abstract factory pattern hierarchy. In the template method 
- * {@link #analyzeDataFiles analyzeDataFiles} the unsorted data comes from the user and is sorted into 
+ * {@link #analyzeDataFiles analyzeDataFiles}, the unsorted data comes from the user and is sorted into 
  * a <code>List{@literal <}Titration{@literal >}</code>. A {@link Titration} is composed of a 
  * a <code>List{@literal <}TitrationPoint{@literal >}</code>. A {@link TitrationPoint} is composed
- * of two {@link Resonance} objects. 
+ * of two {@link Resonance} objects and two protein concentrations (receptor and ligand). 
  * 
  * Where appropriate for creation of implementation specifics, abstract
  * methods are called which are overridden in the subclasses.

@@ -124,7 +124,7 @@ public class Results {
     }
     
     /**
-     * A method to open a file (ie create a new <code>Formatter</code>
+     * A method to open a file (ie create a new {@link java.util.Formatter Formatter}
      * 
      * @return a {@link java.util.Formatter Formatter} instance where the result will be written to disk
      */
@@ -159,13 +159,13 @@ public class Results {
             Arrays.stream(getBoundCSPArray())
                   .forEach(csp -> output.format("%.6f%n", csp));
             
-            output.format("%nModel points [ligand radio, percent bound]%n");
+            output.format("%n%17s%17s%17s%n","ligand ratio", "model point", "exp point");
             
             for(int ctr = 0; ctr < presentationFit.length; ctr++)
             {
                 for(int ctr2 = 0; ctr2 < presentationFit[ctr].length; ctr2++)
                 {
-                    output.format("%f\t", presentationFit[ctr][ctr2]);
+                    output.format("%17f", presentationFit[ctr][ctr2]);
                 }
                 output.format("%n");
             }

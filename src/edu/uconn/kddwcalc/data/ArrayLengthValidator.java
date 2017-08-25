@@ -5,11 +5,13 @@ import java.util.Arrays;
 /**
  * A class with a single static method that tests a set of arrays to make sure they have the 
  * same length. During the computation, arrays with ligand concentrations, receptor concentrations and either 
- * chemical shifts or chemical shifts perturbations all have to have the same number of elements. This is because each 
- * index represents a single experimental point. In other words: ligand[0], receptor[0] and chemShift[0] are the value 
- * from the first titration point.
+ * chemical shifts or chemical shift perturbations all have to have the same number of elements. This is because each 
+ * index represents a single experimental point. In other words: <code>ligand[0], receptor[0] and chemShift[0]</code> 
+ * are the value from the first titration point.
  * 
  * @author Alex R.
+ * 
+ * @see ArrayLengthsInvalidException
  * 
  */
 public class ArrayLengthValidator {

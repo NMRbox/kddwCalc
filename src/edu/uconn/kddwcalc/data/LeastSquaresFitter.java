@@ -45,11 +45,11 @@ public class LeastSquaresFitter {
         final double[] ligandConcArray = series.getLigandConcArray();
         final double[] receptorConcArray = series.getReceptorConcArray();
         
-        final double[] cumCSPs = series.getCumulativeShifts();
+        final double[] aggExpCSPs = series.getCumulativeShifts();
         
         // TODO add array length validation here
         
-        AggResults aggResultsObject = fitCumulativeData(ligandConcArray, receptorConcArray, cumCSPs);
+        AggResults aggResultsObject = fitCumulativeData(ligandConcArray, receptorConcArray, aggExpCSPs);
         
         double kd = aggResultsObject.getKd();
         double percentBound = aggResultsObject.getPercentBound();
@@ -81,7 +81,7 @@ public class LeastSquaresFitter {
      * 
      * @param ligandConcArray contains total ligand concentrations (L0)
      * @param receptorConcArray contains total receptor (labeled species) concentrations (P0)
-     * @param aggCSPsArray contains the cumulative chemical shift perturbations
+     * @param aggExpCSPsArray contains the cumulative chemical shift perturbations
      * 
      * @see AggResults
      * @see #makeArrayOfPresentationFit
@@ -91,7 +91,7 @@ public class LeastSquaresFitter {
      */
     private static AggResults fitCumulativeData(double[] ligandConcArray,
                                                 double[] receptorConcArray,
-                                                double[] aggCSPsArray) {
+                                                double[] aggExpCSPsArray) {
         
         // TODO add code to make sure arrays are all same size
 
@@ -119,18 +119,18 @@ public class LeastSquaresFitter {
         //  change based on number of residues. later edit: maybe not. seems to be robust over a range of kd
         final double[] startingGuess = {10, 5};
         
-        LeastSquaresOptimizer.Optimum optimum = buildAndGetOptimum(startingGuess, function, aggCSPsArray);
+        LeastSquaresOptimizer.Optimum optimum = buildAndGetOptimum(startingGuess, function, aggExpCSPsArray);
         
         double kd =  optimum.getPoint().getEntry(0);   
         
         double dwMax =  optimum.getPoint().getEntry(1);  // at fully bound
-        double dwAtHighestPoint = aggCSPsArray[aggCSPsArray.length - 1];
+        double dwAtHighestPoint = aggExpCSPsArray[aggExpCSPsArray.length - 1];
         
         double[][] presentationFit = makeArrayOfPresentationFit(ligandConcArray, 
                                                                 receptorConcArray, 
                                                                 kd, 
                                                                 dwMax, 
-                                                                aggCSPsArray);
+                                                                aggExpCSPsArray);
         
         
         
@@ -238,17 +238,22 @@ public class LeastSquaresFitter {
                                                          double[] receptorConcArray, 
                                                          double kd, 
                                                          double dwMax,
-                                                         double[] cumCSPsArray) {    
-        double [][] presentationFit = new double[ligandConcArray.length][2];
+                                                         double[] aggExpCSPsArray) {    
+        double [][] presentationFit = new double[ligandConcArray.length][3];
         
         for(int ctr = 0; ctr < ligandConcArray.length; ctr++) {
             presentationFit[ctr][0] = ligandConcArray[ctr] / receptorConcArray[ctr];
         }
         
-        for(int ctr = 0; ctr < cumCSPsArray.length; ctr++) {
+        for(int ctr = 0; ctr < ligandConcArray.length; ctr++) {
             presentationFit[ctr][1] = 
                 calcModel(receptorConcArray[ctr], ligandConcArray[ctr], kd, dwMax) / dwMax;
         }
+        
+        for(int ctr = 0; ctr < ligandConcArray.length; ctr++) {
+            presentationFit[ctr][2] = aggExpCSPsArray[ctr] / dwMax;
+        }
+        
         return presentationFit;
         
         // TODO this method needs to be a 3 column array that also gives exprimental values

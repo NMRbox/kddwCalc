@@ -1,16 +1,16 @@
 package edu.uconn.kddwcalc.data;
 
 /**
- * A class containing a single simple static factory to instantiate a subclass of <code>AbsFactory</code>.
- * The switch statement using a <code>String</code> that came from
- * <code>InputGUIController.typeOfTitration</code>. These string must match. I probably should have used enums
+ * A class containing a single simple static factory to instantiate a subclass of {link AbsFactory}.
+ * The switch statement using a {link String} that came from
+ * {link InputGUIController#typeOfTitration}. These string must match. I probably should have used enums
  * but its done now.
  * 
  * @author Alex R.
  * 
  * @see AbsFactory
  * @see TitrationSeries
- * @see edu.uconn.kddwcalc.gui.InputGUIController
+ * @see edu.uconn.kddwcalc.gui.TypeOrderMultiplierGUIController
  * 
  * 
  * @since 1.8
@@ -24,7 +24,7 @@ public class FactoryMaker {
         }
 
     /**
-     * Creates a concrete implementation of <code>AbsFactory</code>.
+     * Creates a concrete implementation of {@link AbsFactory}.
      * 
      * @param type the type of titration (chosen by user in GUI)
      * 
