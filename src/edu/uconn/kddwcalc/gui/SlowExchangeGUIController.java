@@ -1,11 +1,13 @@
 package edu.uconn.kddwcalc.gui;
 
 import edu.uconn.kddwcalc.data.AbsFactory;
+import edu.uconn.kddwcalc.data.DataArrayValidator;
 import edu.uconn.kddwcalc.data.FactoryMaker;
 import edu.uconn.kddwcalc.data.LeastSquaresFitter;
 import edu.uconn.kddwcalc.data.RawData;
 import edu.uconn.kddwcalc.data.Results;
 import edu.uconn.kddwcalc.data.TitrationSeries;
+import edu.uconn.kddwcalc.data.TypesOfTitrations;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -15,15 +17,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
+import org.controlsfx.dialog.ExceptionDialog;
 
 /**
  * Controller class for input of slow exchange NMR titration data.
@@ -98,262 +100,167 @@ public class SlowExchangeGUIController implements Initializable
     @FXML private TextField fileName13;  
     @FXML private TextField fileName14;  
     @FXML private TextField fileName15;
+    
+    @FXML TextField multiplierTextField;
+    
+    @FXML ToggleGroup typeOfTitrationToggleGroup;
+    @FXML RadioButton amideHSQCradioButton;
+    @FXML RadioButton methylHMQCradioButton;
+    
+    @FXML ToggleGroup orderOfNucleiToggleGroup;
+    @FXML RadioButton orderNucleiFirstRadioButton;
+    @FXML RadioButton orderNucleiSecondRadioButton;
+    
+    @FXML Button chooseOutputButton;
+    
     // </editor-fold>
     
-    
+    // set this way so that each the List<File> has 15 elements of <code>null</code>. The
+    // program will add new elements and later remove elements if null. Best way I could
+    // quickly think of. would be better if this wasnt so global. also, note how this
+    // variable is reinitialized in the catch block when the data is not valid
+    private List<File> fileList = new ArrayList<File>(Arrays.asList(new File[15]));
 
     @Override
     public void initialize(URL url, ResourceBundle rb) 
-    {
-        // when i had a combo box selecting
-        //typeOfTitration.setItems(FXCollections.observableArrayList("1H-15N HSQC", "1H-13C methyl HMQC"));
-        //resonanceOrderSelector.setItems(FXCollections.observableArrayList("Please select type of spectrum first"));
-
+    {   
+        amideHSQCradioButton.setUserData(TypesOfTitrations.AMIDEHSQC);
+        methylHMQCradioButton.setUserData(TypesOfTitrations.METHYLHMQC);
+        
+        orderNucleiFirstRadioButton.setUserData(false);
+        orderNucleiSecondRadioButton.setUserData(true);
         
     } 
     
     public void executeButtonPressed(ActionEvent event)
     {   
-        // chooser buton list
-        // ligand conc list
-        //receptor conc list
-        //text field list
-        
-        getPrelimDataAndRunValidation();
-        
-        // create factory subclass using the string from the combobox
-        AbsFactory factory = FactoryMaker.createFactory(typeOfTitration.getValue());
-        
-        RawData rawDataInstance = createRawDataObject();
-        
-        TitrationSeries series = factory.analyzeDataFiles(rawDataInstance);
-        
-        //series.printTitrationSeries();
-        
-        Results results = LeastSquaresFitter.fit(series);
-        
-        results.writeResultsToDisk();
-        
-        
-        
-        
-  
-    }
-    
-    private void getPrelimDataAndRunValidation()
-    {
-        
-        removeNullFilesAndMakePaths();
-        
-        makeSureConcsCanBeParsed();
-        
-        makeSureEqualNumFilesAndConcs();
-        
-        makeSureMultiplierCanBeParsed();
-        
-        determineResonanceReversal();
-    }
-    
-    private void removeNullFilesAndMakePaths()
-    {
-        pathList.addAll(fileList.stream()
-                                .filter(file -> file != null)
-                                .map(File::toPath)
-                                .collect(Collectors.toList()));
-    }
-    
-    private void convertTextFieldsToConcsAndTruncate()
-    {
-        ligandConcList.addAll(ligandConcTextFieldList.stream()
-                                                 .map(TextField::getText) // get the string from each text field
-                                                 .filter(text -> !(text.equals(""))) // deletes blank text fields
-                                                 .map(Double::valueOf)      // turn string to a double
-                                                 .collect(Collectors.toList()));
-        receptorConcList.addAll(receptorConcTextFieldList.stream()
-                                                 .map(TextField::getText) // get the string from each text field
-                                                 .filter(text -> !(text.equals(""))) // deletes blank text fields
-                                                 .map(Double::valueOf)      // turn string to a double
-                                                 .collect(Collectors.toList()));  
-    }
-    
-    private void makeSureConcsCanBeParsed()
-    {
-        // if text fields have something that cant be parsed, this will catch that
-        //    and give an error message in a label that printed to user
-        try
-        {
-            convertTextFieldsToConcsAndTruncate();
-        }
-        catch(NumberFormatException e)
-        {
-            System.err.println(e);
-            errorLabel.setText("Conc cant be parsed");
-        }
-    }
-    
-    private void makeSureEqualNumFilesAndConcs()
-    {
-        try
-        {
-            if (pathList.size() != ligandConcList.size()
-              ||pathList.size() != receptorConcList.size()
-              ||ligandConcList.size() != receptorConcList.size())
-            {
-                throw new IllegalArgumentException();
-            }
-        }
-        catch(IllegalArgumentException e)
-        {
-            System.err.println("Dont have same number of files and concentrations");
-            errorLabel.setText("Dif number of files and concs");
+        try {        
+            // <editor-fold desc="Puts GUI objects into Lists">
+            List<Button> fileChooserButtonList = makeListOfObjects(chooser1, chooser2, chooser3,
+                                                                   chooser4, chooser5, chooser6,
+                                                                   chooser7, chooser8, chooser9,
+                                                                   chooser10, chooser11, chooser12,
+                                                                   chooser13, chooser14, chooser15);   
             
-            // reset some of the objects
-            ligandConcList.clear();
-            receptorConcList.clear();
-            pathList.clear();
+            List<TextField> ligandConcTextFieldList = makeListOfObjects(ligandConc1, ligandConc2, ligandConc3,
+                                                                        ligandConc4, ligandConc5, ligandConc6,
+                                                                        ligandConc7, ligandConc8, ligandConc9,
+                                                                        ligandConc10, ligandConc11, ligandConc12,
+                                                                        ligandConc13, ligandConc14, ligandConc15); 
+            
+            List<TextField> receptorConcTextFieldList = makeListOfObjects(receptorConc1, receptorConc2, receptorConc3,
+                                                                          receptorConc4, receptorConc5, receptorConc6,
+                                                                          receptorConc7, receptorConc8, receptorConc9,
+                                                                          receptorConc10, receptorConc11, receptorConc12,
+                                                                          receptorConc13, receptorConc14, receptorConc15);
+            // </editor-fold>
+            
+            AbsFactory factory = 
+                FactoryMaker.createFactory((TypesOfTitrations)typeOfTitrationToggleGroup.getSelectedToggle()
+                                                                                        .getUserData());
+            RawData rawDataInstance = 
+                prepAndMakeRawDataObject(fileChooserButtonList, ligandConcTextFieldList, receptorConcTextFieldList);
+            
+            TitrationSeries series = factory.analyzeDataFiles(rawDataInstance);
+        
+            Results results = LeastSquaresFitter.fit(series);
+            results.writeResultsToDisk();
             
         }
-    }
-    
-    private void makeSureMultiplierCanBeParsed()
-    {
-        try
-        {
-            multiplier = Double.valueOf(multiplierTextField.getText());
-        }
-        catch(NumberFormatException e)
-        {
-            errorLabel.setText("Multplier can't be parsed");
-        }
-    }
-    
-    private RawData createRawDataObject()
-    {
-        RawData rawDataInstance = null;
-        
-        try
-        {
-            rawDataInstance = RawData.createRawData(pathList, ligandConcList, 
-                receptorConcList, multiplier, resonanceReversal);
-        }
-        catch(IOException e)
-        {
+        // note: NumberFormatException will be caught by its superclass IllegalArgumentException
+        catch(IllegalArgumentException | NullPointerException | IOException e) { 
             
+            ExceptionDialog dialog = new ExceptionDialog(e);
+            dialog.showAndWait();
+            
+            fileList = new ArrayList<>(Arrays.asList(new File[15]));
         }
-        catch(IllegalArgumentException e)
-        {
-            errorLabel.setText("Resonances are out of range. Reversal?");
-        }
+    } // end method executeButtonPressed
+    
+    
+    private RawData prepAndMakeRawDataObject(List<Button> fileChooserButtonList,
+                                             List<TextField> ligandConcTextField,
+                                             List<TextField> receptorConcTextField) 
+                                             throws IOException {
+        
+        final RawData rawDataInstance;
+        
+        List<Path> pathList = removeNullFilesAndMakePaths();
+        List<Double> ligandConcList = getListDoubleFromListTextField(ligandConcTextField);
+        List<Double> receptorConcList = getListDoubleFromListTextField(receptorConcTextField);
+        
+        // make sure they all have the same length
+        if(!DataArrayValidator.isListLengthsAllEqual(pathList, ligandConcList, receptorConcList))
+            throw new IllegalArgumentException("Lists have different length in prepAndMakeRawDataObject");
+        
+        double multiplier = Double.valueOf(multiplierTextField.getText());
+        
+        boolean resonanceReversal = (boolean) orderOfNucleiToggleGroup.getSelectedToggle().getUserData();
+       
+        rawDataInstance = RawData.createRawData(pathList, ligandConcList, 
+            receptorConcList, multiplier, resonanceReversal);
+        
+        if (rawDataInstance == null)
+            throw new NullPointerException(
+                "rawDataInstance was null before return in method prepAndMakeRawDataObject");
         
         return rawDataInstance;
     }
     
-    private void determineResonanceReversal()
-    {
-        if(resonanceOrderSelector.getValue().equalsIgnoreCase("Proton Nitrogen")
-        || resonanceOrderSelector.getValue().equalsIgnoreCase("Proton Carbon"))
-                resonanceReversal = true;
-    }
-   
-    
-    // this code is coupled to specific titration information. this must be updated if new types of tirations
-    //     are added
-    public void typeOfTitrationSelected(ActionEvent event)
-    {
-        if(typeOfTitration.getValue().equals("1H-15N HSQC"))
-        {
-            resonanceOrderSelector.setItems(FXCollections.observableArrayList("Nitrogen Proton", "Proton Nitrogen"));
-            multiplierTextField.setText("0.1");
-        }
+    /**
+     * Takes the <code>List{@literal <}File{@literal >}</code> and turns it into a
+     * <code>List{@literal <}Path{@literal >}</code> . Also removes the null references from the end of the end.
+     * 
+     * @return {@link List} objects with locations of NMR chemical shift peak list.
+     */
+    private List<Path> removeNullFilesAndMakePaths() {
         
-        if(typeOfTitration.getValue().equals("1H-13C methyl HMQC"))
-        {
-            resonanceOrderSelector.setItems(FXCollections.observableArrayList("Carbon Proton", "Proton Carbon"));
-            multiplierTextField.setText("0.25");
-        }
+        return new ArrayList<>(fileList.stream()
+                                       .filter(file -> file != null)
+                                       .map(File::toPath)
+                                       .collect(Collectors.toList()));
     }
+    
+    /**
+     * Makes <code>List{@literal <}TextField{@literal >}</code> a <code>List{@literal <}Double@literal >}</code>
+     * 
+     * @param textFieldList
+     * 
+     * @throws NumberFormatException if the {@link TextField} can't be parsed.
+     * 
+     * @return the protein concentrations in a <code>List{@literal <}Double@literal >}</code>
+     */
+    private List<Double> getListDoubleFromListTextField(List<TextField> textFieldList) {
+        
+        return new ArrayList<>(textFieldList.stream()
+                                      .map(TextField::getText) // get the string from each text field
+                                      .filter(text -> !(text.equals(""))) // deletes blank text fields
+                                      .map(Double::valueOf)      // turn string to a double
+                                      .collect(Collectors.toList()));
+    }
+    
+    
+    
+    
+    
+    
+    
     
     // make a generic method to remove the redundancy from lower 
     private <T> List<T> makeListOfObjects(T... object) {   
         return new ArrayList<>(Arrays.asList(object));
     }
     
-    /////////////////////////////
-    /////////////////////////////
-    /////////////////////////////
-    /////////////////////////////
-    /////////////////////////////
-    /////////////////////////////
-    /////////////////////////////
     
     
-    
-    
-    private void addChoosersToList()
+    public void chooseOutputButtonPressed(ActionEvent event)
     {
-        chooserButtonList.add(chooser1);
-        chooserButtonList.add(chooser2);
-        chooserButtonList.add(chooser3);
-        chooserButtonList.add(chooser4);
-        chooserButtonList.add(chooser5);
-        chooserButtonList.add(chooser6);
-        chooserButtonList.add(chooser7);
-        chooserButtonList.add(chooser8);
-        chooserButtonList.add(chooser9);
-        chooserButtonList.add(chooser10);
-        chooserButtonList.add(chooser11);
-        chooserButtonList.add(chooser12);
-        chooserButtonList.add(chooser13);
-        chooserButtonList.add(chooser14);
-        chooserButtonList.add(chooser15);  
+        // TODO
     }
     
+ 
     
-    private void addLigandConcTextFieldsToList()
-    {
-        ligandConcTextFieldList.add(ligandConc1);
-        ligandConcTextFieldList.add(ligandConc2);
-        ligandConcTextFieldList.add(ligandConc3);
-        ligandConcTextFieldList.add(ligandConc4);
-        ligandConcTextFieldList.add(ligandConc5);
-        ligandConcTextFieldList.add(ligandConc6);
-        ligandConcTextFieldList.add(ligandConc7);
-        ligandConcTextFieldList.add(ligandConc8);
-        ligandConcTextFieldList.add(ligandConc9);
-        ligandConcTextFieldList.add(ligandConc10);
-        ligandConcTextFieldList.add(ligandConc11);
-        ligandConcTextFieldList.add(ligandConc12);
-        ligandConcTextFieldList.add(ligandConc13);
-        ligandConcTextFieldList.add(ligandConc14);
-        ligandConcTextFieldList.add(ligandConc15);
-    }
-    
-    private void addReceptorConcTextFieldsToList()
-    {
-        receptorConcTextFieldList.add(receptorConc1);
-        receptorConcTextFieldList.add(receptorConc2);
-        receptorConcTextFieldList.add(receptorConc3);
-        receptorConcTextFieldList.add(receptorConc4);
-        receptorConcTextFieldList.add(receptorConc5);
-        receptorConcTextFieldList.add(receptorConc6);
-        receptorConcTextFieldList.add(receptorConc7);
-        receptorConcTextFieldList.add(receptorConc8);
-        receptorConcTextFieldList.add(receptorConc9);
-        receptorConcTextFieldList.add(receptorConc10);
-        receptorConcTextFieldList.add(receptorConc11);
-        receptorConcTextFieldList.add(receptorConc12);
-        receptorConcTextFieldList.add(receptorConc13);
-        receptorConcTextFieldList.add(receptorConc14);
-        receptorConcTextFieldList.add(receptorConc15);   
-    }
-    
-    
-    //////////////////
-    //////////////////
-    //////////////////
-    //////////////////
-    //////////////////
-    
+    // <editor-fold>
     public void Button1pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
@@ -562,11 +469,11 @@ public class SlowExchangeGUIController implements Initializable
             ligandConc15.setEditable(true);
         }
     }
+    // </editor-fold>
+    
     
     public void clearButtonPressed(ActionEvent event)
     {
         
-    }
-    
-    
+    } 
 } // end class SlowExchangeGUIController

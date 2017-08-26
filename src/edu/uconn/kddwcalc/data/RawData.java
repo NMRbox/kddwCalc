@@ -85,12 +85,7 @@ public final class RawData {
         // bit of code to make sure user entered and equal number of dataFiles, ligand conccentrations...
         // TODO insert the exception to check list lengths here
         
-        if (dataFiles.size()   !=  ligandConcs.size()
-         || ligandConcs.size() !=  receptorConcs.size()
-         || dataFiles.size()   !=  receptorConcs.size()) {
-            throw new IllegalArgumentException("The size of ArrayLists for dataFiles, ligandConcs"
-                + " and receptorConcs do not have the same length. They must.");
-        }
+        
         
         
 

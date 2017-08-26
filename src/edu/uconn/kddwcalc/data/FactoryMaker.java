@@ -10,7 +10,7 @@ package edu.uconn.kddwcalc.data;
  * 
  * @see AbsFactory
  * @see TitrationSeries
- * @see edu.uconn.kddwcalc.gui.TypeOrderMultiplierGUIController
+ * @see edu.uconn.kddwcalc.gui.SlowExchangeGUIController
  * 
  * 
  * @since 1.8
@@ -30,10 +30,10 @@ public class FactoryMaker {
      * 
      * @return a concrete subclass of {@link AbsFactory}
      * 
-     * @see TypesOfTitations
+     * @see TypesOfTitrations
      * @see AbsFactory
      * 
-     * @throws NullPointerException if the variable {@Link AbsFactory} is not initialized in the
+     * @throws NullPointerException if the variable {@link AbsFactory} is not initialized in the
      * switch statement.
      */
     public static AbsFactory createFactory(TypesOfTitrations type) {
