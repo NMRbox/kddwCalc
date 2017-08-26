@@ -25,7 +25,7 @@
                                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                        </padding>
                                     </Label>
-                                    <RadioButton fx:id="amideHSQCradioButton" contentDisplay="CENTER" mnemonicParsing="false" selected="true" text="1H-15N HSQC">
+                                    <RadioButton fx:id="amideHSQCradioButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#amideHSQCSelected" selected="true" text="1H-15N HSQC">
                                        <padding>
                                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                        </padding>
@@ -36,7 +36,7 @@
                                           <ToggleGroup fx:id="spectrumToggleGroup" />
                                        </toggleGroup>
                                     </RadioButton>
-                                    <RadioButton fx:id="methylHMQCradioButton" contentDisplay="CENTER" mnemonicParsing="false" text="1H-13C methyl HMQC" toggleGroup="$spectrumToggleGroup">
+                                    <RadioButton fx:id="methylHMQCradioButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#methylHMQCSelected" text="1H-13C methyl HMQC" toggleGroup="$spectrumToggleGroup">
                                        <padding>
                                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                        </padding>
@@ -105,21 +105,27 @@
                            <children>
                               <VBox>
                                  <children>
-                                    <Button fx:id="chooseOutputButton" mnemonicParsing="false" text="Choose output...">
+                                    <Button fx:id="chooseOutputButton" mnemonicParsing="false" onAction="#chooseOutputButtonPressed" text="Choose output...">
                                        <padding>
                                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                        </padding>
                                        <HBox.margin>
                                           <Insets right="4.0" />
                                        </HBox.margin>
+                                       <VBox.margin>
+                                          <Insets bottom="4.0" />
+                                       </VBox.margin>
                                     </Button>
-                                    <TextField fx:id="chooseOutputTextfield" editable="false">
+                                    <TextField fx:id="outputTextfield" editable="false">
                                        <padding>
                                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                        </padding>
                                        <HBox.margin>
                                           <Insets left="4.0" />
                                        </HBox.margin>
+                                       <VBox.margin>
+                                          <Insets top="4.0" />
+                                       </VBox.margin>
                                     </TextField>
                                  </children>
                               </VBox>
@@ -245,7 +251,7 @@
             </SplitPane>
          </children>
       </HBox>
-      <Button mnemonicParsing="false" prefWidth="200.0" text="Analyze">
+      <Button fx:id="analyzeButton" mnemonicParsing="false" onAction="#analyzeButtonPressed" prefWidth="200.0" text="Analyze">
          <padding>
             <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
          </padding>

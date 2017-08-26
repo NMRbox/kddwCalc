@@ -114,34 +114,18 @@ public class Results {
     
     /**
      * A method to write a text file with the results to disk.
-     */
-    public void writeResultsToDisk() {
-        Formatter output = openFile();
-        
-        writeResults(output);
-        
-        closeFile(output);
-    }
-    
-    /**
-     * A method to open a file (ie create a new {@link java.util.Formatter Formatter}
      * 
-     * @return a {@link java.util.Formatter Formatter} instance where the result will be written to disk
+     * @throws FileNotFoundException if can't find the place to write finalResults.txt
      */
-    private Formatter openFile() {
-        Formatter output = null;
-        
-        try {
-            return new Formatter("finalResults.txt");
+    public void writeResultsToDisk() throws FileNotFoundException {
+
+        try (Formatter output = new Formatter("finalResults.txt")) {
+            
+            writeResults(output);
         }
-        catch(SecurityException | FileNotFoundException e) {
-            System.err.println(e);
-        }
-        
-        if (output == null)
-            throw new IllegalArgumentException("output Formatter is null before returning");
-                
-        return output; 
+        catch(FileNotFoundException e) {
+            throw new FileNotFoundException("Was an issue opening finalResults.txt");
+        }  
     }
     
     /**
@@ -150,39 +134,21 @@ public class Results {
      * @param output the {@link java.util.Formatter Formatter} used to write the results to disk
      */
     private void writeResults(Formatter output) {
-        try {
-            output.format("kd = %.2f%n", getKd());
-            output.format("percent bound = %.2f%n", getPercentBound());
+        output.format("kd = %.2f%n", getKd());
+        output.format("percent bound = %.2f%n", getPercentBound());
             
-            output.format("%ndw for fully bound%n");
+        output.format("%ndw for fully bound%n");
             
-            Arrays.stream(getBoundCSPArray())
-                  .forEach(csp -> output.format("%.6f%n", csp));
+        Arrays.stream(getBoundCSPArray())
+              .forEach(csp -> output.format("%.6f%n", csp));
             
-            output.format("%n%17s%17s%17s%n","ligand ratio", "model point", "exp point");
+        output.format("%n%17s%17s%17s%n","ligand ratio", "model point", "exp point");
             
-            for(int ctr = 0; ctr < presentationFit.length; ctr++)
-            {
-                for(int ctr2 = 0; ctr2 < presentationFit[ctr].length; ctr2++)
-                {
-                    output.format("%17f", presentationFit[ctr][ctr2]);
-                }
-                output.format("%n");
+        for(int ctr = 0; ctr < presentationFit.length; ctr++) {
+            for(int ctr2 = 0; ctr2 < presentationFit[ctr].length; ctr2++) {
+                output.format("%17f", presentationFit[ctr][ctr2]);
             }
-            
-        }
-        catch(FormatterClosedException | NoSuchElementException e) {
-            System.err.println(e);
-        }
-    }
-    
-    /**
-     * Closes an open {@link java.util.Formatter Formatter}
-     * 
-     * @param output the {@link java.util.Formatter Formatter} to close
-     */
-    private void closeFile(Formatter output) {
-        if (output != null)
-            output.close();
-    }
-}
+            output.format("%n");
+        }  
+    } // end writeResults
+} // end class Results

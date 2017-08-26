@@ -1,6 +1,7 @@
 package edu.uconn.kddwcalc.gui;
 
 import edu.uconn.kddwcalc.data.AbsFactory;
+import edu.uconn.kddwcalc.data.AmideNitrogenProtonFactory;
 import edu.uconn.kddwcalc.data.DataArrayValidator;
 import edu.uconn.kddwcalc.data.FactoryMaker;
 import edu.uconn.kddwcalc.data.LeastSquaresFitter;
@@ -9,23 +10,28 @@ import edu.uconn.kddwcalc.data.Results;
 import edu.uconn.kddwcalc.data.TitrationSeries;
 import edu.uconn.kddwcalc.data.TypesOfTitrations;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.FormatterClosedException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
-import org.controlsfx.dialog.ExceptionDialog;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.*;
 
 /**
  * Controller class for input of slow exchange NMR titration data.
@@ -107,11 +113,12 @@ public class SlowExchangeGUIController implements Initializable
     @FXML RadioButton amideHSQCradioButton;
     @FXML RadioButton methylHMQCradioButton;
     
-    @FXML ToggleGroup orderOfNucleiToggleGroup;
+    @FXML ToggleGroup nucleiToggleGroup;
     @FXML RadioButton orderNucleiFirstRadioButton;
     @FXML RadioButton orderNucleiSecondRadioButton;
     
     @FXML Button chooseOutputButton;
+    @FXML TextField outputTextField;
     
     // </editor-fold>
     
@@ -132,7 +139,7 @@ public class SlowExchangeGUIController implements Initializable
         
     } 
     
-    public void executeButtonPressed(ActionEvent event)
+    public void analyzeButtonPressed(ActionEvent event)
     {   
         try {        
             // <editor-fold desc="Puts GUI objects into Lists">
@@ -155,24 +162,30 @@ public class SlowExchangeGUIController implements Initializable
                                                                           receptorConc13, receptorConc14, receptorConc15);
             // </editor-fold>
             
-            AbsFactory factory = 
-                FactoryMaker.createFactory((TypesOfTitrations)typeOfTitrationToggleGroup.getSelectedToggle()
-                                                                                        .getUserData());
+            AbsFactory factory = new AmideNitrogenProtonFactory();
+                //FactoryMaker.createFactory((TypesOfTitrations)typeOfTitrationToggleGroup.getSelectedToggle()
+                                                                               //         .getUserData());
             RawData rawDataInstance = 
                 prepAndMakeRawDataObject(fileChooserButtonList, ligandConcTextFieldList, receptorConcTextFieldList);
             
             TitrationSeries series = factory.analyzeDataFiles(rawDataInstance);
+            
+            series.printTitrationSeries();
         
             Results results = LeastSquaresFitter.fit(series);
             results.writeResultsToDisk();
             
+            displayResultsWrittenPopUp();
+            
         }
         // note: NumberFormatException will be caught by its superclass IllegalArgumentException
-        catch(IllegalArgumentException | NullPointerException | IOException e) { 
+        //       FileNotFoundException hanled by IOException
+        catch(IllegalArgumentException | NullPointerException | IOException | SecurityException |
+            FormatterClosedException | NoSuchElementException e) { 
             
             ExceptionDialog dialog = new ExceptionDialog(e);
             dialog.showAndWait();
-            
+         
             fileList = new ArrayList<>(Arrays.asList(new File[15]));
         }
     } // end method executeButtonPressed
@@ -195,7 +208,7 @@ public class SlowExchangeGUIController implements Initializable
         
         double multiplier = Double.valueOf(multiplierTextField.getText());
         
-        boolean resonanceReversal = (boolean) orderOfNucleiToggleGroup.getSelectedToggle().getUserData();
+        boolean resonanceReversal = (boolean) nucleiToggleGroup.getSelectedToggle().getUserData();
        
         rawDataInstance = RawData.createRawData(pathList, ligandConcList, 
             receptorConcList, multiplier, resonanceReversal);
@@ -238,15 +251,16 @@ public class SlowExchangeGUIController implements Initializable
                                       .map(Double::valueOf)      // turn string to a double
                                       .collect(Collectors.toList()));
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    // make a generic method to remove the redundancy from lower 
+
+    /**
+     * Makes a {@link List} from a variable number of arguments array. 
+     * 
+     * @param <T> object type that will go into the {@link List}
+     * 
+     * @param object individual instance to add to a {@link List}
+     * 
+     * @return array containing the elements that were formerly in a {@link List}
+     */ 
     private <T> List<T> makeListOfObjects(T... object) {   
         return new ArrayList<>(Arrays.asList(object));
     }
@@ -255,13 +269,42 @@ public class SlowExchangeGUIController implements Initializable
     
     public void chooseOutputButtonPressed(ActionEvent event)
     {
-        // TODO
+        FileChooser chooser = new FileChooser();
+        File file = chooser.showSaveDialog(null);
+        
+        if (file != null)
+        {
+            outputTextField.setText(file.getName());
+        }
+    }
+    
+    public void displayResultsWrittenPopUp() {
+      
+        // TODO add dialog here
+    }
+    
+    @FXML
+    private void methylHMQCSelected(ActionEvent event)
+    {
+        orderNucleiFirstRadioButton.setText("Carbon Proton");
+        orderNucleiSecondRadioButton.setText("Proton Carbon");
+        multiplierTextField.setText("0.25");
+    }
+    
+
+    @FXML
+    private void amideHSQCSelected(ActionEvent event)
+    { 
+        orderNucleiFirstRadioButton.setText("Nitrogen Proton");
+        orderNucleiSecondRadioButton.setText("Proton Nitrogen");
+        multiplierTextField.setText("0.1");
     }
     
  
     
     // <editor-fold>
-    public void Button1pressed(ActionEvent event)
+    @FXML
+    private void Button1pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
         this.fileList.set(0, chooser.showOpenDialog(null));
@@ -274,7 +317,8 @@ public class SlowExchangeGUIController implements Initializable
         }
     }
     
-    public void Button2pressed(ActionEvent event)
+    @FXML
+    private void Button2pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
         fileList.set(1, chooser.showOpenDialog(null));
@@ -288,7 +332,8 @@ public class SlowExchangeGUIController implements Initializable
         }
     }
     
-    public void Button3pressed(ActionEvent event)
+    @FXML
+    private void Button3pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
         
@@ -303,7 +348,8 @@ public class SlowExchangeGUIController implements Initializable
         }
     }
     
-    public void Button4pressed(ActionEvent event)
+    @FXML
+    private void Button4pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
         fileList.set(3, chooser.showOpenDialog(null));
@@ -317,7 +363,8 @@ public class SlowExchangeGUIController implements Initializable
         }
     }
     
-    public void Button5pressed(ActionEvent event)
+    @FXML
+    private void Button5pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
         fileList.set(4, chooser.showOpenDialog(null));
@@ -331,7 +378,8 @@ public class SlowExchangeGUIController implements Initializable
         }
     }
     
-    public void Button6pressed(ActionEvent event)
+    @FXML 
+    private void Button6pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
         fileList.set(5, chooser.showOpenDialog(null));
@@ -345,7 +393,8 @@ public class SlowExchangeGUIController implements Initializable
         }
     }
     
-    public void Button7pressed(ActionEvent event)
+    @FXML 
+    private void Button7pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
         fileList.set(6, chooser.showOpenDialog(null));
@@ -359,7 +408,8 @@ public class SlowExchangeGUIController implements Initializable
         }
     }
     
-    public void Button8pressed(ActionEvent event)
+    @FXML 
+    private void Button8pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
         fileList.set(7, chooser.showOpenDialog(null));
@@ -373,7 +423,8 @@ public class SlowExchangeGUIController implements Initializable
         }
     }
     
-    public void Button9pressed(ActionEvent event)
+    @FXML 
+    private void Button9pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
         fileList.set(8, chooser.showOpenDialog(null));
@@ -387,7 +438,8 @@ public class SlowExchangeGUIController implements Initializable
         }
     }
     
-    public void Button10pressed(ActionEvent event)
+    @FXML 
+    private void Button10pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
         fileList.set(9, chooser.showOpenDialog(null));
@@ -401,7 +453,8 @@ public class SlowExchangeGUIController implements Initializable
         }
     }
     
-    public void Button11pressed(ActionEvent event)
+    @FXML 
+    private void Button11pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
         fileList.set(10, chooser.showOpenDialog(null));
@@ -415,7 +468,8 @@ public class SlowExchangeGUIController implements Initializable
         }
     }
     
-    public void Button12pressed(ActionEvent event)
+    @FXML 
+    private void Button12pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
         fileList.set(11, chooser.showOpenDialog(null));
@@ -429,7 +483,8 @@ public class SlowExchangeGUIController implements Initializable
         }
     }
     
-    public void Button13pressed(ActionEvent event)
+    @FXML 
+    private void Button13pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
         fileList.set(12, chooser.showOpenDialog(null));
@@ -443,7 +498,8 @@ public class SlowExchangeGUIController implements Initializable
         }
     }
     
-    public void Button14pressed(ActionEvent event)
+    @FXML 
+    private void Button14pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
         fileList.set(13, chooser.showOpenDialog(null));
@@ -457,7 +513,8 @@ public class SlowExchangeGUIController implements Initializable
         }
     }
     
-    public void Button15pressed(ActionEvent event)
+    @FXML 
+    private void Button15pressed(ActionEvent event)
     {
         FileChooser chooser = new FileChooser();
         fileList.set(14, chooser.showOpenDialog(null));
@@ -470,10 +527,4 @@ public class SlowExchangeGUIController implements Initializable
         }
     }
     // </editor-fold>
-    
-    
-    public void clearButtonPressed(ActionEvent event)
-    {
-        
-    } 
 } // end class SlowExchangeGUIController

@@ -34,6 +34,24 @@ public class TitrationSeries
     }
     
     /**
+     * Prints a text 
+     * 
+     * @throws FileNotFoundException if problems occur when opening sortedData.txt
+     */
+    public void printTitrationSeries() throws FileNotFoundException {
+        try (Formatter output = new Formatter("sortedData.txt")) {
+            titrationSeries.stream()
+                       .forEach(titr -> {
+                           titr.printTitration(output);
+                           output.format("%n");
+                       });
+        }
+        catch(FileNotFoundException e) {
+            throw new FileNotFoundException("Was an issue opening sortedData.txt");
+        }
+    }
+
+    /**
      * Calculates and returns an array with the cumulative chemical shifts. This array must be the 
      * same length as the arrays with concentrations of receptor and ligand
      * 
@@ -100,4 +118,6 @@ public class TitrationSeries
     public List<Titration> getTitrationSeries() {
         return titrationSeries;
     } 
+    
+    
 } // end class TitrationSeries

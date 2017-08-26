@@ -1,6 +1,7 @@
 package edu.uconn.kddwcalc.data;
 
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 
 /**
@@ -98,5 +99,20 @@ public class Titration {
         return getCSPsFrom2DPoints().stream()
                                     .mapToDouble(Double::doubleValue)
                                     .toArray();
+    }
+    
+    /**
+     * Prints information from an NMR titration for a single residue to a text file.
+     * 
+     * @param output the {@link Formatter} instance that writes finalResults.txt
+     * 
+     * @see TitrationSeries
+     */
+    public void printTitration(Formatter output) {
+        output.format("Titration with multiplier of %.2f%nCSPs: %s%n"
+            + "LigandConc     ReceptorConc    Resonance1      Resonance2%n", multiplier, getCSPsFrom2DPoints().toString());
+        
+        titration.stream() // results in a Stream<TitrationPoint>
+                 .forEach(titrPoint -> output.format("%s%n", titrPoint.toString()));
     }
 }
