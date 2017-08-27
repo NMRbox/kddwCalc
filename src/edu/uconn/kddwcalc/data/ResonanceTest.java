@@ -13,6 +13,14 @@ import java.util.Scanner;
  * @author Alex R.
  */
 public class ResonanceTest {
+    
+    /**
+     * Alternative main class for running the program by hard coding values or to test the program 
+     * without entering all the data in the GUI.
+     * 
+     * @param args args from command line
+     * @throws IOException if issue opening a file to read or write data
+     */
     public static void main(String[] args) throws IOException {
         /*
         Resonance amideNitro = AmideNitrogen.validateAndCreate(115.9);
@@ -203,9 +211,16 @@ public class ResonanceTest {
         }
         
         */
+        Results results = null;
         
-        Results results = LeastSquaresFitter.fit(series);
-        
+        try
+        {
+            results = LeastSquaresFitter.fit(series);
+        }
+        catch(ArraysInvalidException e)
+        {
+            
+        }
         
         results.writeResultsToDisk();
         

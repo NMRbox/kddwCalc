@@ -1,5 +1,7 @@
 package edu.uconn.kddwcalc.data;
 
+import edu.uconn.kddwcalc.gui.SlowExchangeGUIController;
+
 /**
  * Represent the types of titrations. This is used for the switch in {@link FactoryMaker}.
  * 
@@ -7,5 +9,16 @@ package edu.uconn.kddwcalc.data;
  * 
  * @see FactoryMaker
  * @see AbsFactory
+ * @see SlowExchangeGUIController
  */
-public enum TypesOfTitrations { AMIDEHSQC, METHYLHMQC }
+public enum TypesOfTitrations {
+
+    /**
+     * Represents a 1H-15N HSQC-based NMR titration (TROSY also works).
+     */
+    AMIDEHSQC,
+
+    /**
+     *Represents a 1H-13N methyl HMQC-based NMR titration.
+     */
+    METHYLHMQC }

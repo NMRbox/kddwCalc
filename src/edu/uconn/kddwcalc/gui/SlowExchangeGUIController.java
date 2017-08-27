@@ -1,6 +1,7 @@
 package edu.uconn.kddwcalc.gui;
 
 import edu.uconn.kddwcalc.data.AbsFactory;
+import edu.uconn.kddwcalc.data.ArraysInvalidException;
 import edu.uconn.kddwcalc.data.DataArrayValidator;
 import edu.uconn.kddwcalc.data.FactoryMaker;
 import edu.uconn.kddwcalc.data.LeastSquaresFitter;
@@ -200,7 +201,7 @@ public class SlowExchangeGUIController implements Initializable {
         // note: NumberFormatException will be caught by its superclass IllegalArgumentException
         //       FileNotFoundException hanled by IOException
         catch(IllegalArgumentException | NullPointerException | IOException | SecurityException |
-            FormatterClosedException | NoSuchElementException e) { 
+            FormatterClosedException | NoSuchElementException | ArraysInvalidException e) { 
             
             ExceptionDialog dialog = new ExceptionDialog(e);
             dialog.showAndWait();   

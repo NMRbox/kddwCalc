@@ -39,15 +39,18 @@ public class LeastSquaresFitter {
      * @see Results
      * @see AggResults
      * 
+     * @throws ArraysInvalidException if arrays have different lengths of duplicate data
+     * 
      * @return a {@link Results} object containing Kd and other values from the fitting
      */
-    public static Results fit(TitrationSeries series) {
+    public static Results fit(TitrationSeries series) throws ArraysInvalidException {
         final double[] ligandConcArray = series.getLigandConcArray();
         final double[] receptorConcArray = series.getReceptorConcArray();
         
         final double[] aggExpCSPs = series.getCumulativeShifts();
         
-        // TODO add array length validation here
+        if (!DataArrayValidator.isValid(ligandConcArray, receptorConcArray, aggExpCSPs))
+            throw new ArraysInvalidException("in LeastSquaresFitter.fit");
         
         AggResults aggResultsObject = fitCumulativeData(ligandConcArray, receptorConcArray, aggExpCSPs);
         
@@ -86,14 +89,18 @@ public class LeastSquaresFitter {
      * @see AggResults
      * @see #makeArrayOfPresentationFit
      * 
+     * @throws ArraysInvalidException if arrays have different lengths or duplicate data
+     * 
      * @return a {@link AggResults} object with Kd, percent bound, and presentation fitting
      * 
      */
     private static AggResults fitCumulativeData(double[] ligandConcArray,
                                                 double[] receptorConcArray,
-                                                double[] aggExpCSPsArray) {
+                                                double[] aggExpCSPsArray) 
+                                                throws ArraysInvalidException {
         
-        // TODO add code to make sure arrays are all same size
+        if (!DataArrayValidator.isValid(ligandConcArray, receptorConcArray, aggExpCSPsArray))
+            throw new ArraysInvalidException("in LeastSquaresFitter.fitCumulativeData");
 
         MultivariateJacobianFunction function = (final RealVector paramPoint) -> {
             double kd = paramPoint.getEntry(0);
@@ -154,13 +161,23 @@ public class LeastSquaresFitter {
      * @param cspArray Contains chemical shift perturbations of an individual residues
      * @param kdFromCumData The affinity constant (Kd)
      * 
+     * @throws ArraysInvalidException if the protein concentrations are equal or there are 
+     * duplicates in cspArray.
+     * 
      * @return Value of the total CSP between free and fully bound for a single residue
      */
     private static double fitDwForAResidue(double[] ligandConcArray,
                                            double[] receptorConcArray,
                                            double[] cspArray,
                                            double kdFromCumData) {
-        // TODO add code to make sure arrays are all same size
+        
+        
+        if (!DataArrayValidator.isValid(ligandConcArray, receptorConcArray))
+            throw new IllegalArgumentException("in LeastSquaresFitter.fitDwForAResidue");
+        
+        // only checking for duplicates technically
+        if (!DataArrayValidator.isValid(cspArray))
+            throw new IllegalArgumentException("in LeastSquaresFitter.fitDwForAResidue, for aggExpCSPs");
         
         
         MultivariateJacobianFunction function = (final RealVector paramPoint) -> {
@@ -238,7 +255,12 @@ public class LeastSquaresFitter {
                                                          double[] receptorConcArray, 
                                                          double kd, 
                                                          double dwMax,
-                                                         double[] aggExpCSPsArray) {    
+                                                         double[] aggExpCSPsArray) 
+                                                         throws ArraysInvalidException {    
+        
+        if (!DataArrayValidator.isValid(ligandConcArray, receptorConcArray, aggExpCSPsArray))
+            throw new ArraysInvalidException("in LeastSquaresFitter.makeArrayOfPresentationFit");
+        
         double [][] presentationFit = new double[ligandConcArray.length][3];
         
         for(int ctr = 0; ctr < ligandConcArray.length; ctr++) {

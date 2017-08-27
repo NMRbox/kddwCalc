@@ -204,5 +204,4 @@ public abstract class AbsFactory {
         scanners.stream()
                 .forEach(Scanner::close);
     }
-    
 }
