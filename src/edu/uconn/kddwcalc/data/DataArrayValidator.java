@@ -16,7 +16,7 @@ import java.util.List;
  * 
  * @author Alex R.
  * 
- * @see ArrayLengthsInvalidException
+ * @see ArraysInvalidException
  * 
  */
 public class DataArrayValidator {

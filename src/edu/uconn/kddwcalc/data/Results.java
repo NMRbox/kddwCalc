@@ -116,6 +116,8 @@ public class Results {
     /**
      * A method to write a text file with the results to disk.
      * 
+     * @param file where the results will be written
+     * 
      * @throws FileNotFoundException if can't find the place to write finalResults.txt
      */
     public void writeResultsToDisk(File file) throws FileNotFoundException {
@@ -130,7 +132,7 @@ public class Results {
     }
     
     /**
-     * Overloaded version for testing with {@link ResonancText}
+     * Overloaded version for testing with {@link ResonanceTest}
      * 
      * @throws FileNotFoundException if issue arises when writing final results
      */

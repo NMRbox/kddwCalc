@@ -32,7 +32,7 @@ public class KdDwCalc extends Application {
     }
 
     /**
-     * Program <code>main</code> methods where execution starts.
+     * Program <code>main</code> method where execution starts.
      * 
      * @param args the command line arguments
      */
