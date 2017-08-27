@@ -198,7 +198,7 @@ public abstract class AbsFactory {
     /**
      * Closes a {@link Scanner} object
      * 
-     * @param scanners the object to close
+     * @param scanners the objects to close
      */
     private void closeFiles(List<Scanner> scanners) {
         scanners.stream()

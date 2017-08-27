@@ -120,6 +120,10 @@ public class SlowExchangeGUIController implements Initializable {
     
     @FXML Button resultsOutputButton;
     @FXML TextField resultsOutputTextField;
+    
+    @FXML Button loadButton;
+    @FXML Button saveButton;
+    
     // </editor-fold>
     
     // set this way so that each the List<File> has 15 elements of <code>null</code>. The
@@ -364,6 +368,22 @@ public class SlowExchangeGUIController implements Initializable {
         multiplierTextField.setText("0.1");
     }
     
+    
+    @FXML
+    private void loadButtonPressed(ActionEvent event) {
+        
+        
+        
+    }
+    
+    @FXML
+    private void saveButtonPressed(ActionEvent event) {
+        
+    }
+    
+    
+    // an embarressing and ridiculous duplication of code.
+    // TODO rework
     // <editor-fold>
     @FXML
     private void Button1pressed(ActionEvent event)
