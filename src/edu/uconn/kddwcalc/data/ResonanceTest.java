@@ -206,6 +206,7 @@ public class ResonanceTest {
         
         Results results = LeastSquaresFitter.fit(series);
         
+        
         results.writeResultsToDisk();
         
         

@@ -1,125 +1,150 @@
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.059322790763753214]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     115.13227         7.89247
+     0.000           33.000     115.13227         7.89247
+   223.000           33.000     114.58879         7.86869
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.03630707866243134]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     112.99542         7.87127
+     0.000           33.000     112.99542         7.87127
+   223.000           33.000     113.09961         7.83649
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.03857747089947712]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     111.36392         7.75382
+     0.000           33.000     111.36392         7.75382
+   223.000           33.000     111.46123         7.79115
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.0347128699620191]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     112.03483         8.27967
+     0.000           33.000     112.03483         8.27967
+   223.000           33.000     112.13454         8.31292
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.08387363405146968]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     120.63766         7.52064
+     0.000           33.000     120.63766         7.52064
+   223.000           33.000     120.07433         7.58278
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.05289122257047898]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     111.34986         6.44635
+     0.000           33.000     111.34986         6.44635
+   223.000           33.000     111.48331         6.39517
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.06084200447881234]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     120.11986         8.78588
+     0.000           33.000     120.11986         8.78588
+   223.000           33.000     120.41089         8.83931
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.04912961824602316]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     120.36228         8.02019
+     0.000           33.000     120.36228         8.02019
+   223.000           33.000     120.77161         8.04736
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.08388915711222737]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     121.11017         8.24274
+     0.000           33.000     121.11017         8.24274
+   223.000           33.000     120.27726         8.25274
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.04292793147823561]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     120.16136         8.16924
+     0.000           33.000     120.16136         8.16924
+   223.000           33.000     120.23735         8.12699
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.0519076356714496]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     123.27468         8.18431
+     0.000           33.000     123.27468         8.18431
+   223.000           33.000     123.44597         8.13531
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.012610546221317909]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     122.43376         8.31283
+     0.000           33.000     122.43376         8.31283
+   223.000           33.000     122.51300         8.32264
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.07164436910183501]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     121.15352         8.44256
+     0.000           33.000     121.15352         8.44256
+   223.000           33.000     121.77634         8.47797
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.05595610995235335]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     121.38347         8.51321
+     0.000           33.000     121.38347         8.51321
+   223.000           33.000     121.87068         8.54073
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.07916273606312506]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     125.85726         8.58046
+     0.000           33.000     125.85726         8.58046
+   223.000           33.000     126.35385         8.64211
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.04572619775358527]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     124.76207         8.19572
+     0.000           33.000     124.76207         8.19572
+   223.000           33.000     125.09876         8.16478
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.015258718688015217]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     124.39882         9.50453
+     0.000           33.000     124.39882         9.50453
+   223.000           33.000     124.31046         9.51697
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.0684786525057266]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     125.79466         8.92562
+     0.000           33.000     125.79466         8.92562
+   223.000           33.000     126.29773         8.97208
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.059363601011058]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     126.90412         8.96066
+     0.000           33.000     126.90412         8.96066
+   223.000           33.000     126.31997         8.97123
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.10094855222339791]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     117.27111         7.59495
+     0.000           33.000     117.27111         7.59495
+   223.000           33.000     117.25797         7.69589
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.08741676933518022]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     111.54664         7.17776
+     0.000           33.000     111.54664         7.17776
+   223.000           33.000     112.05883         7.10692
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.12240516110033908]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     125.45017         9.18851
+     0.000           33.000     125.45017         9.18851
+   223.000           33.000     124.87275         9.29644
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.19385893734620496]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     117.25009         9.00306
+     0.000           33.000     117.25009         9.00306
+   223.000           33.000     115.39042         9.05781
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.09606472839185087]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     118.63824         8.53450
+     0.000           33.000     118.63824         8.53450
+   223.000           33.000     118.43453         8.44062
 
 Titration with multiplier of 0.10
-CSPs: [0.0]
+CSPs: [0.0, 0.0693229015261189]
 LigandConc     ReceptorConc    Resonance1      Resonance2
-     0.000           55.000     118.90401         8.38541
+     0.000           33.000     118.90401         8.38541
+   223.000           33.000     118.30727         8.42069
 

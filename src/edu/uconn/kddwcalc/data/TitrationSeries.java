@@ -1,5 +1,6 @@
 package edu.uconn.kddwcalc.data;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -36,10 +37,12 @@ public class TitrationSeries
     /**
      * Prints a text 
      * 
+     * @param file where the sorted peak lists will be written 
+     * 
      * @throws FileNotFoundException if problems occur when opening sortedData.txt
      */
-    public void printTitrationSeries() throws FileNotFoundException {
-        try (Formatter output = new Formatter("sortedData.txt")) {
+    public void printTitrationSeries(File file) throws FileNotFoundException {
+        try (Formatter output = new Formatter(file)) {
             titrationSeries.stream()
                        .forEach(titr -> {
                            titr.printTitration(output);

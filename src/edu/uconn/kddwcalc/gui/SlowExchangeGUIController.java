@@ -10,7 +10,6 @@ import edu.uconn.kddwcalc.data.Results;
 import edu.uconn.kddwcalc.data.TitrationSeries;
 import edu.uconn.kddwcalc.data.TypesOfTitrations;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -24,6 +23,7 @@ import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.RadioButton;
@@ -117,38 +117,36 @@ public class SlowExchangeGUIController implements Initializable
     @FXML RadioButton orderNucleiFirstRadioButton;
     @FXML RadioButton orderNucleiSecondRadioButton;
     
-    @FXML Button chooseOutputButton;
-    @FXML TextField outputTextField;
+    @FXML Button dataOutputButton;
+    @FXML TextField dataOutputTextField;
+    
+    @FXML Button resultsOutputButton;
+    @FXML TextField resultsOutputTextField;
     
     // </editor-fold>
     
     // set this way so that each the List<File> has 15 elements of <code>null</code>. The
     // program will add new elements and later remove elements if null. Best way I could
-    // quickly think of. would be better if this wasnt so global. also, note how this
-    // variable is reinitialized in the catch block when the data is not valid
-    private List<File> fileList = new ArrayList<File>(Arrays.asList(new File[15]));
+    // quickly think of. would be better if this wasnt so global.
+    private final List<File> fileList = new ArrayList<>(Arrays.asList(new File[15]));
+    private File dataOutputFile = null;
+    private File resultsOutputFile = null;
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) 
-    {   
+    public void initialize(URL url, ResourceBundle rb) {  
+        
         amideHSQCradioButton.setUserData(TypesOfTitrations.AMIDEHSQC);
         methylHMQCradioButton.setUserData(TypesOfTitrations.METHYLHMQC);
         
         orderNucleiFirstRadioButton.setUserData(false);
         orderNucleiSecondRadioButton.setUserData(true);
-        
     } 
     
     public void analyzeButtonPressed(ActionEvent event)
     {   
-        try {        
-            // <editor-fold desc="Puts GUI objects into Lists">
-            List<Button> fileChooserButtonList = makeListOfObjects(chooser1, chooser2, chooser3,
-                                                                   chooser4, chooser5, chooser6,
-                                                                   chooser7, chooser8, chooser9,
-                                                                   chooser10, chooser11, chooser12,
-                                                                   chooser13, chooser14, chooser15);   
+        try {
             
+            // <editor-fold desc="Puts GUI objects into Lists">
             List<TextField> ligandConcTextFieldList = makeListOfObjects(ligandConc1, ligandConc2, ligandConc3,
                                                                         ligandConc4, ligandConc5, ligandConc6,
                                                                         ligandConc7, ligandConc8, ligandConc9,
@@ -162,21 +160,20 @@ public class SlowExchangeGUIController implements Initializable
                                                                           receptorConc13, receptorConc14, receptorConc15);
             // </editor-fold>
             
-            AbsFactory factory = new AmideNitrogenProtonFactory();
-                //FactoryMaker.createFactory((TypesOfTitrations)typeOfTitrationToggleGroup.getSelectedToggle()
-                                                                               //         .getUserData());
+            AbsFactory factory = 
+                FactoryMaker.createFactory((TypesOfTitrations)typeOfTitrationToggleGroup.getSelectedToggle()
+                                                                                        .getUserData());
             RawData rawDataInstance = 
-                prepAndMakeRawDataObject(fileChooserButtonList, ligandConcTextFieldList, receptorConcTextFieldList);
+                prepAndMakeRawDataObject(ligandConcTextFieldList, receptorConcTextFieldList);
             
             TitrationSeries series = factory.analyzeDataFiles(rawDataInstance);
             
-            series.printTitrationSeries();
+            series.printTitrationSeries(dataOutputFile);
         
             Results results = LeastSquaresFitter.fit(series);
-            results.writeResultsToDisk();
+            results.writeResultsToDisk(resultsOutputFile);
             
             displayResultsWrittenPopUp();
-            
         }
         // note: NumberFormatException will be caught by its superclass IllegalArgumentException
         //       FileNotFoundException hanled by IOException
@@ -184,15 +181,12 @@ public class SlowExchangeGUIController implements Initializable
             FormatterClosedException | NoSuchElementException e) { 
             
             ExceptionDialog dialog = new ExceptionDialog(e);
-            dialog.showAndWait();
-         
-            fileList = new ArrayList<>(Arrays.asList(new File[15]));
+            dialog.showAndWait();   
         }
     } // end method executeButtonPressed
     
     
-    private RawData prepAndMakeRawDataObject(List<Button> fileChooserButtonList,
-                                             List<TextField> ligandConcTextField,
+    private RawData prepAndMakeRawDataObject(List<TextField> ligandConcTextField,
                                              List<TextField> receptorConcTextField) 
                                              throws IOException {
         
@@ -265,27 +259,39 @@ public class SlowExchangeGUIController implements Initializable
         return new ArrayList<>(Arrays.asList(object));
     }
     
-    
-    
-    public void chooseOutputButtonPressed(ActionEvent event)
-    {
+    public void resultsOutputButtonPressed(ActionEvent event) {
+        
         FileChooser chooser = new FileChooser();
         File file = chooser.showSaveDialog(null);
         
-        if (file != null)
-        {
-            outputTextField.setText(file.getName());
+        if (file != null) {
+            resultsOutputTextField.setText(file.getName());
+            resultsOutputFile = file;
         }
     }
     
+    public void dataOutputButtonPressed(ActionEvent event) {
+        
+        FileChooser chooser = new FileChooser();
+        File file = chooser.showSaveDialog(null);
+        
+        if (file != null) {
+            dataOutputTextField.setText(file.getName());
+            dataOutputFile = file;
+        }
+    }
+
     public void displayResultsWrittenPopUp() {
       
-        // TODO add dialog here
+        Alert alert = 
+           new Alert(Alert.AlertType.CONFIRMATION, "Results were written to disk (a good sign!)");
+        
+        alert.showAndWait();
     }
     
     @FXML
-    private void methylHMQCSelected(ActionEvent event)
-    {
+    private void methylHMQCSelected(ActionEvent event) {
+       
         orderNucleiFirstRadioButton.setText("Carbon Proton");
         orderNucleiSecondRadioButton.setText("Proton Carbon");
         multiplierTextField.setText("0.25");
@@ -293,14 +299,12 @@ public class SlowExchangeGUIController implements Initializable
     
 
     @FXML
-    private void amideHSQCSelected(ActionEvent event)
-    { 
+    private void amideHSQCSelected(ActionEvent event) { 
+       
         orderNucleiFirstRadioButton.setText("Nitrogen Proton");
         orderNucleiSecondRadioButton.setText("Proton Nitrogen");
         multiplierTextField.setText("0.1");
     }
-    
- 
     
     // <editor-fold>
     @FXML

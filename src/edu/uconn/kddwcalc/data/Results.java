@@ -1,5 +1,6 @@
 package edu.uconn.kddwcalc.data;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Formatter;
@@ -117,6 +118,22 @@ public class Results {
      * 
      * @throws FileNotFoundException if can't find the place to write finalResults.txt
      */
+    public void writeResultsToDisk(File file) throws FileNotFoundException {
+
+        try (Formatter output = new Formatter(file)) {
+            
+            writeResults(output);
+        }
+        catch(FileNotFoundException e) {
+            throw new FileNotFoundException("Was an issue opening the file to write results");
+        }  
+    }
+    
+    /**
+     * Overloaded version for testing with {@link ResonancText}
+     * 
+     * @throws FileNotFoundException if issue arises when writing final results
+     */
     public void writeResultsToDisk() throws FileNotFoundException {
 
         try (Formatter output = new Formatter("finalResults.txt")) {
@@ -124,7 +141,7 @@ public class Results {
             writeResults(output);
         }
         catch(FileNotFoundException e) {
-            throw new FileNotFoundException("Was an issue opening finalResults.txt");
+            throw new FileNotFoundException("Was an issue opening the file to write results");
         }  
     }
     
