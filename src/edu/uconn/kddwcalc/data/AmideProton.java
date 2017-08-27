@@ -37,6 +37,7 @@ public class AmideProton extends Resonance {
         if (isWithinLegitRange(chemShift, AMIDE_PROTON_MAX_SHIFT, AMIDE_PROTON_MIN_SHIFT))
             return new AmideProton(chemShift);
         
-        else throw new IllegalArgumentException();
+        else throw new IllegalArgumentException("Chemical shifts out of range in "
+            + "AmideProton.validateAndCreate. Consider switching titration type or order of nuclei.");
     }  
 }

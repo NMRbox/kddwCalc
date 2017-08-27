@@ -37,6 +37,7 @@ public class MethylCarbon extends Resonance {
         if (isWithinLegitRange(chemShift, METHYL_CARBON_MAX_SHIFT, METHYL_CARBON_MIN_SHIFT))
             return new MethylCarbon(chemShift);
         
-        else throw new IllegalArgumentException();
+        else throw new IllegalArgumentException("Chemical shifts out of range in "
+            + "MethylCarbon.validateAndCreate. Consider switching titration type or order of nuclei.");
     }
 }  // end class MethylCarbon

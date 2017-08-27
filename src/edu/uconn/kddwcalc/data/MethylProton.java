@@ -37,6 +37,7 @@ public class MethylProton extends Resonance {
         if (isWithinLegitRange(chemShift, METHYL_PROTON_MAX_SHIFT, METHYL_PROTON_MIN_SHIFT))
             return new MethylProton(chemShift);
         
-        else throw new IllegalArgumentException();
+        else throw new IllegalArgumentException("Chemical shifts out of range in "
+            + "MethylProton.validateAndCreate. Consider switching titration type or order of nuclei.");
     } 
 }
