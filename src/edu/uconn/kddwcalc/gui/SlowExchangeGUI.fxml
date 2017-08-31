@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER_RIGHT" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.uconn.kddwcalc.gui.SlowExchangeGUIController">
+<VBox alignment="CENTER_RIGHT" stylesheets="@GUIStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.uconn.kddwcalc.gui.SlowExchangeGUIController">
    <children>
       <HBox>
          <children>
@@ -105,7 +105,7 @@
                            <children>
                               <VBox>
                                  <children>
-                                    <Button fx:id="dataOutputButton" mnemonicParsing="false" onAction="#dataOutputButtonPressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose data output...">
+                                    <Button fx:id="dataOutputButton" mnemonicParsing="false" onAction="#dataOutputButtonPressed" styleClass="fileChooser" text="Choose data output...">
                                        <padding>
                                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                        </padding>
@@ -138,7 +138,7 @@
                            <children>
                               <VBox>
                                  <children>
-                                    <Button fx:id="resultsOutputButton" mnemonicParsing="false" onAction="#resultsOutputButtonPressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose results output...">
+                                    <Button fx:id="resultsOutputButton" mnemonicParsing="false" onAction="#resultsOutputButtonPressed" styleClass="fileChooser" text="Choose results output...">
                                        <padding>
                                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                        </padding>
@@ -252,21 +252,21 @@
                         <TextField fx:id="fileName13" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="13" />
                         <TextField fx:id="fileName14" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="14" />
                         <TextField fx:id="fileName15" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="15" />
-                        <Button fx:id="chooser1" mnemonicParsing="false" onAction="#Button1pressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Button fx:id="chooser2" disable="true" mnemonicParsing="false" onAction="#Button2pressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Button fx:id="chooser3" disable="true" mnemonicParsing="false" onAction="#Button3pressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Button fx:id="chooser4" disable="true" mnemonicParsing="false" onAction="#Button4pressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <Button fx:id="chooser5" disable="true" mnemonicParsing="false" onAction="#Button5pressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <Button fx:id="chooser6" disable="true" mnemonicParsing="false" onAction="#Button6pressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                        <Button fx:id="chooser7" disable="true" mnemonicParsing="false" onAction="#Button7pressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                        <Button fx:id="chooser8" disable="true" mnemonicParsing="false" onAction="#Button8pressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                        <Button fx:id="chooser9" disable="true" mnemonicParsing="false" onAction="#Button9pressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                        <Button fx:id="chooser10" disable="true" mnemonicParsing="false" onAction="#Button10pressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                        <Button fx:id="chooser15" disable="true" mnemonicParsing="false" onAction="#Button15pressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="15" />
-                        <Button fx:id="chooser14" disable="true" mnemonicParsing="false" onAction="#Button14pressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="14" />
-                        <Button fx:id="chooser13" disable="true" mnemonicParsing="false" onAction="#Button13pressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="13" />
-                        <Button fx:id="chooser11" disable="true" mnemonicParsing="false" onAction="#Button11pressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="11" />
-                        <Button fx:id="chooser12" disable="true" mnemonicParsing="false" onAction="#Button12pressed" styleClass="fileChooser" stylesheets="@GUIStyleSheet.css" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                        <Button fx:id="chooser1" mnemonicParsing="false" onAction="#Button1pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Button fx:id="chooser2" disable="true" mnemonicParsing="false" onAction="#Button2pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Button fx:id="chooser3" disable="true" mnemonicParsing="false" onAction="#Button3pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Button fx:id="chooser4" disable="true" mnemonicParsing="false" onAction="#Button4pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Button fx:id="chooser5" disable="true" mnemonicParsing="false" onAction="#Button5pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Button fx:id="chooser6" disable="true" mnemonicParsing="false" onAction="#Button6pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <Button fx:id="chooser7" disable="true" mnemonicParsing="false" onAction="#Button7pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                        <Button fx:id="chooser8" disable="true" mnemonicParsing="false" onAction="#Button8pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                        <Button fx:id="chooser9" disable="true" mnemonicParsing="false" onAction="#Button9pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                        <Button fx:id="chooser10" disable="true" mnemonicParsing="false" onAction="#Button10pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                        <Button fx:id="chooser15" disable="true" mnemonicParsing="false" onAction="#Button15pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="15" />
+                        <Button fx:id="chooser14" disable="true" mnemonicParsing="false" onAction="#Button14pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="14" />
+                        <Button fx:id="chooser13" disable="true" mnemonicParsing="false" onAction="#Button13pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="13" />
+                        <Button fx:id="chooser11" disable="true" mnemonicParsing="false" onAction="#Button11pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                        <Button fx:id="chooser12" disable="true" mnemonicParsing="false" onAction="#Button12pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="12" />
                         <TextField fx:id="receptorConc2" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                         <TextField fx:id="ligandConc2" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="2" />
                         <TextField fx:id="receptorConc15" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="15" />

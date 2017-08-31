@@ -371,7 +371,16 @@ public class SlowExchangeGUIController implements Initializable {
     
     @FXML
     private void loadButtonPressed(ActionEvent event) {
+       
         
+       /* 
+        nucleiToggleGroup.selectToggle(
+            nucleiToggleGroup.getToggles().stream()
+                                          .filter(toggle -> toggle.getUserData() == savedData.getNucleiToggle()))
+        );
+            
+       */
+                                     
         
         
     }
@@ -386,13 +395,11 @@ public class SlowExchangeGUIController implements Initializable {
     // TODO rework
     // <editor-fold>
     @FXML
-    private void Button1pressed(ActionEvent event)
-    {
+    private void Button1pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         this.fileList.set(0, chooser.showOpenDialog(null));
         
-        if(fileList.get(0) != null)
-        {
+        if(fileList.get(0) != null) {
             fileName1.setText(fileList.get(0).getName());
             chooser2.setDisable(false);
             receptorConc1.setEditable(true);
@@ -400,13 +407,11 @@ public class SlowExchangeGUIController implements Initializable {
     }
     
     @FXML
-    private void Button2pressed(ActionEvent event)
-    {
+    private void Button2pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(1, chooser.showOpenDialog(null));
         
-        if(fileList.get(1) != null)
-        {
+        if(fileList.get(1) != null) {
             fileName2.setText(fileList.get(1).getName());
             chooser3.setDisable(false);
             receptorConc2.setEditable(true);
@@ -415,14 +420,12 @@ public class SlowExchangeGUIController implements Initializable {
     }
     
     @FXML
-    private void Button3pressed(ActionEvent event)
-    {
+    private void Button3pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         
         fileList.set(2, chooser.showOpenDialog(null));
         
-        if(fileList.get(2) != null)
-        {
+        if(fileList.get(2) != null) {
             fileName3.setText(fileList.get(2).getName());
             chooser4.setDisable(false);
             receptorConc3.setEditable(true);

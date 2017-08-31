@@ -30,6 +30,8 @@ public class KdDwCalc extends Application {
         scene.getStylesheets().add(
             getClass().getResource("GUIStyleSheet.css").toExternalForm());
         
+        stage.setTitle("For Slow Exchange NMR Titration Data");
+        
         stage.setScene(scene);
         stage.show();
     }
