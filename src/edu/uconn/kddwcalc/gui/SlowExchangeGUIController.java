@@ -11,7 +11,10 @@ import edu.uconn.kddwcalc.data.TitrationSeries;
 import edu.uconn.kddwcalc.data.TypesOfTitrations;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -174,22 +177,16 @@ public class SlowExchangeGUIController implements Initializable {
         try {
             
             // <editor-fold desc="Puts GUI objects into Lists">
-            List<TextField> ligandConcTextFieldList = makeListOfObjects(ligandConc1, ligandConc2, ligandConc3,
-                                                                        ligandConc4, ligandConc5, ligandConc6,
-                                                                        ligandConc7, ligandConc8, ligandConc9,
-                                                                        ligandConc10, ligandConc11, ligandConc12,
-                                                                        ligandConc13, ligandConc14, ligandConc15); 
+            List<TextField> ligandConcTextFieldList = compileLigandConcTextFields();
             
-            List<TextField> receptorConcTextFieldList = makeListOfObjects(receptorConc1, receptorConc2, receptorConc3,
-                                                                          receptorConc4, receptorConc5, receptorConc6,
-                                                                          receptorConc7, receptorConc8, receptorConc9,
-                                                                          receptorConc10, receptorConc11, receptorConc12,
-                                                                          receptorConc13, receptorConc14, receptorConc15);
+            List<TextField> receptorConcTextFieldList = compileReceptorConcTextFields();
             // </editor-fold>
             
+            if (isOutputFilesNull())
+                throw new NullPointerException("Must choose name and where to output data and results");
+            
             AbsFactory factory = 
-                FactoryMaker.createFactory((TypesOfTitrations)typeOfTitrationToggleGroup.getSelectedToggle()
-                                                                                        .getUserData());
+                FactoryMaker.createFactory(getTypeOfTitration());
             RawData rawDataInstance = 
                 prepAndMakeRawDataObject(ligandConcTextFieldList, receptorConcTextFieldList);
             
@@ -205,12 +202,83 @@ public class SlowExchangeGUIController implements Initializable {
         // note: NumberFormatException will be caught by its superclass IllegalArgumentException
         //       FileNotFoundException hanled by IOException
         catch(IllegalArgumentException | NullPointerException | IOException | SecurityException |
-            FormatterClosedException | NoSuchElementException | ArraysInvalidException e) { 
+              FormatterClosedException | NoSuchElementException | ArraysInvalidException e) { 
             
-            ExceptionDialog dialog = new ExceptionDialog(e);
-            dialog.showAndWait();   
+            showExceptionDialog(e);   
         }
     } // end method executeButtonPressed
+    
+    // some duplicated code here from analyze button pres
+    @FXML
+    private void saveButtonPressed(ActionEvent event) throws IOException {
+        
+        File saveFile = useSaveChooser("Save Input Data", "inputDataForGUI.ser");
+        
+        try (ObjectOutputStream output = new ObjectOutputStream(Files.newOutputStream(saveFile.toPath()))) {
+            List<File> localFileList = fileList;
+            
+            List<Double> ligandConcs = 
+                    getListDoubleFromListTextField(compileLigandConcTextFields()); 
+            
+            List<Double> receptorConcs = 
+                    getListDoubleFromListTextField(compileReceptorConcTextFields()); 
+            
+            if (isOutputFilesNull())
+                throw new NullPointerException("Must choose name and where to write data and results");
+                
+            // make sure they all have the same length
+            if(!DataArrayValidator.isListLengthsAllEqual(removeNullFilesAndMakePaths(), ligandConcs, receptorConcs))
+                throw new IllegalArgumentException("Lists have different length in saveButtonPressed");
+            
+            SlowExchangeGUISave instanceToSave =
+                    SlowExchangeGUISave.createUnsortedDataObject(getTypeOfTitration(), 
+                                                                 getResonanceReversal(), 
+                                                                 parseMultiplier(), 
+                                                                 dataOutputFile, 
+                                                                 resultsOutputFile, 
+                                                                 localFileList, 
+                                                                 ligandConcs, 
+                                                                 receptorConcs); 
+            
+        output.writeObject(instanceToSave);
+        
+        // if all went well, reached this point
+        displayResultsWrittenPopUp();
+        
+        }
+        catch (IllegalArgumentException | NullPointerException | SecurityException| 
+               NoSuchElementException | ClassCastException | IOException e) { 
+            
+            showExceptionDialog(e);  
+        } 
+    }
+    
+    @FXML
+    private void loadButtonPressed(ActionEvent event) throws IOException {
+        
+        File openFile = useOpenChooser("Open Saved Data");
+        
+        try (ObjectInputStream input = new ObjectInputStream(Files.newInputStream(openFile.toPath()))) {
+            
+            SlowExchangeGUISave savedData = (SlowExchangeGUISave) input.readObject();
+            
+            
+            
+            multiplierTextField.setText(Double.toString(savedData.getMultiplier()));
+            
+            
+            
+            
+            
+        }
+        catch (IllegalArgumentException | NullPointerException | SecurityException | 
+               NoSuchElementException | ClassCastException | IOException | ClassNotFoundException e) {
+            
+            showExceptionDialog(e);
+        }
+        
+        
+    }
     
     
     /**
@@ -236,9 +304,9 @@ public class SlowExchangeGUIController implements Initializable {
         if(!DataArrayValidator.isListLengthsAllEqual(pathList, ligandConcList, receptorConcList))
             throw new IllegalArgumentException("Lists have different length in prepAndMakeRawDataObject");
         
-        double multiplier = Double.valueOf(multiplierTextField.getText());
+        double multiplier = parseMultiplier();
         
-        boolean resonanceReversal = (boolean) nucleiToggleGroup.getSelectedToggle().getUserData();
+        boolean resonanceReversal = getResonanceReversal();
        
         final RawData rawDataInstance = RawData.createRawData(pathList, ligandConcList, 
             receptorConcList, multiplier, resonanceReversal);
@@ -303,12 +371,12 @@ public class SlowExchangeGUIController implements Initializable {
     @FXML
     private void resultsOutputButtonPressed(ActionEvent event) {
         
-        FileChooser chooser = new FileChooser();
-        File file = chooser.showSaveDialog(null);
+        File resultsFileToSave = useSaveChooser("Save Results", "finalResults.txt");
         
-        if (file != null) {
-            resultsOutputTextField.setText(file.getName());
-            resultsOutputFile = file;
+        
+        if (resultsFileToSave != null) {
+            resultsOutputTextField.setText(resultsFileToSave.getName());
+            resultsOutputFile = resultsFileToSave;
         }
     }
     
@@ -321,8 +389,7 @@ public class SlowExchangeGUIController implements Initializable {
     @FXML
     private void dataOutputButtonPressed(ActionEvent event) {
         
-        FileChooser chooser = new FileChooser();
-        File file = chooser.showSaveDialog(null);
+        File file = useSaveChooser("Save Data", "sortedPeakLists.txt");
         
         if (file != null) {
             dataOutputTextField.setText(file.getName());
@@ -338,6 +405,8 @@ public class SlowExchangeGUIController implements Initializable {
       
         Alert alert = 
            new Alert(Alert.AlertType.CONFIRMATION, "Results were written to disk (a good sign!)");
+        
+        alert.setTitle("Application Status");
         
         alert.showAndWait();
     }
@@ -367,29 +436,6 @@ public class SlowExchangeGUIController implements Initializable {
         orderNucleiSecondRadioButton.setText("Proton Nitrogen");
         multiplierTextField.setText("0.1");
     }
-    
-    
-    @FXML
-    private void loadButtonPressed(ActionEvent event) {
-       
-        
-       /* 
-        nucleiToggleGroup.selectToggle(
-            nucleiToggleGroup.getToggles().stream()
-                                          .filter(toggle -> toggle.getUserData() == savedData.getNucleiToggle()))
-        );
-            
-       */
-                                     
-        
-        
-    }
-    
-    @FXML
-    private void saveButtonPressed(ActionEvent event) {
-        
-    }
-    
     
     // an embarressing and ridiculous duplication of code.
     // TODO rework
@@ -612,4 +658,63 @@ public class SlowExchangeGUIController implements Initializable {
         }
     }
     // </editor-fold>
+
+    private List<TextField> compileLigandConcTextFields() {
+        return makeListOfObjects(ligandConc1, ligandConc2, ligandConc3,
+                                 ligandConc4, ligandConc5, ligandConc6,
+                                 ligandConc7, ligandConc8, ligandConc9,
+                                 ligandConc10, ligandConc11, ligandConc12,
+                                 ligandConc13, ligandConc14, ligandConc15); 
+    }
+
+    private List<TextField> compileReceptorConcTextFields() {
+        return makeListOfObjects(receptorConc1, receptorConc2, receptorConc3,
+                                 receptorConc4, receptorConc5, receptorConc6,
+                                 receptorConc7, receptorConc8, receptorConc9,
+                                 receptorConc10, receptorConc11, receptorConc12,
+                                 receptorConc13, receptorConc14, receptorConc15);
+    }
+
+    private TypesOfTitrations getTypeOfTitration() {
+        return (TypesOfTitrations) typeOfTitrationToggleGroup.getSelectedToggle().getUserData();
+    }
+
+    private boolean getResonanceReversal() {
+        return (boolean) nucleiToggleGroup.getSelectedToggle().getUserData();
+    }
+
+    private double parseMultiplier() {
+        return Double.valueOf(multiplierTextField.getText());
+    }
+
+    private boolean isOutputFilesNull() {
+        return (dataOutputFile == null || resultsOutputFile == null);
+    }
+
+    private void showExceptionDialog(Exception e) {
+        
+        ExceptionDialog dialog = new ExceptionDialog(e);
+            dialog.showAndWait();
+    }
+
+    private File useSaveChooser(String title, String defaultFileName) {
+        
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle((title));
+        chooser.setInitialFileName(defaultFileName);
+        
+        File file = chooser.showSaveDialog(null); 
+        
+        return file;
+    }
+    
+    private File useOpenChooser(String title) {
+        
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle((title));
+        
+        File file = chooser.showOpenDialog(null); 
+        
+        return file;
+    }
 } // end class SlowExchangeGUIController

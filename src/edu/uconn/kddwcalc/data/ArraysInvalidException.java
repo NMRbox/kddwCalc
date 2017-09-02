@@ -1,7 +1,7 @@
 package edu.uconn.kddwcalc.data;
 
 /**
- * Exception that is thrown if the data arrays end up with a different number of elements. 
+ * Exception that is thrown if the data arrays have a different number of elements. 
  * 
  * In the program, the arrays with receptor/ligand concentrations and chemical shifts or 
  * chemical shift perturbations must have the same number of elements since each index 

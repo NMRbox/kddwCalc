@@ -1,5 +1,6 @@
 package edu.uconn.kddwcalc.data;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
@@ -58,7 +59,6 @@ public class DataArrayValidator {
         
         return true;
     }
-    
     
     /**
      * Tests a variable number of arrays to make sure they have the same length

@@ -305,17 +305,17 @@ public class LeastSquaresFitter {
     
     /**
      * A method that evaluates the first derivative with respect to dw (dM/d(dw))
-     * of the equation in method {@link #calcModel}. This is required for the
+     * of the equation in method <code>calcModel</code>. This is required for the
      * Jacobian matrix in LM minimization
      * 
-     * @param P0 The total receptor concentration (labeled species)
-     * @param L0 The total ligand concentration
-     * @param kd The affinity
+     * @param P0 the total receptor concentration (labeled species)
+     * @param L0 the total ligand concentration
+     * @param kd the affinity
      * 
      * @see #calcModel
      * @see #calcModelDerivativeKd
      * 
-     * @return Value of the model derivative for the given parameters
+     * @return value of the model derivative for the given parameters
      */
     private static double calcModelDerivativeDw(double P0, 
                                                 double L0, 
@@ -329,10 +329,10 @@ public class LeastSquaresFitter {
      * of the equation in method {@link #calcModel}. This is required for the
      * Jacobian matrix in LV minimization
      * 
-     * @param P0 The total receptor concentration (labeled species)
-     * @param L0 The total ligand concentration
-     * @param kd The affinity
-     * @param dw Delta-omega between free and bound states
+     * @param P0 the total receptor concentration (labeled species)
+     * @param L0 the total ligand concentration
+     * @param kd the affinity
+     * @param dw delta-omega between free and bound states
      * 
      * @see #calcModel
      * @see #calcModelDerivativeDw
