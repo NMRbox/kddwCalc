@@ -175,7 +175,7 @@ public class LeastSquaresFitter {
         if (!DataArrayValidator.isValid(ligandConcArray, receptorConcArray))
             throw new IllegalArgumentException("in LeastSquaresFitter.fitDwForAResidue");
         
-        // only checking for duplicates technically
+        // only checking for duplicates technically, single element in array created by varargs
         if (!DataArrayValidator.isValid(cspArray))
             throw new IllegalArgumentException("in LeastSquaresFitter.fitDwForAResidue, for aggExpCSPs");
         

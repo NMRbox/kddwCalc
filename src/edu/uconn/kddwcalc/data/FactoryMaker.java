@@ -1,7 +1,7 @@
 package edu.uconn.kddwcalc.data;
 
 /**
- * A class containing a single simple static factory to instantiate a subclass of {link AbsFactory}.
+ * A class containing a single simple static factory to instantiate a subclass of {@link AbsFactory}.
  * The switch statement using a {link String} that came from
  * {link InputGUIController#typeOfTitration}. These string must match. I probably should have used enums
  * but its done now.

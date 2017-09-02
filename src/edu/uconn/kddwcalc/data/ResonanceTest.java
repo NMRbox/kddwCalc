@@ -21,7 +21,7 @@ public class ResonanceTest {
      * @param args args from command line
      * @throws IOException if issue opening a file to read or write data
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ArraysInvalidException {
         /*
         Resonance amideNitro = AmideNitrogen.validateAndCreate(115.9);
         Resonance amideProton = AmideProton.validateAndCreate(8.1);

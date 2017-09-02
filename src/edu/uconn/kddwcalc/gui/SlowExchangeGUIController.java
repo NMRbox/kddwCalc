@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -127,6 +128,8 @@ public class SlowExchangeGUIController implements Initializable {
     @FXML Button loadButton;
     @FXML Button saveButton;
     
+    
+    
     // </editor-fold>
     
     // set this way so that each the List<File> has 15 elements of <code>null</code>. The
@@ -135,6 +138,10 @@ public class SlowExchangeGUIController implements Initializable {
     private final List<File> fileList = new ArrayList<>(Arrays.asList(new File[15]));
     private File dataOutputFile = null;
     private File resultsOutputFile = null;
+    
+    private ReadOnlyObjectWrapper<File> wrappedDataOutputFile;
+    private ReadOnlyObjectWrapper<File> wrappedResultsOutputFile;
+    
 
     /**
      * Initializes the GUI.  enums are set as <code>userData</code> for the {@link RadioButton}
@@ -153,13 +160,26 @@ public class SlowExchangeGUIController implements Initializable {
         
         orderNucleiFirstRadioButton.setUserData(false);
         orderNucleiSecondRadioButton.setUserData(true);
+        
+        wrappedDataOutputFile = new ReadOnlyObjectWrapper(dataOutputFile, "wrappedDataOutputFile");
+        wrappedResultsOutputFile = new ReadOnlyObjectWrapper(resultsOutputFile, "wrappedResultsOutputFile");
+        
+        
+        wrappedDataOutputFile.addListener((observableValue, oldValue, newValue) -> {
+            dataOutputTextField.setText(newValue.getName());
+        });
+        
+        wrappedResultsOutputFile.addListener((observableValue, oldValue, newValue) -> {
+            resultsOutputTextField.setText(newValue.getName());
+        });
+        
     } 
     
     /**
      * Executes when the analyze button is pressed. In short, this method contains the meat of the program.
      * It creates the {@link AbsFactory} subclass, prepares the data and then sorts the peak lists. This forms a 
      * {@link TitrationSeries} which is passed as an argument to {@link LeastSquaresFitter#fit} to return a 
-     * {@link Results} object. The {@link Results} can be printed to disk.
+     * {@link Results} object. The {@link Results} is then printed to disk.
      * 
      * Note: all exceptions should climb back to the catch block in <code>analyzeButtonPressed</code>
      * and show its message in the dialog box. If an exception does occur, the user can close the box and
@@ -183,7 +203,8 @@ public class SlowExchangeGUIController implements Initializable {
             // </editor-fold>
             
             if (isOutputFilesNull())
-                throw new NullPointerException("Must choose name and where to output data and results");
+               throw new NullPointerException("Before pressing \"Analyze\", must choose "
+                       + "name and where to output data and results");
             
             AbsFactory factory = 
                 FactoryMaker.createFactory(getTypeOfTitration());
@@ -192,10 +213,10 @@ public class SlowExchangeGUIController implements Initializable {
             
             TitrationSeries series = factory.analyzeDataFiles(rawDataInstance);
             
-            series.printTitrationSeries(dataOutputFile);
+            series.printTitrationSeries(wrappedDataOutputFile.get());
         
             Results results = LeastSquaresFitter.fit(series);
-            results.writeResultsToDisk(resultsOutputFile);
+            results.writeResultsToDisk(wrappedResultsOutputFile.get());
             
             displayResultsWrittenPopUp();
         }
@@ -208,7 +229,14 @@ public class SlowExchangeGUIController implements Initializable {
         }
     } // end method executeButtonPressed
     
-    // some duplicated code here from analyze button pres
+    /**
+     * Allows the user the save the data from the GUI to a binary file which can be read later by pressing
+     * <code>loadButtonPressed</code>. Note that all data must be filled out to allow the save.
+     * 
+     * @param event the {@link ActionEvent} that occurred
+     * 
+     * @throws IOException if can't write the {@link SlowExchangeGUISave} object
+     */
     @FXML
     private void saveButtonPressed(ActionEvent event) throws IOException {
         
@@ -224,7 +252,8 @@ public class SlowExchangeGUIController implements Initializable {
                     getListDoubleFromListTextField(compileReceptorConcTextFields()); 
             
             if (isOutputFilesNull())
-                throw new NullPointerException("Must choose name and where to write data and results");
+                throw new NullPointerException("Before pressing \'Save\", must choose name "
+                        + "and where to write data and results");
                 
             // make sure they all have the same length
             if(!DataArrayValidator.isListLengthsAllEqual(removeNullFilesAndMakePaths(), ligandConcs, receptorConcs))
@@ -234,16 +263,16 @@ public class SlowExchangeGUIController implements Initializable {
                     SlowExchangeGUISave.createUnsortedDataObject(getTypeOfTitration(), 
                                                                  getResonanceReversal(), 
                                                                  parseMultiplier(), 
-                                                                 dataOutputFile, 
-                                                                 resultsOutputFile, 
+                                                                 wrappedDataOutputFile.get(),
+                                                                 wrappedResultsOutputFile.get(), 
                                                                  localFileList, 
                                                                  ligandConcs, 
                                                                  receptorConcs); 
             
-        output.writeObject(instanceToSave);
-        
-        // if all went well, reached this point
-        displayResultsWrittenPopUp();
+            output.writeObject(instanceToSave);
+            
+            // if all went well, reached this point
+            displayResultsWrittenPopUp();
         
         }
         catch (IllegalArgumentException | NullPointerException | SecurityException| 
@@ -253,6 +282,14 @@ public class SlowExchangeGUIController implements Initializable {
         } 
     }
     
+    /**
+     * A method to read a previously saved {@link SlowExchangeGUISave} object. This populates the 
+     * data into the GUI, then the user must press the "analyze" button to finish.
+     * 
+     * @param event the {@link ActionEvent} that occurred
+     * 
+     * @throws IOException if can't read the chosen data file
+     */
     @FXML
     private void loadButtonPressed(ActionEvent event) throws IOException {
         
@@ -262,7 +299,13 @@ public class SlowExchangeGUIController implements Initializable {
             
             SlowExchangeGUISave savedData = (SlowExchangeGUISave) input.readObject();
             
+            System.out.println();
             
+            System.out.println(savedData.getOutputDataFile().toString());
+            
+            
+            wrappedDataOutputFile.setValue(savedData.getOutputDataFile());
+            wrappedResultsOutputFile.setValue(savedData.getOutputResultsFile());
             
             multiplierTextField.setText(Double.toString(savedData.getMultiplier()));
             
@@ -276,8 +319,6 @@ public class SlowExchangeGUIController implements Initializable {
             
             showExceptionDialog(e);
         }
-        
-        
     }
     
     
@@ -294,7 +335,7 @@ public class SlowExchangeGUIController implements Initializable {
      */
     private RawData prepAndMakeRawDataObject(List<TextField> ligandConcTextField,
                                              List<TextField> receptorConcTextField) 
-                                             throws IOException {
+                                             throws IOException, ArraysInvalidException {
 
         List<Path> pathList = removeNullFilesAndMakePaths();
         List<Double> ligandConcList = getListDoubleFromListTextField(ligandConcTextField);
@@ -364,23 +405,6 @@ public class SlowExchangeGUIController implements Initializable {
     }
     
     /**
-     * Allows the user to choose a file to write the final results
-     * 
-     * @param event the {@link ActionEvent} that occurred
-     */
-    @FXML
-    private void resultsOutputButtonPressed(ActionEvent event) {
-        
-        File resultsFileToSave = useSaveChooser("Save Results", "finalResults.txt");
-        
-        
-        if (resultsFileToSave != null) {
-            resultsOutputTextField.setText(resultsFileToSave.getName());
-            resultsOutputFile = resultsFileToSave;
-        }
-    }
-    
-    /**
      * Allows the user to choose a file to write the sorted peak lists. Inspection of this would
      * make an error obvious.
      * 
@@ -389,14 +413,23 @@ public class SlowExchangeGUIController implements Initializable {
     @FXML
     private void dataOutputButtonPressed(ActionEvent event) {
         
-        File file = useSaveChooser("Save Data", "sortedPeakLists.txt");
+        wrappedDataOutputFile.setValue(useSaveChooser("Save Data", "sortedPeakLists.txt"));
         
-        if (file != null) {
-            dataOutputTextField.setText(file.getName());
-            dataOutputFile = file;
-        }
+        //System.out.println(wrappedDataOutputFile);
+        //System.out.println(wrappedDataOutputFile.get());
     }
-
+    
+    /**
+     * Allows the user to choose a file to write the final results
+     * 
+     * @param event the {@link ActionEvent} that occurred
+     */
+    @FXML
+    private void resultsOutputButtonPressed(ActionEvent event) {
+        
+        wrappedResultsOutputFile.setValue(useSaveChooser("Save Results", "finalResults.txt"));
+    }
+    
     /**
      * If the program reaches this method, then a {@link Results} object was written to disk. This informs
      * the user that this has happened.
@@ -404,7 +437,7 @@ public class SlowExchangeGUIController implements Initializable {
     private void displayResultsWrittenPopUp() {
       
         Alert alert = 
-           new Alert(Alert.AlertType.CONFIRMATION, "Results were written to disk (a good sign!)");
+           new Alert(Alert.AlertType.INFORMATION, "Results were written to disk (a good sign!)");
         
         alert.setTitle("Application Status");
         
@@ -659,6 +692,11 @@ public class SlowExchangeGUIController implements Initializable {
     }
     // </editor-fold>
 
+    /**
+     * Aggregates the ligand concentration {@link TextField} objects into a {@link List}
+     * 
+     * @return the ligand concentration {@link TextField} objects in a list
+     */
     private List<TextField> compileLigandConcTextFields() {
         return makeListOfObjects(ligandConc1, ligandConc2, ligandConc3,
                                  ligandConc4, ligandConc5, ligandConc6,
@@ -666,7 +704,12 @@ public class SlowExchangeGUIController implements Initializable {
                                  ligandConc10, ligandConc11, ligandConc12,
                                  ligandConc13, ligandConc14, ligandConc15); 
     }
-
+    
+    /**
+     * Aggregates the receptor concentration {@link TextField} objects into a {@link List}
+     * 
+     * @return the receptor concentration {@link TextField} objects in a list
+     */
     private List<TextField> compileReceptorConcTextFields() {
         return makeListOfObjects(receptorConc1, receptorConc2, receptorConc3,
                                  receptorConc4, receptorConc5, receptorConc6,
@@ -675,28 +718,60 @@ public class SlowExchangeGUIController implements Initializable {
                                  receptorConc13, receptorConc14, receptorConc15);
     }
 
+    /**
+     * Gets the enum which indicates which type of titration (which nuclei) was performed
+     * 
+     * @return an enum indicating which type of titration was performed
+     */
     private TypesOfTitrations getTypeOfTitration() {
         return (TypesOfTitrations) typeOfTitrationToggleGroup.getSelectedToggle().getUserData();
     }
 
+    /**
+     * Gets information about the order of chemical shifts in the peak lists
+     * 
+     * @return indicates whether the values should be reversed going forward
+     */
     private boolean getResonanceReversal() {
         return (boolean) nucleiToggleGroup.getSelectedToggle().getUserData();
     }
-
+    
+    /**
+     * Gets the multiplier value from the {@link TextField} and parses it
+     * 
+     * @return the multiplier as a {@link double}
+     */
     private double parseMultiplier() {
         return Double.valueOf(multiplierTextField.getText());
     }
-
+    
+    /**
+     * Determines whether the user has chosen where to write the sorted data and final results
+     * 
+     * @return <code>true</code> if the user has specified where to write data, otherwise <code>false</code> 
+     */
     private boolean isOutputFilesNull() {
-        return (dataOutputFile == null || resultsOutputFile == null);
+        return (wrappedDataOutputFile.get() == null || wrappedResultsOutputFile.get() == null);
     }
 
+    /**
+     * Shows an exception dialog from ControlsFX with the message from the parameter
+     * 
+     * @param e the exception that was throw which contains the message for the dialog box
+     */
     private void showExceptionDialog(Exception e) {
         
         ExceptionDialog dialog = new ExceptionDialog(e);
-            dialog.showAndWait();
+        dialog.showAndWait();
     }
-
+    
+    /**
+     * 
+     * @param title the title to apply to the dialog window
+     * @param defaultFileName the name of the file that will be written to
+     * 
+     * @return the name and location where the data will be saved which is chosen from {@link FileChooser}
+     */
     private File useSaveChooser(String title, String defaultFileName) {
         
         FileChooser chooser = new FileChooser();
@@ -708,6 +783,12 @@ public class SlowExchangeGUIController implements Initializable {
         return file;
     }
     
+    /**
+     * 
+     * @param title the title to apply to the dialog window
+     * 
+     * @return the name and location chosen by the user in the {link FileChooser}
+     */
     private File useOpenChooser(String title) {
         
         FileChooser chooser = new FileChooser();

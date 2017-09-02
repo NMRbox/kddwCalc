@@ -81,17 +81,20 @@ public final class RawData {
                                               List<Double> receptorConcs, 
                                               double multiplier, 
                                               boolean resonanceReversal) 
-                                              throws IOException {
-        // bit of code to make sure user entered and equal number of dataFiles, ligand conccentrations...
-        // TODO insert the exception to check list lengths here
+                                              throws IOException, ArraysInvalidException {
         
+        
+        if (!DataArrayValidator.isListLengthsAllEqual(dataFiles, ligandConcs, receptorConcs))
+            throw new ArraysInvalidException("List had different lengths in RawData.createRawData");
         
         
         
 
-        // validation to ensure equal number of lines in each data file
         
-        // this array holds the number of lines in each file
+        /*
+        * This block of code tests each peak list to ensure it has the same number of lines. Each line is a residue,
+        * so each file must have the same number of lines.
+        */
         long[] numLines = new long[dataFiles.size()];
         
         // now count the number of lines in each file
@@ -107,14 +110,12 @@ public final class RawData {
         
         // if every number in that array isnt the same    
          if (Arrays.stream(numLines).distinct().count() != 1)
-             throw new IllegalArgumentException("Data files dont all have same number of lines");
+             throw new IllegalArgumentException("Data files dont all have same number of lines in"
+                     + "RawData.createRawData");
         
         }
-        
         // if this statement is reached, all the validation was passed 
-        return new RawData(dataFiles, ligandConcs,receptorConcs, multiplier, resonanceReversal);
-          
-        
+        return new RawData(dataFiles, ligandConcs,receptorConcs, multiplier, resonanceReversal); 
     }
 
     /**

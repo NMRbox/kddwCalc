@@ -50,14 +50,15 @@ public class DataArrayValidator {
                                                 List<Double> ligandConcList,
                                                 List<Double> receptorConcList) {
         
-        if (pathList.size()       !=  ligandConcList.size()
-        ||  ligandConcList.size() !=  receptorConcList.size()
-        ||  pathList.size()       !=  receptorConcList.size()) {
-              throw new IllegalArgumentException("The size of ArrayLists for pathList, ligandConcs"
-                + " and receptorConcs do not have the same length in isListLengthAllEqual");
-        }
+        return (pathList.size()       ==  ligandConcList.size()
+            &&  ligandConcList.size() ==  receptorConcList.size()
+            &&  pathList.size()       ==  receptorConcList.size());
+    }
+    
+    public static boolean isListLengthsAllEqual(List<Double> ligandConcList,
+                                                List<Double> receptorConcList) {
         
-        return true;
+        return ligandConcList.size() == receptorConcList.size();
     }
     
     /**
@@ -104,5 +105,4 @@ public class DataArrayValidator {
         
         return isDuplicates;    
     }
-    
 } // end class DataArrayValidator
