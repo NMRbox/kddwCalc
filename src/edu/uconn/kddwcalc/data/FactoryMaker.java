@@ -40,18 +40,22 @@ public class FactoryMaker {
         
         AbsFactory absFactory = null;
         
-        if (type == TypesOfTitrations.AMIDEHSQC)
-            absFactory = new AmideNitrogenProtonFactory();
-        
-        else if (type == TypesOfTitrations.METHYLHMQC)
-            absFactory = new MethylCarbonProtonFactory();
-        
-        
-        if (absFactory == null)
-            throw new NullPointerException("In class FactoryMaker, the variable absFactory"
-                + " was still null before return statement. Why didn't the if statement "
-                + "make a reference to a concrete factory class when switching enums?");
-        
+        switch (type) {
+            
+            case AMIDEHSQC: 
+                absFactory = new AmideNitrogenProtonFactory();
+                break;
+                            
+            case METHYLHMQC: 
+                absFactory = new MethylCarbonProtonFactory();
+                break;
+            
+            default: 
+                throw new NullPointerException("In class FactoryMaker, the variable absFactory"
+                + " was not instantiated before the return statement. Why didn't the switch "
+                + "make a reference to a concrete factory class when switching enums?");                  
+        }
+
         return absFactory;
     }
 }  // end class FactoryMaker

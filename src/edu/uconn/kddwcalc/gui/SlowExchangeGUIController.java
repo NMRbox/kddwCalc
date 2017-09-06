@@ -24,6 +24,7 @@ import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,19 +32,22 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
-import org.controlsfx.dialog.*;
+import javafx.stage.FileChooser.ExtensionFilter;
+import org.controlsfx.dialog.ExceptionDialog;
 
 /**
- * Controller class for input of slow exchange NMR titration data. For user data input.
- *  
+ * Controller class for input of slow exchange NMR titration data. For user data
+ * input.
+ *
  * @author Alex R.
- * 
+ *
  * @since 1.8
  */
-public class SlowExchangeGUIController implements Initializable {   
-    
+public class SlowExchangeGUIController implements Initializable {
+
 // <editor-fold>
     @FXML private Button chooser1;
     @FXML private Button chooser2;
@@ -58,9 +62,9 @@ public class SlowExchangeGUIController implements Initializable {
     @FXML private Button chooser11;
     @FXML private Button chooser12;
     @FXML private Button chooser13;
-    @FXML private Button chooser14; 
+    @FXML private Button chooser14;
     @FXML private Button chooser15;
-    
+
     @FXML TextField receptorConc1;
     @FXML TextField receptorConc2;
     @FXML TextField receptorConc3;
@@ -76,7 +80,7 @@ public class SlowExchangeGUIController implements Initializable {
     @FXML TextField receptorConc13;
     @FXML TextField receptorConc14;
     @FXML TextField receptorConc15;
-    
+
     @FXML TextField ligandConc1;
     @FXML TextField ligandConc2;
     @FXML TextField ligandConc3;
@@ -92,384 +96,472 @@ public class SlowExchangeGUIController implements Initializable {
     @FXML TextField ligandConc13;
     @FXML TextField ligandConc14;
     @FXML TextField ligandConc15;
-    
-    @FXML private TextField fileName1;    
-    @FXML private TextField fileName2;   
-    @FXML private TextField fileName3;   
-    @FXML private TextField fileName4;    
-    @FXML private TextField fileName5;   
+
+    @FXML private TextField fileName1;
+    @FXML private TextField fileName2;
+    @FXML private TextField fileName3;
+    @FXML private TextField fileName4;
+    @FXML private TextField fileName5;
     @FXML private TextField fileName6;
     @FXML private TextField fileName7;
     @FXML private TextField fileName8;
     @FXML private TextField fileName9;
     @FXML private TextField fileName10;
     @FXML private TextField fileName11;
-    @FXML private TextField fileName12; 
-    @FXML private TextField fileName13;  
-    @FXML private TextField fileName14;  
+    @FXML private TextField fileName12;
+    @FXML private TextField fileName13;
+    @FXML private TextField fileName14;
     @FXML private TextField fileName15;
-    
+
+    // </editor-fold>
     @FXML TextField multiplierTextField;
-    
+
     @FXML ToggleGroup typeOfTitrationToggleGroup;
     @FXML RadioButton amideHSQCradioButton;
     @FXML RadioButton methylHMQCradioButton;
-    
+
     @FXML ToggleGroup nucleiToggleGroup;
     @FXML RadioButton orderNucleiFirstRadioButton;
     @FXML RadioButton orderNucleiSecondRadioButton;
-    
+
     @FXML Button dataOutputButton;
     @FXML TextField dataOutputTextField;
-    
+
     @FXML Button resultsOutputButton;
     @FXML TextField resultsOutputTextField;
-    
+
     @FXML Button loadButton;
     @FXML Button saveButton;
-    
-    
-    
-    // </editor-fold>
-    
-    // set this way so that each the List<File> has 15 elements of <code>null</code>. The
-    // program will add new elements and later remove elements if null. Best way I could
-    // quickly think of. would be better if this wasnt so global.
-    private final List<File> fileList = new ArrayList<>(Arrays.asList(new File[15]));
-    private File dataOutputFile = null;
-    private File resultsOutputFile = null;
-    
+
+    private static final double AMIDE_HSQC_DEFAULT_MULT = 0.1;
+    private static final double METHYL_HMQC_DEFAULT_MULT = 0.25;
+    private static final String DEFAULT_OUTPUT_DATA_FILENAME = "sortedPeakLists.txt";
+    private static final String DEFAULT_OUTPUT_RESULTS_FILENAME = "finalResults.txt";
+    private static final int MAX_NUM_EXP_PTS = 15;
+    private static final String AMIDE_FIRST_RADIO_BUTTON_MESSAGE = "Nitrogen Proton";
+    private static final String AMIDE_SECOND_RADIO_BUTTON_MESSAGE = "Proton Nitrogen";
+    private static final String METHYL_FIRST_RADIO_BUTTON_MESSAGE = "Carbon Proton";
+    private static final String METHYL_SECOND_RADIO_BUTTON_MESSAGE = "Proton Carbon";
+
+    // its global because i cant figure out how to pass it to the analyze and save button handlers
     private ReadOnlyObjectWrapper<File> wrappedDataOutputFile;
     private ReadOnlyObjectWrapper<File> wrappedResultsOutputFile;
     
+    private final List<File> fileList = new ArrayList<>(Arrays.asList(new File[15]));
 
+            
+    private List<TextField> wrappedFileNameTextFieldList;
+
+    
+    
     /**
-     * Initializes the GUI.  enums are set as <code>userData</code> for the {@link RadioButton}
-     * objects.  
-     * 
+     * Initializes the GUI. enums are set as <code>userData</code> for the
+     * {@link RadioButton} objects. Default set to 1H-15N HSQC settings. This is
+     * set redunanly in both the fxml file (so one can see an initialized GUI in
+     * scenebuilder) but also in this method for clarity
+     *
      * @param url a url
      * @param rb resource bundle
-     * 
+     *
      * @see TypesOfTitrations
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {  
-        
-        amideHSQCradioButton.setUserData(TypesOfTitrations.AMIDEHSQC);
-        methylHMQCradioButton.setUserData(TypesOfTitrations.METHYLHMQC);
-        
-        orderNucleiFirstRadioButton.setUserData(false);
-        orderNucleiSecondRadioButton.setUserData(true);
-        
+    public void initialize(URL url, ResourceBundle rb) {
+
+        initializeRadioButtonUserData();
+
+        File dataOutputFile = null;
+        File resultsOutputFile = null;
         wrappedDataOutputFile = new ReadOnlyObjectWrapper(dataOutputFile, "wrappedDataOutputFile");
         wrappedResultsOutputFile = new ReadOnlyObjectWrapper(resultsOutputFile, "wrappedResultsOutputFile");
         
-        
+        wrappedFileNameTextFieldList = compileDataFileTextField();
+
+        //listOfWrappedFiles = new ArrayList<ReadOnlyObjectWrapper<File>>();
+
+        initializeAllListeners();
+
+        setToDefaultGUIValues();
+
+    }
+
+    /**
+     * Initializes the GUI with amide HSQC values as default.
+     */
+    private void setToDefaultGUIValues() {
+
+        typeOfTitrationToggleGroup.selectToggle(amideHSQCradioButton);
+        orderNucleiFirstRadioButton.setText(AMIDE_FIRST_RADIO_BUTTON_MESSAGE);
+        orderNucleiSecondRadioButton.setText(AMIDE_SECOND_RADIO_BUTTON_MESSAGE);
+        multiplierTextField.setText(Double.toString(AMIDE_HSQC_DEFAULT_MULT));
+
+        dataOutputTextField.setText(DEFAULT_OUTPUT_DATA_FILENAME);
+        resultsOutputTextField.setText(DEFAULT_OUTPUT_RESULTS_FILENAME);
+
+        wrappedDataOutputFile.setValue(
+            new File(System.getProperty("user.home"), DEFAULT_OUTPUT_DATA_FILENAME));
+        wrappedResultsOutputFile.setValue(
+            new File(System.getProperty("user.home"), DEFAULT_OUTPUT_RESULTS_FILENAME));
+    }
+
+    /**
+     * Sets userData for all {@link RadioButton} objects.
+     */
+    private void initializeRadioButtonUserData() {
+
+        amideHSQCradioButton.setUserData(TypesOfTitrations.AMIDEHSQC);
+        methylHMQCradioButton.setUserData(TypesOfTitrations.METHYLHMQC);
+        orderNucleiFirstRadioButton.setUserData(false);
+        orderNucleiSecondRadioButton.setUserData(true);
+    }
+
+    /**
+     * Encapsulates all the listener initializations.
+     */
+    private void initializeAllListeners() {
+
+        // if the name and location to write the sorted peak lists change, update the textfield below it
         wrappedDataOutputFile.addListener((observableValue, oldValue, newValue) -> {
             dataOutputTextField.setText(newValue.getName());
         });
-        
+
+        // if the name and location to write the results change, update the textfield below it
         wrappedResultsOutputFile.addListener((observableValue, oldValue, newValue) -> {
             resultsOutputTextField.setText(newValue.getName());
         });
-        
-    } 
-    
-    /**
-     * Executes when the analyze button is pressed. In short, this method contains the meat of the program.
-     * It creates the {@link AbsFactory} subclass, prepares the data and then sorts the peak lists. This forms a 
-     * {@link TitrationSeries} which is passed as an argument to {@link LeastSquaresFitter#fit} to return a 
-     * {@link Results} object. The {@link Results} is then printed to disk.
-     * 
-     * Note: all exceptions should climb back to the catch block in <code>analyzeButtonPressed</code>
-     * and show its message in the dialog box. If an exception does occur, the user can close the box and
-     * should be able to edit any of the information in the GUI.
-     * 
-     * @param event generated by pressing the Analyze button in the GUI
-     * 
-     * @see AbsFactory
-     * @see TitrationSeries
-     * @see Results
-     * @see RawData
-     */
-    @FXML
-    private void analyzeButtonPressed(ActionEvent event) {   
+
+        // if the type of spectrum changes, change the labels for the 
+        // order of nuclei to reflect the type of specrum chosen
+        typeOfTitrationToggleGroup.selectedToggleProperty().addListener(
+            (ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
+
+                switch ( (TypesOfTitrations) newValue.getUserData()) {
+
+                    case AMIDEHSQC:
+                        orderNucleiFirstRadioButton.setText(AMIDE_FIRST_RADIO_BUTTON_MESSAGE);
+                        orderNucleiSecondRadioButton.setText(AMIDE_SECOND_RADIO_BUTTON_MESSAGE);
+                        multiplierTextField.setText(Double.toString(AMIDE_HSQC_DEFAULT_MULT));
+                        break;
+
+                    case METHYLHMQC:
+                        orderNucleiFirstRadioButton.setText(METHYL_FIRST_RADIO_BUTTON_MESSAGE);
+                        orderNucleiSecondRadioButton.setText(METHYL_SECOND_RADIO_BUTTON_MESSAGE);
+                        multiplierTextField.setText(Double.toString(METHYL_HMQC_DEFAULT_MULT));
+                        break;
+
+                    default:
+                        throw new IllegalArgumentException(
+                            "Was unable to select type in SlowExchangeGUIControler.initializeAllListeners()");
+                }
+            });
+    }
+
+       
+
+        /**
+         * Executes when the analyze button is pressed. In short, this method
+         * contains the meat of the program. It creates the {@link AbsFactory}
+         * subclass, prepares the data and then sorts the peak lists. This forms
+         * a {@link TitrationSeries} which is passed as an argument to
+         * {@link LeastSquaresFitter#fit} to return a {@link Results} object.
+         * The {@link Results} is then printed to disk.
+         *
+         * Note: all exceptions should climb back to the catch block in
+         * <code>analyzeButtonPressed</code> and show its message in the dialog
+         * box. If an exception does occur, the user can close the box and
+         * should be able to edit any of the information in the GUI.
+         *
+         * @param event generated by pressing the Analyze button in the GUI
+         *
+         * @see AbsFactory
+         * @see TitrationSeries
+         * @see Results
+         * @see RawData
+         */
+        @FXML 
+        private void analyzeButtonPressed (ActionEvent event) {   
         try {
-            
-            // <editor-fold desc="Puts GUI objects into Lists">
-            List<TextField> ligandConcTextFieldList = compileLigandConcTextFields();
-            
-            List<TextField> receptorConcTextFieldList = compileReceptorConcTextFields();
+
+                // <editor-fold desc="Puts GUI objects into Lists">
+                List<TextField> ligandConcTextFieldList = compileLigandConcTextFields();
+
+                List<TextField> receptorConcTextFieldList = compileReceptorConcTextFields();
             // </editor-fold>
-            
-            if (isOutputFilesNull())
-               throw new NullPointerException("Before pressing \"Analyze\", must choose "
-                       + "name and where to output data and results");
-            
-            AbsFactory factory = 
-                FactoryMaker.createFactory(getTypeOfTitration());
-            RawData rawDataInstance = 
-                prepAndMakeRawDataObject(ligandConcTextFieldList, receptorConcTextFieldList);
-            
-            TitrationSeries series = factory.analyzeDataFiles(rawDataInstance);
-            
-            series.printTitrationSeries(wrappedDataOutputFile.get());
-        
-            Results results = LeastSquaresFitter.fit(series);
-            results.writeResultsToDisk(wrappedResultsOutputFile.get());
-            
-            displayResultsWrittenPopUp();
+
+                if (isOutputFilesNull()) {
+                    throw new NullPointerException("Before pressing \"Analyze\", must choose "
+                        + "name and where to output data and results");
+                }
+
+                AbsFactory factory
+                    = FactoryMaker.createFactory(getTypeOfTitration());
+                RawData rawDataInstance
+                    = prepAndMakeRawDataObject(ligandConcTextFieldList, receptorConcTextFieldList);
+
+                TitrationSeries series = factory.analyzeDataFiles(rawDataInstance);
+
+                series.printTitrationSeries(wrappedDataOutputFile.get());
+
+                Results results = LeastSquaresFitter.fit(series);
+                results.writeResultsToDisk(wrappedResultsOutputFile.get());
+
+                displayResultsWrittenPopUp();
+            } // note: NumberFormatException will be caught by its superclass IllegalArgumentException
+            //       FileNotFoundException hanled by IOException
+            catch (IllegalArgumentException | NullPointerException | IOException | SecurityException |
+                FormatterClosedException | NoSuchElementException | ArraysInvalidException e) {
+
+                showExceptionDialog(e);
+            }
+        } // end method executeButtonPressed
+
+        /**
+         * Allows the user the save the data from the GUI to a binary file which
+         * can be read later by pressing <code>loadButtonPressed</code>. Note
+         * that all data must be filled out to allow the save.
+         *
+         * @param event the {@link ActionEvent} that occurred
+         *
+         * @throws IOException if can't write the {@link SlowExchangeGUISave}
+         * object
+         */
+        @FXML
+        private void saveButtonPressed
+        (ActionEvent event) throws IOException {
+
+            File saveFile = useSaveChooser("Save Input Data", "inputDataForGUI.ser");
+
+            if (saveFile != null) {
+
+                try (ObjectOutputStream output = new ObjectOutputStream(Files.newOutputStream(saveFile.toPath()))) {
+                    List<File> localFileList = fileList;
+
+                    List<Double> ligandConcs
+                        = getListDoubleFromListTextField(compileLigandConcTextFields());
+
+                    List<Double> receptorConcs
+                        = getListDoubleFromListTextField(compileReceptorConcTextFields());
+
+                    if (isOutputFilesNull()) {
+                        throw new NullPointerException("Before pressing \'Save\", must choose name "
+                            + "and where to write data and results");
+                    }
+
+                    // make sure they all have the same length
+                    if (!DataArrayValidator.isListLengthsAllEqual(removeNullFilesAndMakePaths(), ligandConcs, receptorConcs)) {
+                        throw new IllegalArgumentException("Lists have different length in saveButtonPressed");
+                    }
+
+                    SlowExchangeGUISave instanceToSave
+                        = SlowExchangeGUISave.createUnsortedDataObject(getTypeOfTitration(),
+                            getResonanceReversal(),
+                            parseMultiplier(),
+                            wrappedDataOutputFile.get(),
+                            wrappedResultsOutputFile.get(),
+                            localFileList,
+                            ligandConcs,
+                            receptorConcs);
+
+                    output.writeObject(instanceToSave);
+
+                    // if all went well, reached this point
+                    displayResultsWrittenPopUp();
+
+                } catch (IllegalArgumentException | NullPointerException | SecurityException |
+                    NoSuchElementException | ClassCastException | IOException e) {
+
+                    showExceptionDialog(e);
+                }
+            }
         }
-        // note: NumberFormatException will be caught by its superclass IllegalArgumentException
-        //       FileNotFoundException hanled by IOException
-        catch(IllegalArgumentException | NullPointerException | IOException | SecurityException |
-              FormatterClosedException | NoSuchElementException | ArraysInvalidException e) { 
-            
-            showExceptionDialog(e);   
+
+        /**
+         * A method to read a previously saved {@link SlowExchangeGUISave}
+         * object. This populates the data into the GUI, then the user must
+         * press the "analyze" button to finish.
+         *
+         * Note: based on the listeners in <code>initialize</code> which update
+         * the {@link TextField} with the multiplier, the multiplier must be set
+         * after the {@link RadioButton} for the type of titration has been
+         * selected
+         *
+         * @param event the {@link ActionEvent} that occurred
+         *
+         * @throws IOException if can't read the chosen data file
+         */
+        @FXML
+        private void loadButtonPressed
+        (ActionEvent event) throws IOException {
+
+            File openFile = useOpenChooser("Open Saved Data", "Serialized Files", "*.ser");
+
+            if (openFile != null) {
+
+                try (ObjectInputStream input = new ObjectInputStream(Files.newInputStream(openFile.toPath()))) {
+
+                    SlowExchangeGUISave savedData = (SlowExchangeGUISave) input.readObject();
+
+                    // best way i could think of quickly to make this without introducing dependencies
+                    typeOfTitrationToggleGroup.selectToggle(
+                        typeOfTitrationToggleGroup.getToggles()
+                        .stream()
+                        .filter(toggle -> toggle.getUserData() == savedData.getTypeOfTitr())
+                        .limit(1)
+                        .findFirst()
+                        .get());
+
+                    nucleiToggleGroup.selectToggle(
+                        nucleiToggleGroup.getToggles()
+                        .stream()
+                        .filter(toggle -> (boolean) toggle.getUserData() == savedData.getResonanceReversal())
+                        .limit(1)
+                        .findFirst()
+                        .get());
+
+                    multiplierTextField.setText(Double.toString(savedData.getMultiplier()));
+
+                    // listeners update the corresponding textfields
+                    wrappedDataOutputFile.setValue(savedData.getOutputDataFile());
+                    wrappedResultsOutputFile.setValue(savedData.getOutputResultsFile());
+                    
+                    fillProteinConcTextFields(savedData.getLigandConcs(), savedData.getReceptorConcs());
+
+                } catch (IllegalArgumentException | NullPointerException | SecurityException |
+                    NoSuchElementException | ClassCastException | IOException | ClassNotFoundException e) {
+
+                    showExceptionDialog(e);
+                }
+            }
         }
-    } // end method executeButtonPressed
-    
-    /**
-     * Allows the user the save the data from the GUI to a binary file which can be read later by pressing
-     * <code>loadButtonPressed</code>. Note that all data must be filled out to allow the save.
-     * 
-     * @param event the {@link ActionEvent} that occurred
-     * 
-     * @throws IOException if can't write the {@link SlowExchangeGUISave} object
-     */
-    @FXML
-    private void saveButtonPressed(ActionEvent event) throws IOException {
-        
-        File saveFile = useSaveChooser("Save Input Data", "inputDataForGUI.ser");
-        
-        try (ObjectOutputStream output = new ObjectOutputStream(Files.newOutputStream(saveFile.toPath()))) {
-            List<File> localFileList = fileList;
-            
-            List<Double> ligandConcs = 
-                    getListDoubleFromListTextField(compileLigandConcTextFields()); 
-            
-            List<Double> receptorConcs = 
-                    getListDoubleFromListTextField(compileReceptorConcTextFields()); 
-            
-            if (isOutputFilesNull())
-                throw new NullPointerException("Before pressing \'Save\", must choose name "
-                        + "and where to write data and results");
-                
-            // make sure they all have the same length
-            if(!DataArrayValidator.isListLengthsAllEqual(removeNullFilesAndMakePaths(), ligandConcs, receptorConcs))
-                throw new IllegalArgumentException("Lists have different length in saveButtonPressed");
-            
-            SlowExchangeGUISave instanceToSave =
-                    SlowExchangeGUISave.createUnsortedDataObject(getTypeOfTitration(), 
-                                                                 getResonanceReversal(), 
-                                                                 parseMultiplier(), 
-                                                                 wrappedDataOutputFile.get(),
-                                                                 wrappedResultsOutputFile.get(), 
-                                                                 localFileList, 
-                                                                 ligandConcs, 
-                                                                 receptorConcs); 
-            
-            output.writeObject(instanceToSave);
-            
-            // if all went well, reached this point
-            displayResultsWrittenPopUp();
-        
-        }
-        catch (IllegalArgumentException | NullPointerException | SecurityException| 
-               NoSuchElementException | ClassCastException | IOException e) { 
-            
-            showExceptionDialog(e);  
-        } 
-    }
-    
-    /**
-     * A method to read a previously saved {@link SlowExchangeGUISave} object. This populates the 
-     * data into the GUI, then the user must press the "analyze" button to finish.
-     * 
-     * @param event the {@link ActionEvent} that occurred
-     * 
-     * @throws IOException if can't read the chosen data file
-     */
-    @FXML
-    private void loadButtonPressed(ActionEvent event) throws IOException {
-        
-        File openFile = useOpenChooser("Open Saved Data");
-        
-        try (ObjectInputStream input = new ObjectInputStream(Files.newInputStream(openFile.toPath()))) {
-            
-            SlowExchangeGUISave savedData = (SlowExchangeGUISave) input.readObject();
-            
-            System.out.println();
-            
-            System.out.println(savedData.getOutputDataFile().toString());
-            
-            
-            wrappedDataOutputFile.setValue(savedData.getOutputDataFile());
-            wrappedResultsOutputFile.setValue(savedData.getOutputResultsFile());
-            
-            multiplierTextField.setText(Double.toString(savedData.getMultiplier()));
-            
-            
-            
-            
-            
-        }
-        catch (IllegalArgumentException | NullPointerException | SecurityException | 
-               NoSuchElementException | ClassCastException | IOException | ClassNotFoundException e) {
-            
-            showExceptionDialog(e);
-        }
-    }
-    
-    
-    /**
-     * Prepares the data from the user for {@link AbsFactory} by performing some validation of the input
-     * and creating the {@link RawData} instance. {@link RawData} is passed to {@link AbsFactory}.  
-     * 
-     * @param ligandConcTextField contains a ligand concentration from the user
-     * @param receptorConcTextField contains a receptor concentration from the user
-     * 
-     * @return preliminary unsorted peak lists and ligand concentrations
-     * 
-     * @throws IOException 
-     */
+        /**
+         * Prepares the data from the user for {@link AbsFactory} by performing
+         * some validation of the input and creating the {@link RawData}
+         * instance. {@link RawData} is passed to {@link AbsFactory}.
+         *
+         * @param ligandConcTextField contains a ligand concentration from the
+         * user
+         * @param receptorConcTextField contains a receptor concentration from
+         * the user
+         *
+         * @return preliminary unsorted peak lists and ligand concentrations
+         *
+         * @throws IOException
+         */
     private RawData prepAndMakeRawDataObject(List<TextField> ligandConcTextField,
-                                             List<TextField> receptorConcTextField) 
-                                             throws IOException, ArraysInvalidException {
+        List<TextField> receptorConcTextField)
+        throws IOException, ArraysInvalidException {
 
         List<Path> pathList = removeNullFilesAndMakePaths();
         List<Double> ligandConcList = getListDoubleFromListTextField(ligandConcTextField);
         List<Double> receptorConcList = getListDoubleFromListTextField(receptorConcTextField);
-        
+
         // make sure they all have the same length
-        if(!DataArrayValidator.isListLengthsAllEqual(pathList, ligandConcList, receptorConcList))
+        if (!DataArrayValidator.isListLengthsAllEqual(pathList, ligandConcList, receptorConcList)) {
             throw new IllegalArgumentException("Lists have different length in prepAndMakeRawDataObject");
-        
+        }
+
         double multiplier = parseMultiplier();
-        
+
         boolean resonanceReversal = getResonanceReversal();
-       
-        final RawData rawDataInstance = RawData.createRawData(pathList, ligandConcList, 
+
+        final RawData rawDataInstance = RawData.createRawData(pathList, ligandConcList,
             receptorConcList, multiplier, resonanceReversal);
-        
-        if (rawDataInstance == null)
+
+        if (rawDataInstance == null) {
             throw new NullPointerException(
                 "rawDataInstance was null before return in method prepAndMakeRawDataObject");
-        
+        }
+
         return rawDataInstance;
-    }
-    
-    /**
-     * Takes the <code>List{@literal <}File{@literal >}</code> and turns it into a
-     * <code>List{@literal <}Path{@literal >}</code> . Also removes the null references from the end of the end.
-     * 
-     * @return {@link List} objects with locations of NMR chemical shift peak list.
-     */
-    private List<Path> removeNullFilesAndMakePaths() {
-        
-        return new ArrayList<>(fileList.stream()
-                                       .filter(file -> file != null)
-                                       .map(File::toPath)
-                                       .collect(Collectors.toList()));
-    }
-    
-    /**
-     * Makes <code>List{@literal <}TextField{@literal >}</code> a <code>List{@literal <}Double@literal >}</code>
-     * 
-     * @param textFieldList
-     * 
-     * @throws NumberFormatException if the {@link TextField} can't be parsed.
-     * 
-     * @return the protein concentrations in a <code>List{@literal <}Double@literal >}</code>
-     */
-    private List<Double> getListDoubleFromListTextField(List<TextField> textFieldList) {
-        
-        return new ArrayList<>(textFieldList.stream()
-                                      .map(TextField::getText) // get the string from each text field
-                                      .filter(text -> !(text.equals(""))) // deletes blank text fields
-                                      .map(Double::valueOf)      // turn string to a double
-                                      .collect(Collectors.toList()));
     }
 
     /**
-     * Makes a {@link List} from a variable number of arguments array. 
-     * 
+     * Takes the <code>List{@literal <}File{@literal >}</code> and turns it into
+     * a <code>List{@literal <}Path{@literal >}</code> . Also removes the null
+     * references from the end of the end.
+     *
+     * @return {@link List} objects with locations of NMR chemical shift peak
+     * list.
+     */
+    private List<Path> removeNullFilesAndMakePaths() {
+
+        return new ArrayList<>(fileList.stream()
+            .filter(file -> file != null)
+            .map(File::toPath)
+            .collect(Collectors.toList()));
+    }
+
+    /**
+     * Makes <code>List{@literal <}TextField{@literal >}</code> a
+     * <code>List{@literal <}Double@literal >}</code>
+     *
+     * @param textFieldList
+     *
+     * @throws NumberFormatException if the {@link TextField} can't be parsed.
+     *
+     * @return the protein concentrations in a
+     * <code>List{@literal <}Double@literal >}</code>
+     */
+    private List<Double> getListDoubleFromListTextField(List<TextField> textFieldList) {
+
+        return new ArrayList<>(textFieldList.stream()
+            .map(TextField::getText) // get the string from each text field
+            .filter(text -> !(text.equals(""))) // deletes blank text fields
+            .map(Double::valueOf) // turn string to a double
+            .collect(Collectors.toList()));
+    }
+
+    /**
+     * Makes a {@link List} from a variable number of arguments array.
+     *
      * @param <T> object type that will go into the {@link List}
-     * 
+     *
      * @param object individual instance to add to a {@link List}
-     * 
-     * @return array containing the elements that were formerly in a {@link List}
-     */ 
-    private <T> List<T> makeListOfObjects(T... object) {   
+     *
+     * @return array containing the elements that were formerly in a
+     * {@link List}
+     */
+    private <T> List<T> makeListOfObjects(T... object) {
         return new ArrayList<>(Arrays.asList(object));
     }
-    
+
     /**
-     * Allows the user to choose a file to write the sorted peak lists. Inspection of this would
-     * make an error obvious.
-     * 
+     * Allows the user to choose a file to write the sorted peak lists.
+     * Inspection of this would make an error obvious.
+     *
      * @param event the {@link ActionEvent} that occurred
      */
     @FXML
     private void dataOutputButtonPressed(ActionEvent event) {
-        
-        wrappedDataOutputFile.setValue(useSaveChooser("Save Data", "sortedPeakLists.txt"));
-        
-        //System.out.println(wrappedDataOutputFile);
-        //System.out.println(wrappedDataOutputFile.get());
+
+        wrappedDataOutputFile.setValue(useSaveChooser("Save Data", DEFAULT_OUTPUT_DATA_FILENAME));
     }
-    
+
     /**
      * Allows the user to choose a file to write the final results
-     * 
+     *
      * @param event the {@link ActionEvent} that occurred
      */
     @FXML
     private void resultsOutputButtonPressed(ActionEvent event) {
-        
-        wrappedResultsOutputFile.setValue(useSaveChooser("Save Results", "finalResults.txt"));
+
+        wrappedResultsOutputFile.setValue(useSaveChooser("Save Results", DEFAULT_OUTPUT_RESULTS_FILENAME));
     }
-    
+
     /**
-     * If the program reaches this method, then a {@link Results} object was written to disk. This informs
-     * the user that this has happened.
+     * If the program reaches this method, then a {@link Results} object was
+     * written to disk. This informs the user that this has happened.
      */
     private void displayResultsWrittenPopUp() {
-      
-        Alert alert = 
-           new Alert(Alert.AlertType.INFORMATION, "Results were written to disk (a good sign!)");
-        
+
+        Alert alert
+            = new Alert(Alert.AlertType.INFORMATION, "Results were written to disk (a good sign!)");
+
         alert.setTitle("Application Status");
-        
+
         alert.showAndWait();
     }
-    
-    /**
-     * Responds to user selections a methyl HMQC titration type. 
-     * 
-     * @param event user has chosen a 1H-13C methyl HMQC titration type
-     */
-    @FXML
-    private void methylHMQCSelected(ActionEvent event) {
-       
-        orderNucleiFirstRadioButton.setText("Carbon Proton");
-        orderNucleiSecondRadioButton.setText("Proton Carbon");
-        multiplierTextField.setText("0.25");
-    }
-    
-    /**
-     * Responds to user selections a methyl HMQC titration type. 
-     * 
-     * @param event user has chosen a 1H-13C methyl HMQC titration type
-     */
-    @FXML
-    private void amideHSQCSelected(ActionEvent event) { 
-       
-        orderNucleiFirstRadioButton.setText("Nitrogen Proton");
-        orderNucleiSecondRadioButton.setText("Proton Nitrogen");
-        multiplierTextField.setText("0.1");
-    }
-    
+
     // an embarressing and ridiculous duplication of code.
     // TODO rework
     // <editor-fold>
@@ -477,214 +569,190 @@ public class SlowExchangeGUIController implements Initializable {
     private void Button1pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         this.fileList.set(0, chooser.showOpenDialog(null));
-        
-        if(fileList.get(0) != null) {
+
+        if (fileList.get(0) != null) {
             fileName1.setText(fileList.get(0).getName());
             chooser2.setDisable(false);
             receptorConc1.setEditable(true);
         }
     }
-    
+
     @FXML
     private void Button2pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(1, chooser.showOpenDialog(null));
-        
-        if(fileList.get(1) != null) {
+
+        if (fileList.get(1) != null) {
             fileName2.setText(fileList.get(1).getName());
             chooser3.setDisable(false);
             receptorConc2.setEditable(true);
             ligandConc2.setEditable(true);
         }
     }
-    
+
     @FXML
     private void Button3pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        
+
         fileList.set(2, chooser.showOpenDialog(null));
-        
-        if(fileList.get(2) != null) {
+
+        if (fileList.get(2) != null) {
             fileName3.setText(fileList.get(2).getName());
             chooser4.setDisable(false);
             receptorConc3.setEditable(true);
             ligandConc3.setEditable(true);
         }
     }
-    
+
     @FXML
-    private void Button4pressed(ActionEvent event)
-    {
+    private void Button4pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(3, chooser.showOpenDialog(null));
-        
-        if(fileList.get(3) != null)
-        {
+
+        if (fileList.get(3) != null) {
             fileName4.setText(fileList.get(3).getName());
             chooser5.setDisable(false);
             receptorConc4.setEditable(true);
             ligandConc4.setEditable(true);
         }
     }
-    
+
     @FXML
-    private void Button5pressed(ActionEvent event)
-    {
+    private void Button5pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(4, chooser.showOpenDialog(null));
-        
-        if(fileList.get(4) != null)
-        {
+
+        if (fileList.get(4) != null) {
             fileName5.setText(fileList.get(4).getName());
             chooser6.setDisable(false);
             receptorConc5.setEditable(true);
             ligandConc5.setEditable(true);
         }
     }
-    
-    @FXML 
-    private void Button6pressed(ActionEvent event)
-    {
+
+    @FXML
+    private void Button6pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(5, chooser.showOpenDialog(null));
-        
-        if(fileList.get(5) != null)
-        {
+
+        if (fileList.get(5) != null) {
             fileName6.setText(fileList.get(5).getName());
             chooser7.setDisable(false);
             receptorConc6.setEditable(true);
             ligandConc6.setEditable(true);
         }
     }
-    
-    @FXML 
-    private void Button7pressed(ActionEvent event)
-    {
+
+    @FXML
+    private void Button7pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(6, chooser.showOpenDialog(null));
-        
-        if(fileList.get(6) != null)
-        {
+
+        if (fileList.get(6) != null) {
             fileName7.setText(fileList.get(6).getName());
             chooser8.setDisable(false);
             receptorConc7.setEditable(true);
             ligandConc7.setEditable(true);
         }
     }
-    
-    @FXML 
-    private void Button8pressed(ActionEvent event)
-    {
+
+    @FXML
+    private void Button8pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(7, chooser.showOpenDialog(null));
-        
-        if(fileList.get(7) != null)
-        {
+
+        if (fileList.get(7) != null) {
             fileName8.setText(fileList.get(7).getName());
             chooser9.setDisable(false);
             receptorConc8.setEditable(true);
             ligandConc8.setEditable(true);
         }
     }
-    
-    @FXML 
-    private void Button9pressed(ActionEvent event)
-    {
+
+    @FXML
+    private void Button9pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(8, chooser.showOpenDialog(null));
-        
-        if(fileList.get(8) != null)
-        {
+
+        if (fileList.get(8) != null) {
             fileName9.setText(fileList.get(8).getName());
             chooser10.setDisable(false);
             receptorConc9.setEditable(true);
             ligandConc9.setEditable(true);
         }
     }
-    
-    @FXML 
-    private void Button10pressed(ActionEvent event)
-    {
+
+    @FXML
+    private void Button10pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(9, chooser.showOpenDialog(null));
-        
-        if(fileList.get(9) != null)
-        {
+
+        if (fileList.get(9) != null) {
             fileName10.setText(fileList.get(9).getName());
             chooser11.setDisable(false);
             receptorConc10.setEditable(true);
             ligandConc10.setEditable(true);
         }
     }
-    
-    @FXML 
-    private void Button11pressed(ActionEvent event)
-    {
+
+    @FXML
+    private void Button11pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(10, chooser.showOpenDialog(null));
-        
-        if(fileList.get(10) != null)
-        {
+
+        if (fileList.get(10) != null) {
             fileName11.setText(fileList.get(10).getName());
             chooser12.setDisable(false);
             receptorConc11.setEditable(true);
             ligandConc11.setEditable(true);
         }
     }
-    
-    @FXML 
-    private void Button12pressed(ActionEvent event)
-    {
+
+    @FXML
+    private void Button12pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(11, chooser.showOpenDialog(null));
-        
-        if(fileList.get(11) != null)
-        {
+
+        if (fileList.get(11) != null) {
             fileName12.setText(fileList.get(11).getName());
             chooser13.setDisable(false);
             receptorConc12.setEditable(true);
             ligandConc12.setEditable(true);
         }
     }
-    
-    @FXML 
-    private void Button13pressed(ActionEvent event)
-    {
+
+    @FXML
+    private void Button13pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(12, chooser.showOpenDialog(null));
-        
-        if(fileList.get(12) != null)
-        {
+
+        if (fileList.get(12) != null) {
             fileName13.setText(fileList.get(12).getName());
             chooser14.setDisable(false);
             receptorConc13.setEditable(true);
             ligandConc13.setEditable(true);
         }
     }
-    
-    @FXML 
-    private void Button14pressed(ActionEvent event)
-    {
+
+    @FXML
+    private void Button14pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(13, chooser.showOpenDialog(null));
-        
-        if(fileList.get(13) != null)
-        {
+
+        if (fileList.get(13) != null) {
             fileName14.setText(fileList.get(13).getName());
             chooser15.setDisable(false);
             receptorConc14.setEditable(true);
             ligandConc14.setEditable(true);
         }
     }
-    
-    @FXML 
-    private void Button15pressed(ActionEvent event)
-    {
+
+    @FXML
+    private void Button15pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(14, chooser.showOpenDialog(null));
-        
-        if(fileList.get(14) != null)
-        {
+
+        if (fileList.get(14) != null) {
             fileName15.setText(fileList.get(14).getName());
             receptorConc15.setEditable(true);
             ligandConc15.setEditable(true);
@@ -693,34 +761,67 @@ public class SlowExchangeGUIController implements Initializable {
     // </editor-fold>
 
     /**
-     * Aggregates the ligand concentration {@link TextField} objects into a {@link List}
-     * 
+     * Aggregates the ligand concentration {@link TextField} objects into a
+     * {@link List}
+     *
      * @return the ligand concentration {@link TextField} objects in a list
      */
     private List<TextField> compileLigandConcTextFields() {
         return makeListOfObjects(ligandConc1, ligandConc2, ligandConc3,
-                                 ligandConc4, ligandConc5, ligandConc6,
-                                 ligandConc7, ligandConc8, ligandConc9,
-                                 ligandConc10, ligandConc11, ligandConc12,
-                                 ligandConc13, ligandConc14, ligandConc15); 
+            ligandConc4, ligandConc5, ligandConc6,
+            ligandConc7, ligandConc8, ligandConc9,
+            ligandConc10, ligandConc11, ligandConc12,
+            ligandConc13, ligandConc14, ligandConc15);
     }
-    
+
     /**
-     * Aggregates the receptor concentration {@link TextField} objects into a {@link List}
-     * 
+     * Aggregates the receptor concentration {@link TextField} objects into a
+     * {@link List}
+     *
      * @return the receptor concentration {@link TextField} objects in a list
      */
     private List<TextField> compileReceptorConcTextFields() {
         return makeListOfObjects(receptorConc1, receptorConc2, receptorConc3,
-                                 receptorConc4, receptorConc5, receptorConc6,
-                                 receptorConc7, receptorConc8, receptorConc9,
-                                 receptorConc10, receptorConc11, receptorConc12,
-                                 receptorConc13, receptorConc14, receptorConc15);
+            receptorConc4, receptorConc5, receptorConc6,
+            receptorConc7, receptorConc8, receptorConc9,
+            receptorConc10, receptorConc11, receptorConc12,
+            receptorConc13, receptorConc14, receptorConc15);
     }
 
     /**
-     * Gets the enum which indicates which type of titration (which nuclei) was performed
-     * 
+     * Aggregates the {@link TextField} objects which display the data file
+     * (peak lists) name into a {@link List}
+     *
+     * @return a {@link List} of {@link TextField} objects where the name of the
+     * data files will be displayed;
+     */
+    private List<TextField> compileDataFileTextField() {
+        return makeListOfObjects(fileName1, fileName2, fileName3,
+            fileName4, fileName5, fileName6,
+            fileName7, fileName8, fileName9,
+            fileName10, fileName11, fileName12,
+            fileName13, fileName14, fileName15);
+    }
+
+    /**
+     * Aggregates the {@link Button} objects that will be used for choosing the
+     * data files
+     *
+     * @return a collection of {@link Button} instances that are used to select
+     * data files
+     */
+    private List<Button> compileDataFileChooserButtons() {
+        return makeListOfObjects(chooser1, chooser2, chooser3,
+            chooser4, chooser5, chooser6,
+            chooser7, chooser8, chooser9,
+            chooser10, chooser11, chooser12,
+            chooser13, chooser14, chooser15);
+    }
+
+    /**
+     * Gets the enum which indicates which type of titration (which nuclei) was
+     * performed
+     *
      * @return an enum indicating which type of titration was performed
      */
     private TypesOfTitrations getTypeOfTitration() {
@@ -729,73 +830,110 @@ public class SlowExchangeGUIController implements Initializable {
 
     /**
      * Gets information about the order of chemical shifts in the peak lists
-     * 
+     *
      * @return indicates whether the values should be reversed going forward
      */
     private boolean getResonanceReversal() {
         return (boolean) nucleiToggleGroup.getSelectedToggle().getUserData();
     }
-    
+
     /**
      * Gets the multiplier value from the {@link TextField} and parses it
-     * 
+     *
      * @return the multiplier as a {@link double}
      */
     private double parseMultiplier() {
         return Double.valueOf(multiplierTextField.getText());
     }
-    
+
     /**
-     * Determines whether the user has chosen where to write the sorted data and final results
-     * 
-     * @return <code>true</code> if the user has specified where to write data, otherwise <code>false</code> 
+     * Determines whether the user has chosen where to write the sorted data and
+     * final results
+     *
+     * @return <code>true</code> if the user has specified where to write data,
+     * otherwise <code>false</code>
      */
     private boolean isOutputFilesNull() {
         return (wrappedDataOutputFile.get() == null || wrappedResultsOutputFile.get() == null);
     }
 
     /**
-     * Shows an exception dialog from ControlsFX with the message from the parameter
-     * 
-     * @param e the exception that was throw which contains the message for the dialog box
+     * Shows an exception dialog from ControlsFX with the message from the
+     * parameter
+     *
+     * @param e the exception that was throw which contains the message for the
+     * dialog box
      */
     private void showExceptionDialog(Exception e) {
-        
+
         ExceptionDialog dialog = new ExceptionDialog(e);
+
+        if (e.getMessage() == null) {
+            dialog.setHeaderText("Unexpected exception was caught that probably indicates a logic"
+                + "error in the application, contact developer");
+        }
+
         dialog.showAndWait();
     }
-    
+
     /**
-     * 
+     *
      * @param title the title to apply to the dialog window
      * @param defaultFileName the name of the file that will be written to
-     * 
-     * @return the name and location where the data will be saved which is chosen from {@link FileChooser}
+     *
+     * @return the name and location where the data will be saved which is
+     * chosen from {@link FileChooser}
      */
     private File useSaveChooser(String title, String defaultFileName) {
-        
+
         FileChooser chooser = new FileChooser();
         chooser.setTitle((title));
         chooser.setInitialFileName(defaultFileName);
-        
-        File file = chooser.showSaveDialog(null); 
-        
+
+        File file = chooser.showSaveDialog(null);
+
         return file;
     }
-    
+
     /**
-     * 
+     *
      * @param title the title to apply to the dialog window
-     * 
-     * @return the name and location chosen by the user in the {link FileChooser}
+     *
+     * @return the name and location chosen by the user in the {link
+     * FileChooser}
      */
-    private File useOpenChooser(String title) {
-        
+    private File useOpenChooser(String title, String extTitle, String extFilter) {
+
         FileChooser chooser = new FileChooser();
         chooser.setTitle((title));
-        
-        File file = chooser.showOpenDialog(null); 
-        
+        chooser.getExtensionFilters().addAll(
+            new ExtensionFilter(extTitle, extFilter),
+            new ExtensionFilter("All Files", "*.*"));
+
+        File file = chooser.showOpenDialog(null);
+
         return file;
     }
+
+    private void fillProteinConcTextFields(final List<Double> savedLigandConcs, 
+                                           final List<Double> savedReceptorConcs) {
+        
+        List<TextField> ligandConcTextFieldList = compileLigandConcTextFields();
+        List<TextField> receptorConcTextFieldList = compileReceptorConcTextFields();
+        
+        for(int ctr = 0; ctr < savedLigandConcs.size(); ctr++) {
+            
+            updateTextField(ligandConcTextFieldList.get(ctr), savedLigandConcs.get(ctr));
+            updateTextField(receptorConcTextFieldList.get(ctr), savedReceptorConcs.get(ctr));
+                
+        }
+    }
+    
+    private void updateTextField(TextField textField,
+                                 Double savedConc) {
+        
+        textField.setEditable(true);
+        textField.setText(Double.toString(savedConc));
+    }
+
 } // end class SlowExchangeGUIController

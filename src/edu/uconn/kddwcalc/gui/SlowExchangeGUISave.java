@@ -114,7 +114,7 @@ public class SlowExchangeGUISave implements Serializable {
      * 
      * @return the resonanceReversal
      */
-    public boolean isResonanceReversal() {
+    public boolean getResonanceReversal() {
         return resonanceReversal;
     }
 
