@@ -20,6 +20,7 @@ public class ResonanceTest {
      * 
      * @param args args from command line
      * @throws IOException if issue opening a file to read or write data
+     * @throws ArraysInvalidException if the lists have different lengths
      */
     public static void main(String[] args) throws IOException, ArraysInvalidException {
         /*

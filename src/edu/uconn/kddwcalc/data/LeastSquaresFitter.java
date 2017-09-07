@@ -50,7 +50,8 @@ public class LeastSquaresFitter {
         final double[] aggExpCSPs = series.getCumulativeShifts();
         
         if (!DataArrayValidator.isValid(ligandConcArray, receptorConcArray, aggExpCSPs))
-            throw new ArraysInvalidException("in LeastSquaresFitter.fit");
+            throw new ArraysInvalidException("in LeastSquaresFitter.fit, either duplicate data or arrays are"
+                + " a different length");
         
         AggResults aggResultsObject = fitCumulativeData(ligandConcArray, receptorConcArray, aggExpCSPs);
         

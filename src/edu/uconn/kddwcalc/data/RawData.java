@@ -75,6 +75,7 @@ public final class RawData {
      * @throws IOException if an I/O error occurs opening dataFiles
      * @throws IllegalArgumentException if the lists are not the same length
      * @throws IllegalArgumentException if the underlying text files in dataFiles have a different number of lines
+     * @throws ArraysInvalidException if the lists have different lengths
      */
     public final static RawData createRawData(List<Path> dataFiles, 
                                               List<Double> ligandConcs,

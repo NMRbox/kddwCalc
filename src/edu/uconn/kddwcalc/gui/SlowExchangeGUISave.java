@@ -64,7 +64,7 @@ public class SlowExchangeGUISave implements Serializable {
     }
     
     /**
-     * Simple factory to create an instance of <code>SlowExchangeGUISave<code>
+     * Simple factory to create an instance of <code>SlowExchangeGUISave</code>
      * 
      * @param typeOfTitr type of titration performed (ex 1H-15N HSQC or 1H-13C methyl HMQC)
      * @param resonanceReversal related to the order of resonances in the peak list

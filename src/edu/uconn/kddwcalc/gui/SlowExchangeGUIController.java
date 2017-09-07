@@ -332,7 +332,7 @@ public class SlowExchangeGUIController implements Initializable {
                 List<TextField> ligandConcTextFieldList = compileLigandConcTextFields();
 
                 List<TextField> receptorConcTextFieldList = compileReceptorConcTextFields();
-            // </editor-fold>
+                // </editor-fold>
 
                 if (isOutputFilesNull()) {
                     throw new NullPointerException("Before pressing \"Analyze\", must choose "
@@ -380,7 +380,8 @@ public class SlowExchangeGUIController implements Initializable {
             if (saveFile != null) {
 
                 try (ObjectOutputStream output = new ObjectOutputStream(Files.newOutputStream(saveFile.toPath()))) {
-                    List<File> localFileList = fileList;
+                    List<File> localFileList = fileList.stream()
+                                                       .collect(Collectors.toList());
 
                     List<Double> ligandConcs
                         = getListDoubleFromListTextField(compileLigandConcTextFields());
@@ -830,7 +831,8 @@ public class SlowExchangeGUIController implements Initializable {
     }
 
     /**
-     *
+     *  Opens a {@link FileChooser} and returns the {@link File} to save to.
+     * 
      * @param title the title to apply to the dialog window
      * @param defaultFileName the name of the file that will be written to
      *
@@ -849,7 +851,8 @@ public class SlowExchangeGUIController implements Initializable {
     }
 
     /**
-     *
+     * Opens a {@link FileChooser} and returns the {@link File} it opened.
+     * 
      * @param title the title to apply to the dialog window
      *
      * @return the name and location chosen by the user in the {link
@@ -868,6 +871,13 @@ public class SlowExchangeGUIController implements Initializable {
         return file;
     }
 
+    /**
+     * Populates the {@link TextField} objects in the GUI with the receptor or ligand concentrations
+     * (that probably came from a {@link SlowExchangeGUISave} object
+     * 
+     * @param savedLigandConcs the total ligand concentrations
+     * @param savedReceptorConcs the total receptor concentrations
+     */
     private void fillProteinConcTextFields(final List<Double> savedLigandConcs, 
                                            final List<Double> savedReceptorConcs) {
         
@@ -881,6 +891,13 @@ public class SlowExchangeGUIController implements Initializable {
         }
     }
     
+    /**
+     * Updates a the text in an {@link TextField} object with a protein concentrations
+     * that probably came from a {@link SlowExchangeGUISave} object
+     * 
+     * @param textField holds a ligand or receptor concentration
+     * @param savedConc the concentration
+     */
     private void updateTextField(TextField textField,
                                  Double savedConc) {
         
