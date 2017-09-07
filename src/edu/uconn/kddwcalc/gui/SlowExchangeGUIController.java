@@ -25,6 +25,9 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -147,10 +150,13 @@ public class SlowExchangeGUIController implements Initializable {
     private ReadOnlyObjectWrapper<File> wrappedDataOutputFile;
     private ReadOnlyObjectWrapper<File> wrappedResultsOutputFile;
     
-    private final List<File> fileList = new ArrayList<>(Arrays.asList(new File[15]));
+    // creates a list with File objects that have references to null.
+    // 
+    private final ObservableList<File> fileList = 
+            FXCollections.observableArrayList(new ArrayList<>(Arrays.asList(new File[15])));
 
             
-    private List<TextField> wrappedFileNameTextFieldList;
+    private List<TextField> fileNameTextFieldList;
 
     
     
@@ -175,7 +181,7 @@ public class SlowExchangeGUIController implements Initializable {
         wrappedDataOutputFile = new ReadOnlyObjectWrapper(dataOutputFile, "wrappedDataOutputFile");
         wrappedResultsOutputFile = new ReadOnlyObjectWrapper(resultsOutputFile, "wrappedResultsOutputFile");
         
-        wrappedFileNameTextFieldList = compileDataFileTextField();
+        fileNameTextFieldList = compileDataFileTextField();
 
         //listOfWrappedFiles = new ArrayList<ReadOnlyObjectWrapper<File>>();
 
@@ -222,12 +228,14 @@ public class SlowExchangeGUIController implements Initializable {
 
         // if the name and location to write the sorted peak lists change, update the textfield below it
         wrappedDataOutputFile.addListener((observableValue, oldValue, newValue) -> {
-            dataOutputTextField.setText(newValue.getName());
+            if (newValue != null)
+                dataOutputTextField.setText(newValue.getName());
         });
 
         // if the name and location to write the results change, update the textfield below it
         wrappedResultsOutputFile.addListener((observableValue, oldValue, newValue) -> {
-            resultsOutputTextField.setText(newValue.getName());
+            if (newValue != null)
+                resultsOutputTextField.setText(newValue.getName());
         });
 
         // if the type of spectrum changes, change the labels for the 
@@ -254,6 +262,44 @@ public class SlowExchangeGUIController implements Initializable {
                             "Was unable to select type in SlowExchangeGUIControler.initializeAllListeners()");
                 }
             });
+        
+        // so textFields update when files are set (either by chooser with button or loading from .ser file)
+        fileList.addListener(new ListChangeListener() {
+            
+            @Override
+            public void onChanged(ListChangeListener.Change change) {
+                
+                List<TextField> ligandTextFieldList = compileLigandConcTextFields();
+                List<TextField> receptorTextFieldList = compileReceptorConcTextFields();
+                List<Button> fileChooserButtonList = compileDataFileChooserButtons();
+                
+                // fileNameTextFieldList is what needs to be updated
+                // ObservableList<File> changes and textFields nee to update
+                for(int ctr = 0; ctr < MAX_NUM_EXP_PTS; ctr++) {
+                    
+                    if(fileList.get(ctr) != null) {
+                        fileNameTextFieldList.get(ctr).setText(fileList.get(ctr).getName());
+                        
+                        if(ctr == 0)
+                            receptorTextFieldList.get(ctr).setEditable(true);
+                        else {
+                            
+                            ligandTextFieldList.get(ctr).setEditable(true);
+                            receptorTextFieldList.get(ctr).setEditable(true);
+                        }
+                        if(ctr < MAX_NUM_EXP_PTS - 1)
+                            fileChooserButtonList.get(ctr + 1).setDisable(false);
+                    }
+                    
+                    
+                //    fileName1.setText(fileList.get(0).getName());
+           // chooser2.setDisable(false);
+          //  receptorConc1.setEditable(true);
+                    
+                }
+            }
+        });
+        
     }
 
        
@@ -426,6 +472,17 @@ public class SlowExchangeGUIController implements Initializable {
                     
                     fillProteinConcTextFields(savedData.getLigandConcs(), savedData.getReceptorConcs());
 
+                    
+                    // TODO code changes to file list
+                    //fileList = FXCollections.observableArrayList(savedData.getFileList());
+                    
+                    List<File> savedFileList = savedData.getFileList();
+                    
+                    for(int ctr = 0; ctr < MAX_NUM_EXP_PTS; ctr++) {
+                        fileList.set(ctr, savedFileList.get(ctr));
+                    }
+                    
+                    
                 } catch (IllegalArgumentException | NullPointerException | SecurityException |
                     NoSuchElementException | ClassCastException | IOException | ClassNotFoundException e) {
 
@@ -569,194 +626,90 @@ public class SlowExchangeGUIController implements Initializable {
     private void Button1pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         this.fileList.set(0, chooser.showOpenDialog(null));
-
-        if (fileList.get(0) != null) {
-            fileName1.setText(fileList.get(0).getName());
-            chooser2.setDisable(false);
-            receptorConc1.setEditable(true);
-        }
     }
 
     @FXML
     private void Button2pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(1, chooser.showOpenDialog(null));
-
-        if (fileList.get(1) != null) {
-            fileName2.setText(fileList.get(1).getName());
-            chooser3.setDisable(false);
-            receptorConc2.setEditable(true);
-            ligandConc2.setEditable(true);
-        }
     }
 
     @FXML
     private void Button3pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-
         fileList.set(2, chooser.showOpenDialog(null));
-
-        if (fileList.get(2) != null) {
-            fileName3.setText(fileList.get(2).getName());
-            chooser4.setDisable(false);
-            receptorConc3.setEditable(true);
-            ligandConc3.setEditable(true);
-        }
     }
 
     @FXML
     private void Button4pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(3, chooser.showOpenDialog(null));
-
-        if (fileList.get(3) != null) {
-            fileName4.setText(fileList.get(3).getName());
-            chooser5.setDisable(false);
-            receptorConc4.setEditable(true);
-            ligandConc4.setEditable(true);
-        }
     }
 
     @FXML
     private void Button5pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(4, chooser.showOpenDialog(null));
-
-        if (fileList.get(4) != null) {
-            fileName5.setText(fileList.get(4).getName());
-            chooser6.setDisable(false);
-            receptorConc5.setEditable(true);
-            ligandConc5.setEditable(true);
-        }
     }
 
     @FXML
     private void Button6pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(5, chooser.showOpenDialog(null));
-
-        if (fileList.get(5) != null) {
-            fileName6.setText(fileList.get(5).getName());
-            chooser7.setDisable(false);
-            receptorConc6.setEditable(true);
-            ligandConc6.setEditable(true);
-        }
     }
 
     @FXML
     private void Button7pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(6, chooser.showOpenDialog(null));
-
-        if (fileList.get(6) != null) {
-            fileName7.setText(fileList.get(6).getName());
-            chooser8.setDisable(false);
-            receptorConc7.setEditable(true);
-            ligandConc7.setEditable(true);
-        }
     }
 
     @FXML
     private void Button8pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(7, chooser.showOpenDialog(null));
-
-        if (fileList.get(7) != null) {
-            fileName8.setText(fileList.get(7).getName());
-            chooser9.setDisable(false);
-            receptorConc8.setEditable(true);
-            ligandConc8.setEditable(true);
-        }
     }
 
     @FXML
     private void Button9pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(8, chooser.showOpenDialog(null));
-
-        if (fileList.get(8) != null) {
-            fileName9.setText(fileList.get(8).getName());
-            chooser10.setDisable(false);
-            receptorConc9.setEditable(true);
-            ligandConc9.setEditable(true);
-        }
     }
 
     @FXML
     private void Button10pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(9, chooser.showOpenDialog(null));
-
-        if (fileList.get(9) != null) {
-            fileName10.setText(fileList.get(9).getName());
-            chooser11.setDisable(false);
-            receptorConc10.setEditable(true);
-            ligandConc10.setEditable(true);
-        }
     }
 
     @FXML
     private void Button11pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(10, chooser.showOpenDialog(null));
-
-        if (fileList.get(10) != null) {
-            fileName11.setText(fileList.get(10).getName());
-            chooser12.setDisable(false);
-            receptorConc11.setEditable(true);
-            ligandConc11.setEditable(true);
-        }
     }
 
     @FXML
     private void Button12pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(11, chooser.showOpenDialog(null));
-
-        if (fileList.get(11) != null) {
-            fileName12.setText(fileList.get(11).getName());
-            chooser13.setDisable(false);
-            receptorConc12.setEditable(true);
-            ligandConc12.setEditable(true);
-        }
     }
 
     @FXML
     private void Button13pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(12, chooser.showOpenDialog(null));
-
-        if (fileList.get(12) != null) {
-            fileName13.setText(fileList.get(12).getName());
-            chooser14.setDisable(false);
-            receptorConc13.setEditable(true);
-            ligandConc13.setEditable(true);
-        }
     }
 
     @FXML
     private void Button14pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(13, chooser.showOpenDialog(null));
-
-        if (fileList.get(13) != null) {
-            fileName14.setText(fileList.get(13).getName());
-            chooser15.setDisable(false);
-            receptorConc14.setEditable(true);
-            ligandConc14.setEditable(true);
-        }
     }
 
     @FXML
     private void Button15pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
         fileList.set(14, chooser.showOpenDialog(null));
-
-        if (fileList.get(14) != null) {
-            fileName15.setText(fileList.get(14).getName());
-            receptorConc15.setEditable(true);
-            ligandConc15.setEditable(true);
-        }
     }
     // </editor-fold>
 
@@ -924,8 +877,7 @@ public class SlowExchangeGUIController implements Initializable {
         for(int ctr = 0; ctr < savedLigandConcs.size(); ctr++) {
             
             updateTextField(ligandConcTextFieldList.get(ctr), savedLigandConcs.get(ctr));
-            updateTextField(receptorConcTextFieldList.get(ctr), savedReceptorConcs.get(ctr));
-                
+            updateTextField(receptorConcTextFieldList.get(ctr), savedReceptorConcs.get(ctr));    
         }
     }
     
@@ -935,5 +887,4 @@ public class SlowExchangeGUIController implements Initializable {
         textField.setEditable(true);
         textField.setText(Double.toString(savedConc));
     }
-
 } // end class SlowExchangeGUIController

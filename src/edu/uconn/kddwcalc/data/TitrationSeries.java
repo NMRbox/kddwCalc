@@ -21,8 +21,7 @@ import java.util.stream.Collectors;
  * 
  * @since 1.8
  */
-public class TitrationSeries 
-{   
+public class TitrationSeries {   
     private final List<Titration> titrationSeries = new ArrayList<>();
     
     /**
