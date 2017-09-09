@@ -43,11 +43,11 @@ public class LoadingScreenController implements Initializable {
         
         
         KeyFrame keyFrame1 = new KeyFrame(Duration.millis(KEYFRAME_DURATION * 1),
-                                          new KeyValue(loadingLabel.textProperty(), "Loading modules..."),
+                                          new KeyValue(loadingLabel.textProperty(), "Loading packages..."),
                                           new KeyValue(loadingProgressBar.progressProperty(), 0.15, Interpolator.DISCRETE));
         
         KeyFrame keyFrame2 = new KeyFrame(Duration.millis(KEYFRAME_DURATION * 2),
-                                          new KeyValue(loadingLabel.textProperty(), "Loading packages..."),
+                                          new KeyValue(loadingLabel.textProperty(), "Turning on modules..."),
                                           new KeyValue(loadingProgressBar.progressProperty(), 0.300, Interpolator.DISCRETE));
         
         KeyFrame keyFrame3 = new KeyFrame(Duration.millis(KEYFRAME_DURATION * 3),

@@ -1,6 +1,6 @@
 package edu.uconn.kddwcalc.data;
 
-import edu.uconn.kddwcalc.gui.SlowExchangeGUIController;
+import edu.uconn.kddwcalc.gui.FastExchangeGUIController;
 
 /**
  * Represent the types of titrations. This is used for the switch in {@link FactoryMaker}.
@@ -9,7 +9,7 @@ import edu.uconn.kddwcalc.gui.SlowExchangeGUIController;
  * 
  * @see FactoryMaker
  * @see AbsFactory
- * @see SlowExchangeGUIController
+ * @see FastExchangeGUIController
  */
 public enum TypesOfTitrations {
 

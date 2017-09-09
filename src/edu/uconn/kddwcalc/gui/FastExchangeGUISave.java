@@ -19,7 +19,7 @@ import java.util.List;
  * @since 1.8
  */
 
-public class SlowExchangeGUISave implements Serializable {
+public class FastExchangeGUISave implements Serializable {
     
     private final TypesOfTitrations typeOfTitr;
     private final boolean resonanceReversal;
@@ -44,7 +44,7 @@ public class SlowExchangeGUISave implements Serializable {
      * @param ligandConcs the total ligand concentration
      * @param receptorConcs the total receptor concentration
      */
-    private SlowExchangeGUISave(TypesOfTitrations typeOfTitr,
+    private FastExchangeGUISave(TypesOfTitrations typeOfTitr,
                                 boolean resonanceReversal,
                                 double multiplier,
                                 File outputDataFile,
@@ -64,7 +64,7 @@ public class SlowExchangeGUISave implements Serializable {
     }
     
     /**
-     * Simple factory to create an instance of <code>SlowExchangeGUISave</code>
+     * Simple factory to create an instance of <code>FastExchangeGUISave</code>
      * 
      * @param typeOfTitr type of titration performed (ex 1H-15N HSQC or 1H-13C methyl HMQC)
      * @param resonanceReversal related to the order of resonances in the peak list
@@ -75,10 +75,10 @@ public class SlowExchangeGUISave implements Serializable {
      * @param ligandConcs the total ligand concentration
      * @param receptorConcs the total receptor concentration
      * 
-     * @return an instance of class <code>SlowExchangeGUISave</code> with all instance
+     * @return an instance of class <code>FastExchangeGUISave</code> with all instance
      * variables initialized
      */
-    public static SlowExchangeGUISave createUnsortedDataObject(TypesOfTitrations typeOfTitr,
+    public static FastExchangeGUISave createUnsortedDataObject(TypesOfTitrations typeOfTitr,
                                                                boolean resonanceReversal,
                                                                double multiplier,
                                                                File outputDataFile,
@@ -89,7 +89,7 @@ public class SlowExchangeGUISave implements Serializable {
         
         DataArrayValidator.isListLengthsAllEqual(ligandConcs, receptorConcs);
         
-        return new SlowExchangeGUISave(typeOfTitr,
+        return new FastExchangeGUISave(typeOfTitr,
                                        resonanceReversal,
                                        multiplier,
                                        outputDataFile,

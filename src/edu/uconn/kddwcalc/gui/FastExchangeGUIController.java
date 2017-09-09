@@ -42,14 +42,14 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import org.controlsfx.dialog.ExceptionDialog;
 
 /**
- * Controller class for input of slow exchange NMR titration data. For user data
+ * Controller class for input of fast exchange NMR titration data. For user data
  * input.
  *
  * @author Alex R.
  *
  * @since 1.8
  */
-public class SlowExchangeGUIController implements Initializable {
+public class FastExchangeGUIController implements Initializable {
 
 // <editor-fold>
     @FXML private Button chooser1;
@@ -259,7 +259,7 @@ public class SlowExchangeGUIController implements Initializable {
 
                     default:
                         throw new IllegalArgumentException(
-                            "Was unable to select type in SlowExchangeGUIControler.initializeAllListeners()");
+                            "Was unable to select type in FastExchangeGUIControler.initializeAllListeners()");
                 }
             });
         
@@ -368,7 +368,7 @@ public class SlowExchangeGUIController implements Initializable {
          *
          * @param event the {@link ActionEvent} that occurred
          *
-         * @throws IOException if can't write the {@link SlowExchangeGUISave}
+         * @throws IOException if can't write the {@link FastExchangeGUISave}
          * object
          */
         @FXML
@@ -399,8 +399,8 @@ public class SlowExchangeGUIController implements Initializable {
                         throw new IllegalArgumentException("Lists have different length in saveButtonPressed");
                     }
 
-                    SlowExchangeGUISave instanceToSave
-                        = SlowExchangeGUISave.createUnsortedDataObject(getTypeOfTitration(),
+                    FastExchangeGUISave instanceToSave
+                        = FastExchangeGUISave.createUnsortedDataObject(getTypeOfTitration(),
                             getResonanceReversal(),
                             parseMultiplier(),
                             wrappedDataOutputFile.get(),
@@ -423,7 +423,7 @@ public class SlowExchangeGUIController implements Initializable {
         }
 
         /**
-         * A method to read a previously saved {@link SlowExchangeGUISave}
+         * A method to read a previously saved {@link FastExchangeGUISave}
          * object. This populates the data into the GUI, then the user must
          * press the "analyze" button to finish.
          *
@@ -446,7 +446,7 @@ public class SlowExchangeGUIController implements Initializable {
 
                 try (ObjectInputStream input = new ObjectInputStream(Files.newInputStream(openFile.toPath()))) {
 
-                    SlowExchangeGUISave savedData = (SlowExchangeGUISave) input.readObject();
+                    FastExchangeGUISave savedData = (FastExchangeGUISave) input.readObject();
 
                     // best way i could think of quickly to make this without introducing dependencies
                     typeOfTitrationToggleGroup.selectToggle(
@@ -873,7 +873,7 @@ public class SlowExchangeGUIController implements Initializable {
 
     /**
      * Populates the {@link TextField} objects in the GUI with the receptor or ligand concentrations
-     * (that probably came from a {@link SlowExchangeGUISave} object
+     * (that probably came from a {@link FastExchangeGUISave} object
      * 
      * @param savedLigandConcs the total ligand concentrations
      * @param savedReceptorConcs the total receptor concentrations
@@ -893,7 +893,7 @@ public class SlowExchangeGUIController implements Initializable {
     
     /**
      * Updates a the text in an {@link TextField} object with a protein concentrations
-     * that probably came from a {@link SlowExchangeGUISave} object
+     * that probably came from a {@link FastExchangeGUISave} object
      * 
      * @param textField holds a ligand or receptor concentration
      * @param savedConc the concentration
@@ -904,4 +904,4 @@ public class SlowExchangeGUIController implements Initializable {
         textField.setEditable(true);
         textField.setText(Double.toString(savedConc));
     }
-} // end class SlowExchangeGUIController
+} // end class FastExchangeGUIController

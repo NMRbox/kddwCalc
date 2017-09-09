@@ -14,27 +14,28 @@ import javafx.stage.Stage;
  * @author Alex Ri
  */
 public class MenuController {
-    private Object stage;
+    
+    //private Object fastExchangeStage;
     
     public void quitButtonPressed(ActionEvent e) {
         Platform.exit();
         System.exit(0);
     }
     
-    public void slowExchangeGUIPressed(ActionEvent e) throws IOException {
+    public void fastExchangeGUIPressed(ActionEvent e) throws IOException {
         
-        Parent root = FXMLLoader.load(getClass().getResource("SlowExchangeGUI.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("FastExchangeGUI.fxml"));
         
         Scene scene = new Scene(root);
         
         scene.getStylesheets().add(
-            getClass().getResource("SlowExchangeGUIStyleSheet.css").toExternalForm());
+            getClass().getResource("FastExchangeGUIStyleSheet.css").toExternalForm());
         
-        Stage stage = new Stage();
+        Stage fastExchangeStage = new Stage();
         
-        stage.setTitle("Slow Exchange NMR Titration Data Input");
+        fastExchangeStage.setTitle("Fast Exchange NMR Titration Data Input");
         
-        stage.setScene(scene);
-        stage.show();
+        fastExchangeStage.setScene(scene);
+        fastExchangeStage.show();
     }
 }

@@ -12,7 +12,7 @@
       <items>
             <Menu mnemonicParsing="false" text="New">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#slowExchangeGUIPressed" text="NMR - Fast Exchange" />
+                <MenuItem mnemonicParsing="false" onAction="#fastExchangeGUIPressed" text="NMR - Fast Exchange" />
                   <MenuItem mnemonicParsing="false" text="NMR - Slow Exchange" />
               </items>
             </Menu>
