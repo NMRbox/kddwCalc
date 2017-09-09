@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER_RIGHT" stylesheets="@GUIStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.uconn.kddwcalc.gui.SlowExchangeGUIController">
+<VBox alignment="CENTER_RIGHT" stylesheets="@SlowExchangeGUIStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.uconn.kddwcalc.gui.SlowExchangeGUIController">
    <children>
       <HBox>
          <children>

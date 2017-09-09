@@ -1,0 +1,9 @@
+
+
+#programTitleLabel {
+   -fx-font: bold italic 36pt Helvetica;
+}
+
+#loadingLabel {
+   -fx-font: 11pt Helvetica;
+}
