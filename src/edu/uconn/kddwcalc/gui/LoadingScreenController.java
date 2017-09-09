@@ -6,8 +6,6 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -29,9 +27,11 @@ public class LoadingScreenController implements Initializable {
     private final Timeline loadingTimeline = new Timeline();
 
     /**
-     * Initializes the controller class.
-     * 
-
+     * Initializes the loading screen controller class. Runs a Timeline with a few {@link Keyframe} objects
+     * and an image
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -75,8 +75,12 @@ public class LoadingScreenController implements Initializable {
         loadingTimeline.playFromStart();
     }   
     
-    public Timeline getLoadingTimeline()
-    {
+    /**
+     * Gets the {@link Timeline} for the loading screen
+     * 
+     * @return for the loading screen
+     */
+    public Timeline getLoadingTimeline() {
         return loadingTimeline;
     }
     

@@ -11,7 +11,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 /**
- * Main application class that launches program
+ * <code>Main</code> application class that launches program
  * 
  * @author Alex R
  */
@@ -39,11 +39,10 @@ public class KdDwCalc extends Application {
         
         menuStage.initStyle(StageStyle.UNDECORATED);
         menuStage.setScene(menu);
-        
         menuStage.setX(50);
         menuStage.setY(50);
         
-        runLoadingScreen(new Stage(), menuStage);
+        runLoadingScreenAndShowMenu(new Stage(), menuStage);
     }
 
     /**
@@ -55,7 +54,15 @@ public class KdDwCalc extends Application {
         launch(args);
     }
 
-    private void runLoadingScreen(Stage stage, Stage menuStage) throws IOException {
+    /**
+     * Runs the loading screen and then shows the menu after a {@Link PauseTransition} occurs
+     * 
+     * @param stage the loading scene stage
+     * @param menuStage the menu stage
+     * 
+     * @throws IOException if it cant load the loading screen fxml or css file
+     */
+    private void runLoadingScreenAndShowMenu(Stage stage, Stage menuStage) throws IOException {
 
         PauseTransition delay = new PauseTransition(Duration.millis(LOADING_SCREEN_TOTAL_TIME));
         
@@ -72,8 +79,6 @@ public class KdDwCalc extends Application {
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(loadingScene);
         stage.show();
-        
-        
         
         delay.setOnFinished(event -> {
             stage.close();
