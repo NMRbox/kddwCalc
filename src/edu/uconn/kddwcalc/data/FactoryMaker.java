@@ -10,7 +10,7 @@ package edu.uconn.kddwcalc.data;
  * 
  * @see AbsFactory
  * @see TitrationSeries
- * @see edu.uconn.kddwcalc.gui.SlowExchangeGUIController
+ * @see edu.uconn.kddwcalc.gui.FastExchangeGUIController
  * 
  * 
  * @since 1.8

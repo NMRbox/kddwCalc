@@ -44,33 +44,6 @@ public class KdDwCalc extends Application {
         menuStage.setY(50);
         
         runLoadingScreen(new Stage(), menuStage);
-        
-        
-        
-        
-        
-        
-        /**
-        Parent root = FXMLLoader.load(getClass().getResource("SlowExchangeGUI.fxml"));
-        
-        Scene scene = new Scene(root);
-        
-        scene.getStylesheets().add(
-            getClass().getResource("GUIStyleSheet.css").toExternalForm());
-        
-        stage.setTitle("Slow Exchange NMR Titration Data Input");
-        
-        stage.setScene(scene);
-        stage.show();
-        * 
-        *
-        */
-        
-        
-        
-        
-        
-        
     }
 
     /**

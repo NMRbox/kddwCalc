@@ -7,12 +7,12 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * A class representing unsorted slow exchange NMR titration data that can be serialized and
- * deserialized to populate the SlowExchangeGUI with data.
+ * A class representing unsorted fast exchange NMR titration data that can be serialized and
+ * deserialized to populate the FastExchangeGUI with data.
  * 
  * Note the types of data
  * 
- * @see SlowExchangeGUIController
+ * @see FastExchangeGUIController
  * 
  * @author Rizzo
  * 
