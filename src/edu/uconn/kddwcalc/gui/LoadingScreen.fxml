@@ -14,7 +14,7 @@
          <children>
             <ImageView fitHeight="402.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@uchc_nite__lg.jpg" />
+                  <Image url="@uchcPic_notFOSSIDontThink.jpg" />
                </image>
             </ImageView>
             <Label fx:id="programTitleLabel" layoutX="59.0" layoutY="69.0" prefHeight="44.0" prefWidth="187.0" text="KdCalc" textFill="WHITE">
