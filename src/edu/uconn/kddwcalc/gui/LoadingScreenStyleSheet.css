@@ -1,9 +1,9 @@
 
 
 #programTitleLabel {
-   -fx-font: bold italic 36pt Helvetica;
+   -fx-font: bold italic 36pt "Helvetica Neue";
 }
 
 #loadingLabel {
-   -fx-font: 11pt Helvetica;
+   -fx-font: 11pt "Helvetica Neue";
 }

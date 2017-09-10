@@ -14,15 +14,15 @@
          <children>
             <ImageView fitHeight="402.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@loadingImage.jpeg" />
+                  <Image url="@uchc_nite__lg.jpg" />
                </image>
             </ImageView>
-            <Label fx:id="programTitleLabel" layoutX="334.0" layoutY="301.0" prefHeight="44.0" prefWidth="187.0" text="KdCalc" textFill="WHITE">
+            <Label fx:id="programTitleLabel" layoutX="59.0" layoutY="69.0" prefHeight="44.0" prefWidth="187.0" text="KdCalc" textFill="WHITE">
                <font>
                   <Font name="System Bold Italic" size="10.0" />
                </font>
             </Label>
-            <Label fx:id="loadingLabel" layoutX="231.0" layoutY="376.0" prefHeight="23.0" prefWidth="359.0" textFill="WHITE">
+            <Label fx:id="loadingLabel" layoutX="14.0" layoutY="372.0" prefHeight="23.0" prefWidth="359.0" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
