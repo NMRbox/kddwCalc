@@ -22,7 +22,7 @@
                   <Font name="System Bold Italic" size="10.0" />
                </font>
             </Label>
-            <Label fx:id="loadingLabel" layoutX="14.0" layoutY="372.0" prefHeight="23.0" prefWidth="359.0" textFill="WHITE">
+            <Label fx:id="loadingLabel" layoutX="14.0" layoutY="373.0" prefHeight="23.0" prefWidth="567.0" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>

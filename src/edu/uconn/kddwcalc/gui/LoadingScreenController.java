@@ -27,11 +27,11 @@ public class LoadingScreenController implements Initializable {
     private final Timeline loadingTimeline = new Timeline();
 
     /**
-     * Initializes the loading screen controller class. Runs a Timeline with a few {@link Keyframe} objects
+     * Initializes the loading screen controller class. Runs a Timeline with a few {@link KeyFrame} objects
      * and an image
      *
-     * @param url
-     * @param rb
+     * @param url a url
+     * @param rb resource
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {

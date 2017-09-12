@@ -39,7 +39,7 @@ public class LeastSquaresFitter {
      * @see Results
      * @see AggResults
      * 
-     * @throws ArraysInvalidException if arrays have different lengths of duplicate data
+     * @throws ArraysInvalidException if arrays have different lengths or duplicate data
      * 
      * @return a {@link Results} object containing Kd and other values from the fitting
      */
