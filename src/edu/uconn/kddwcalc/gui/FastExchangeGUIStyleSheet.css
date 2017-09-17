@@ -12,6 +12,8 @@
     -fx-font-weight: bold;
     -fx-font-size: 16px;
     -fx-padding: 10 20 10 20;
+    
+    
 }
 
 .fileChooser {
@@ -23,4 +25,24 @@
     -fx-text-fill: black;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
 }
+
+.bigButton, .fileChooser {
+   -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+
+.bigButton:hover, .fileChooser:hover {
+   -fx-background-color: #dae7f3;
+}
+
+.bigButton:pressed, .fileChooser:pressed {
+   -fx-background-color: linear-gradient(#2A5058, #61a2b1);
+}
+
+
+
+
+
+
+
 
