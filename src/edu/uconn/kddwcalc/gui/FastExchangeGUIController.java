@@ -49,7 +49,7 @@ import org.controlsfx.dialog.ExceptionDialog;
  *
  * @since 1.8
  */
-public class FastExchangeGUIController implements Initializable {
+public class FastExchangeGUIController {
 
 // <editor-fold>
     @FXML private Button chooser1;
@@ -135,6 +135,7 @@ public class FastExchangeGUIController implements Initializable {
 
     @FXML Button loadButton;
     @FXML Button saveButton;
+    @FXML Button clearButton;
 
     private static final double AMIDE_HSQC_DEFAULT_MULT = 0.1;
     private static final double METHYL_HMQC_DEFAULT_MULT = 0.25;
@@ -166,15 +167,12 @@ public class FastExchangeGUIController implements Initializable {
      * set redunanly in both the fxml file (so one can see an initialized GUI in
      * scenebuilder) but also in this method for clarity
      *
-     * @param url a url
-     * @param rb resource bundle
-     *
      * @see TypesOfTitrations
      */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize() {
 
         initializeRadioButtonUserData();
+        
 
         File dataOutputFile = null;
         File resultsOutputFile = null;
@@ -182,6 +180,8 @@ public class FastExchangeGUIController implements Initializable {
         wrappedResultsOutputFile = new ReadOnlyObjectWrapper(resultsOutputFile, "wrappedResultsOutputFile");
         
         fileNameTextFieldList = compileDataFileTextField();
+        
+        
 
         //listOfWrappedFiles = new ArrayList<ReadOnlyObjectWrapper<File>>();
 
@@ -195,6 +195,8 @@ public class FastExchangeGUIController implements Initializable {
      * Initializes the GUI with amide HSQC values as default.
      */
     private void setToDefaultGUIValues() {
+        
+        ligandConc1.setText("0.0");
 
         typeOfTitrationToggleGroup.selectToggle(amideHSQCradioButton);
         orderNucleiFirstRadioButton.setText(AMIDE_FIRST_RADIO_BUTTON_MESSAGE);
@@ -274,7 +276,7 @@ public class FastExchangeGUIController implements Initializable {
                 List<Button> fileChooserButtonList = compileDataFileChooserButtons();
                 
                 // fileNameTextFieldList is what needs to be updated
-                // ObservableList<File> changes and textFields nee to update
+                // ObservableList<File> changes and textFields need to update
                 for(int ctr = 0; ctr < MAX_NUM_EXP_PTS; ctr++) {
                     
                     if(fileList.get(ctr) != null) {
@@ -289,20 +291,16 @@ public class FastExchangeGUIController implements Initializable {
                         }
                         if(ctr < MAX_NUM_EXP_PTS - 1)
                             fileChooserButtonList.get(ctr + 1).setDisable(false);
+                    }  
+                    if(fileList.get(ctr) == null) {
+                        fileNameTextFieldList.get(ctr).setText("");
+                        ligandTextFieldList.get(ctr).setEditable(false);
+                        receptorTextFieldList.get(ctr).setEditable(false);
                     }
-                    
-                    
-                //    fileName1.setText(fileList.get(0).getName());
-           // chooser2.setDisable(false);
-          //  receptorConc1.setEditable(true);
-                    
                 }
             }
-        });
-        
+        }); 
     }
-
-       
 
         /**
          * Executes when the analyze button is pressed. In short, this method
@@ -491,6 +489,41 @@ public class FastExchangeGUIController implements Initializable {
                 }
             }
         }
+        
+        
+        /**
+         * Cleared the GUI and resets to default parameters.
+         * 
+         * @param event The {@link ActionEvent} that occurred when the clear button was pressed
+         */
+        @FXML
+        private void clearButtonPressed(ActionEvent event)
+        {
+            
+
+            for (int ctr = 0; ctr < fileList.size(); ctr++) {
+                fileList.set(ctr, null);
+            }
+            
+            compileLigandConcTextFields().stream()
+                                         .forEach(field -> {
+                                             field.clear();
+                                             field.setEditable(false);
+                                         });
+            
+            compileReceptorConcTextFields().stream()
+                                           .forEach(field -> {
+                                               field.clear();
+                                               field.setEditable(false);
+                                           });
+            
+            setToDefaultGUIValues();
+
+            
+            
+        }
+        
+        
         /**
          * Prepares the data from the user for {@link AbsFactory} by performing
          * some validation of the input and creating the {@link RawData}
