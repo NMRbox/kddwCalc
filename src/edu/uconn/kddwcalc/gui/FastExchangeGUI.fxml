@@ -18,14 +18,14 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <VBox alignment="CENTER">
+                              <VBox fx:id="typeOfTitrVBox" alignment="CENTER">
                                  <children>
-                                    <Label text="Which type of titration?">
+                                    <Label fx:id="typeOfTitrLabel" text="Which type of titration?">
                                        <padding>
                                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                        </padding>
                                     </Label>
-                                    <RadioButton fx:id="amideHSQCradioButton" contentDisplay="CENTER" mnemonicParsing="false" selected="true" text="1H-15N HSQC">
+                                    <RadioButton fx:id="amideHSQCRadioButton" contentDisplay="CENTER" mnemonicParsing="false" selected="true" text="1H-15N HSQC">
                                        <padding>
                                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                        </padding>
@@ -36,7 +36,7 @@
                                           <ToggleGroup fx:id="typeOfTitrationToggleGroup" />
                                        </toggleGroup>
                                     </RadioButton>
-                                    <RadioButton fx:id="methylHMQCradioButton" contentDisplay="CENTER" mnemonicParsing="false" text="1H-13C methyl HMQC" toggleGroup="$typeOfTitrationToggleGroup">
+                                    <RadioButton fx:id="methylHMQCRadioButton" contentDisplay="CENTER" mnemonicParsing="false" text="1H-13C methyl HMQC" toggleGroup="$typeOfTitrationToggleGroup">
                                        <padding>
                                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                        </padding>
@@ -53,9 +53,9 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <VBox>
+                              <VBox fx:id="orderVBox">
                                  <children>
-                                    <Label text="Order of nuclei in peak list?">
+                                    <Label fx:id="orderLabel" text="Order of nuclei in peak list?">
                                        <padding>
                                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                        </padding>
@@ -82,9 +82,9 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <VBox>
+                              <VBox fx:id="multiplierVBox">
                                  <children>
-                                    <Label text="Enter multiplier">
+                                    <Label fx:id="multiplierLabel" text="Enter multiplier">
                                        <padding>
                                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                        </padding>
@@ -308,7 +308,7 @@
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="analyzeButton1" mnemonicParsing="false" onAction="#analyzeButtonPressed" prefWidth="200.0" styleClass="bigButton" text="Analyze">
+                  <Button fx:id="analyzeButton" mnemonicParsing="false" onAction="#analyzeButtonPressed" prefWidth="200.0" styleClass="bigButton" text="Analyze">
                      <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>

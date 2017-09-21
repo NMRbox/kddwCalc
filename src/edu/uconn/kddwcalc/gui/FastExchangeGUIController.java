@@ -33,10 +33,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import org.controlsfx.dialog.ExceptionDialog;
@@ -117,12 +120,15 @@ public class FastExchangeGUIController {
     @FXML private TextField fileName15;
 
     // </editor-fold>
+    @FXML Label multiplierLabel;
     @FXML TextField multiplierTextField;
 
+    @FXML Label typeOfTitrLabel;
     @FXML ToggleGroup typeOfTitrationToggleGroup;
-    @FXML RadioButton amideHSQCradioButton;
-    @FXML RadioButton methylHMQCradioButton;
+    @FXML RadioButton amideHSQCRadioButton;
+    @FXML RadioButton methylHMQCRadioButton;
 
+    @FXML Label orderLabel;
     @FXML ToggleGroup nucleiToggleGroup;
     @FXML RadioButton orderNucleiFirstRadioButton;
     @FXML RadioButton orderNucleiSecondRadioButton;
@@ -136,7 +142,8 @@ public class FastExchangeGUIController {
     @FXML Button loadButton;
     @FXML Button saveButton;
     @FXML Button clearButton;
-
+    @FXML Button analyzeButton;
+    
     private static final double AMIDE_HSQC_DEFAULT_MULT = 0.1;
     private static final double METHYL_HMQC_DEFAULT_MULT = 0.25;
     private static final String DEFAULT_OUTPUT_DATA_FILENAME = "sortedPeakLists.txt";
@@ -188,6 +195,8 @@ public class FastExchangeGUIController {
         initializeAllListeners();
 
         setToDefaultGUIValues();
+        
+        setTooltips();
 
     }
 
@@ -198,7 +207,7 @@ public class FastExchangeGUIController {
         
         ligandConc1.setText("0.0");
 
-        typeOfTitrationToggleGroup.selectToggle(amideHSQCradioButton);
+        typeOfTitrationToggleGroup.selectToggle(amideHSQCRadioButton);
         orderNucleiFirstRadioButton.setText(AMIDE_FIRST_RADIO_BUTTON_MESSAGE);
         orderNucleiSecondRadioButton.setText(AMIDE_SECOND_RADIO_BUTTON_MESSAGE);
         multiplierTextField.setText(Double.toString(AMIDE_HSQC_DEFAULT_MULT));
@@ -217,8 +226,8 @@ public class FastExchangeGUIController {
      */
     private void initializeRadioButtonUserData() {
 
-        amideHSQCradioButton.setUserData(TypesOfTitrations.AMIDEHSQC);
-        methylHMQCradioButton.setUserData(TypesOfTitrations.METHYLHMQC);
+        amideHSQCRadioButton.setUserData(TypesOfTitrations.AMIDEHSQC);
+        methylHMQCRadioButton.setUserData(TypesOfTitrations.METHYLHMQC);
         orderNucleiFirstRadioButton.setUserData(false);
         orderNucleiSecondRadioButton.setUserData(true);
     }
@@ -937,4 +946,62 @@ public class FastExchangeGUIController {
         textField.setEditable(true);
         textField.setText(Double.toString(savedConc));
     }
+
+    private void setTooltips() {
+        
+        dataOutputButton.setTooltip(
+            new Tooltip("Press to select name and location where sorted peak lists will be saved"));
+        
+        dataOutputTextField.setTooltip(
+            new Tooltip("Name of file where sorted peak lists will be saved"));
+        
+        resultsOutputButton.setTooltip(
+            new Tooltip("Press to select name and location where results will be saved"));
+        
+        resultsOutputTextField.setTooltip(
+            new Tooltip("Name of file where results will be printed"));
+        
+        clearButton.setTooltip(
+            new Tooltip("Clears the GUI and resets to default values"));
+        
+        saveButton.setTooltip(
+            new Tooltip("Press to choose location to saved data. Note that only a complete dataset\n"
+                + "with valid values can be saved"));
+        
+        loadButton.setTooltip(
+            new Tooltip("Press to find and load a saved dataset into the GUI"));
+        
+        analyzeButton.setTooltip(
+            new Tooltip("Press to analyze data. This includes validation and sorting.\n"
+                + "Data and results will be saved to disk in the locations indicated"));
+        
+        
+        Tooltip typeTooltip = new Tooltip("Select type of experiment performed.\n"
+            + "This will affect validation");
+        
+        typeOfTitrLabel.setTooltip(typeTooltip);
+        amideHSQCRadioButton.setTooltip(typeTooltip);
+        methylHMQCRadioButton.setTooltip(typeTooltip);
+        
+        Tooltip orderTooltip = new Tooltip("Select the order in which the resonances appear\nin the "
+            + "peak lists. ex: 123.34  7.8 would be \"Nitrogen Proton\"");
+        
+        orderLabel.setTooltip(orderTooltip);
+        orderNucleiFirstRadioButton.setTooltip(orderTooltip);
+        orderNucleiSecondRadioButton.setTooltip(orderTooltip);
+        
+        
+        Tooltip multiplierTooltip = new Tooltip("Enter the value that will be used two scale the two nuclei.\n"
+            + "Note how the default values scale by gyromagnetic ratio");
+        
+        multiplierLabel.setTooltip(multiplierTooltip);
+        multiplierTextField.setTooltip(multiplierTooltip);
+        
+        
+        
+        
+        
+        
+    }
 } // end class FastExchangeGUIController
+ 
