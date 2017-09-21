@@ -998,8 +998,24 @@ public class FastExchangeGUIController {
         multiplierTextField.setTooltip(multiplierTooltip);
         
         
+        compileLigandConcTextFields().stream()
+                                     .forEach(field -> field.setTooltip(new Tooltip(
+                                         "Enter ligand conc in uM. If this TextField isn't editable\n"
+                                             + "then you need to choose a file on this line first")));
         
+        compileReceptorConcTextFields().stream()
+                                     .forEach(field -> field.setTooltip(new Tooltip(
+                                         "Enter receptor conc in uM. If this TextField isn't editable\n"
+                                             + "then you need to choose a file on this line first")));
+            
+  
+        compileDataFileChooserButtons().stream()
+                                     .forEach(field -> field.setTooltip(new Tooltip(
+                                         "Press to choose a peak list file")));
         
+        compileDataFileTextField().stream()
+                                     .forEach(field -> field.setTooltip(new Tooltip(
+                                         "Name of peak list file")));
         
         
     }
