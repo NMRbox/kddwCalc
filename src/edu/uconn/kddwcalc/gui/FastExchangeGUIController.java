@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import java.util.Arrays;
 import java.util.FormatterClosedException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -30,7 +28,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -39,7 +36,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import org.controlsfx.dialog.ExceptionDialog;
@@ -144,8 +140,8 @@ public class FastExchangeGUIController {
     @FXML Button clearButton;
     @FXML Button analyzeButton;
     
-    private static final double AMIDE_HSQC_DEFAULT_MULT = 0.1;
-    private static final double METHYL_HMQC_DEFAULT_MULT = 0.25;
+    private static final double AMIDE_HSQC_DEFAULT_MULT = 0.10136;
+    private static final double METHYL_HMQC_DEFAULT_MULT = 0.25143;
     private static final String DEFAULT_OUTPUT_DATA_FILENAME = "sortedPeakLists.txt";
     private static final String DEFAULT_OUTPUT_RESULTS_FILENAME = "finalResults.txt";
     private static final int MAX_NUM_EXP_PTS = 15;
@@ -219,6 +215,11 @@ public class FastExchangeGUIController {
             new File(System.getProperty("user.home"), DEFAULT_OUTPUT_DATA_FILENAME));
         wrappedResultsOutputFile.setValue(
             new File(System.getProperty("user.home"), DEFAULT_OUTPUT_RESULTS_FILENAME));
+        
+        // turn off file chooser buttons except first
+        compileDataFileChooserButtons().stream()
+                                       .filter(button -> !button.equals(chooser1))
+                                       .forEach(button -> button.disableProperty().setValue(true));
     }
 
     /**
@@ -1004,18 +1005,18 @@ public class FastExchangeGUIController {
                                              + "then you need to choose a file on this line first")));
         
         compileReceptorConcTextFields().stream()
-                                     .forEach(field -> field.setTooltip(new Tooltip(
-                                         "Enter receptor conc in uM. If this TextField isn't editable\n"
-                                             + "then you need to choose a file on this line first")));
+                                       .forEach(field -> field.setTooltip(new Tooltip(
+                                           "Enter receptor conc in uM. If this TextField isn't editable\n"
+                                               + "then you need to choose a file on this line first")));
             
   
         compileDataFileChooserButtons().stream()
-                                     .forEach(field -> field.setTooltip(new Tooltip(
-                                         "Press to choose a peak list file")));
+                                       .forEach(field -> field.setTooltip(new Tooltip(
+                                           "Press to choose a peak list file")));
         
         compileDataFileTextField().stream()
-                                     .forEach(field -> field.setTooltip(new Tooltip(
-                                         "Name of peak list file")));
+                                  .forEach(field -> field.setTooltip(new Tooltip(
+                                      "Name of peak list file")));
         
         
     }
