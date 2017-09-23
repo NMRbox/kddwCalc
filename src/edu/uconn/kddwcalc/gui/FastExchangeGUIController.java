@@ -866,8 +866,7 @@ public class FastExchangeGUIController {
         ExceptionDialog dialog = new ExceptionDialog(e);
 
         if (e.getMessage() == null) {
-            dialog.setHeaderText("Unexpected exception was caught that probably indicates a logic"
-                + "error in the application, contact developer");
+            dialog.setHeaderText("Exception was caught without a message");
         }
 
         dialog.showAndWait();
@@ -948,6 +947,10 @@ public class FastExchangeGUIController {
         textField.setText(Double.toString(savedConc));
     }
 
+    /**
+     * Sets {@link Tooltips} for all the nodes in the GUI
+     */
+    
     private void setTooltips() {
         
         dataOutputButton.setTooltip(

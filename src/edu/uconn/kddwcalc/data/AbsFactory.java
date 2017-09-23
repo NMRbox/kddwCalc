@@ -3,6 +3,7 @@ package edu.uconn.kddwcalc.data;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -137,15 +138,20 @@ public abstract class AbsFactory {
        
        final Resonance[] twoResonances = new Resonance[2];
        
-       if(!resonanceReversal) {
-           twoResonances[0] = getFirstResonanceSubclass(scanner);
-           twoResonances[1] = getSecondResonanceSubclass(scanner);
-       }
-       else if (resonanceReversal) {
-           twoResonances[1] = getSecondResonanceSubclass(scanner);
-           twoResonances[0] = getFirstResonanceSubclass(scanner); 
-       }
-       
+        try {
+            if(!resonanceReversal) {
+                twoResonances[0] = getFirstResonanceSubclass(scanner);
+                twoResonances[1] = getSecondResonanceSubclass(scanner);
+            }
+            else if (resonanceReversal) {
+                twoResonances[1] = getSecondResonanceSubclass(scanner);
+                twoResonances[0] = getFirstResonanceSubclass(scanner); 
+            }
+        }
+        catch(InputMismatchException e) {
+            throw new InputMismatchException("Exception in method makeTwoResonances that suggests an issue "
+                + "with the peak list formats.");
+        }
        return twoResonances;   
     }
 
