@@ -106,13 +106,13 @@ public final class RawData {
             }
         }
         catch(IOException e) {
-            System.err.println("Error when opening file in class RawData");
 
-        
         // if every number in that array isnt the same    
          if (Arrays.stream(numLines).distinct().count() != 1)
              throw new IllegalArgumentException("Data files dont all have same number of lines in"
                      + "RawData.createRawData");
+         
+         throw new IllegalArgumentException("Error when opening file in class RawData", e);
         
         }
         // if this statement is reached, all the validation was passed 

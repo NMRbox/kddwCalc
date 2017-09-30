@@ -35,8 +35,10 @@ public abstract class AbsFactory {
      * 
      * @return a {@link TitrationSeries} containing protein concentrations and chemical shifts (all
      * data required for fitting)
+     * 
+     * @throws IOException if an exception occurs when opening peak list data files
      */
-    public final TitrationSeries analyzeDataFiles(RawData dataObject) {
+    public final TitrationSeries analyzeDataFiles(RawData dataObject) throws IOException {
         final TitrationSeries dataSet = new TitrationSeries();
         
         // open files by getting a List<Scanner> from the List<Path>
@@ -59,7 +61,7 @@ public abstract class AbsFactory {
                     dataObject.getResonanceReversal());
                 
                 titration.addPoint(point);
-            }
+            }   
             
             dataSet.addTitration(titration);   
         }
@@ -76,7 +78,7 @@ public abstract class AbsFactory {
      * 
      * @return {@link Scanner} instances to begin reading peak list data
      */
-    private List<Scanner> makeScannersFromPaths(List<Path> paths) {
+    private List<Scanner> makeScannersFromPaths(List<Path> paths) throws IOException {
         final List<Scanner> scanners = new ArrayList<>();
         
         try {
@@ -85,7 +87,7 @@ public abstract class AbsFactory {
             }
         }
         catch(IOException e) {
-            System.err.println("Exception when change List<Path> to List<Scanner> in AbsFactory");
+            throw new IOException("Exception when change List<Path> to List<Scanner> in AbsFactory", e);
         }
         
         return scanners;

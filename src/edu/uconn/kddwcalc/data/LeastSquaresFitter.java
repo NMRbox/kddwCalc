@@ -250,7 +250,7 @@ public class LeastSquaresFitter {
      * 
      * @see #calcModel
      * 
-     * @return A 2 column array containing 
+     * @return A 3 column array containing 
      */
     private static double[][] makeArrayOfPresentationFit(double[] ligandConcArray, 
                                                          double[] receptorConcArray, 

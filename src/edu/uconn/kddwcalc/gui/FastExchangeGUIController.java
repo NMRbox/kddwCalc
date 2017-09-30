@@ -179,8 +179,8 @@ public class FastExchangeGUIController {
 
         File dataOutputFile = null;
         File resultsOutputFile = null;
-        wrappedDataOutputFile = new ReadOnlyObjectWrapper(dataOutputFile, "wrappedDataOutputFile");
-        wrappedResultsOutputFile = new ReadOnlyObjectWrapper(resultsOutputFile, "wrappedResultsOutputFile");
+        wrappedDataOutputFile = new ReadOnlyObjectWrapper<>(dataOutputFile, "wrappedDataOutputFile");
+        wrappedResultsOutputFile = new ReadOnlyObjectWrapper<>(resultsOutputFile, "wrappedResultsOutputFile");
         
         fileNameTextFieldList = compileDataFileTextField();
         
@@ -201,8 +201,12 @@ public class FastExchangeGUIController {
      */
     private void setToDefaultGUIValues() {
         
+        // first point should be free receptor, so no ligand is present 
+        //      and dont want user to change
         ligandConc1.setText("0.0");
-
+        ligandConc1.setEditable(false);
+        
+        
         typeOfTitrationToggleGroup.selectToggle(amideHSQCRadioButton);
         orderNucleiFirstRadioButton.setText(AMIDE_FIRST_RADIO_BUTTON_MESSAGE);
         orderNucleiSecondRadioButton.setText(AMIDE_SECOND_RADIO_BUTTON_MESSAGE);
@@ -276,7 +280,7 @@ public class FastExchangeGUIController {
             });
         
         // so textFields update when files are set (either by chooser with button or loading from .ser file)
-        fileList.addListener(new ListChangeListener() {
+        fileList.addListener(new ListChangeListener<File>() {
             
             @Override
             public void onChanged(ListChangeListener.Change change) {
@@ -290,15 +294,14 @@ public class FastExchangeGUIController {
                 for(int ctr = 0; ctr < MAX_NUM_EXP_PTS; ctr++) {
                     
                     if(fileList.get(ctr) != null) {
+                        
                         fileNameTextFieldList.get(ctr).setText(fileList.get(ctr).getName());
                         
-                        if(ctr == 0)
-                            receptorTextFieldList.get(ctr).setEditable(true);
-                        else {
-                            
+                        if(!(ligandTextFieldList.get(ctr).equals(ligandConc1)))
                             ligandTextFieldList.get(ctr).setEditable(true);
-                            receptorTextFieldList.get(ctr).setEditable(true);
-                        }
+                        
+                        receptorTextFieldList.get(ctr).setEditable(true);
+                        
                         if(ctr < MAX_NUM_EXP_PTS - 1)
                             fileChooserButtonList.get(ctr + 1).setDisable(false);
                     }  
@@ -866,7 +869,8 @@ public class FastExchangeGUIController {
         ExceptionDialog dialog = new ExceptionDialog(e);
 
         if (e.getMessage() == null) {
-            dialog.setHeaderText("Exception was caught without a message");
+            dialog.setHeaderText("Exception was caught without a message. Might be a good idea to copy/paste "
+                + "and save the stacktrace that can be accessed with the carrot in this box. Thank you.");
         }
 
         dialog.showAndWait();
@@ -943,14 +947,15 @@ public class FastExchangeGUIController {
     private void updateTextField(TextField textField,
                                  Double savedConc) {
         
-        textField.setEditable(true);
+        if (!textField.equals(ligandConc1))
+            textField.setEditable(true);
+        
         textField.setText(Double.toString(savedConc));
     }
 
     /**
      * Sets {@link Tooltips} for all the nodes in the GUI
      */
-    
     private void setTooltips() {
         
         dataOutputButton.setTooltip(
@@ -1020,8 +1025,6 @@ public class FastExchangeGUIController {
         compileDataFileTextField().stream()
                                   .forEach(field -> field.setTooltip(new Tooltip(
                                       "Name of peak list file")));
-        
-        
     }
 } // end class FastExchangeGUIController
  

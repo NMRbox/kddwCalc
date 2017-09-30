@@ -8,19 +8,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER_RIGHT" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.uconn.kddwcalc.gui.FastExchangeGUIController">
+<VBox alignment="CENTER_RIGHT" stylesheets="@FastExchangeGUIStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.uconn.kddwcalc.gui.FastExchangeGUIController">
    <children>
       <HBox>
          <children>
-            <SplitPane dividerPositions="0.5">
+            <SplitPane dividerPositions="0.1708542713567839">
                <items>
-                  <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="200.0">
+                  <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="250.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <VBox fx:id="typeOfTitrVBox" alignment="CENTER">
+                              <VBox fx:id="typeOfTitrVBox" alignment="CENTER_LEFT">
                                  <children>
-                                    <Label fx:id="typeOfTitrLabel" text="Which type of titration?">
+                                    <Label fx:id="typeOfTitrLabel" alignment="CENTER" contentDisplay="CENTER" text="Type of titration?">
                                        <padding>
                                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                        </padding>
@@ -51,11 +51,11 @@
                               <Insets bottom="34.0" top="34.0" />
                            </padding>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <VBox fx:id="orderVBox">
+                              <VBox fx:id="orderVBox" alignment="CENTER_LEFT">
                                  <children>
-                                    <Label fx:id="orderLabel" text="Order of nuclei in peak list?">
+                                    <Label fx:id="orderLabel" text="Order of nuclei?">
                                        <padding>
                                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                        </padding>
@@ -93,6 +93,9 @@
                                        <padding>
                                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                        </padding>
+                                       <VBox.margin>
+                                          <Insets left="8.0" right="8.0" />
+                                       </VBox.margin>
                                     </TextField>
                                  </children>
                               </VBox>
@@ -113,7 +116,7 @@
                                           <Insets right="4.0" />
                                        </HBox.margin>
                                        <VBox.margin>
-                                          <Insets bottom="4.0" />
+                                          <Insets bottom="4.0" left="8.0" right="8.0" />
                                        </VBox.margin>
                                     </Button>
                                     <TextField fx:id="dataOutputTextField" editable="false">
@@ -124,7 +127,7 @@
                                           <Insets left="4.0" />
                                        </HBox.margin>
                                        <VBox.margin>
-                                          <Insets top="4.0" />
+                                          <Insets left="8.0" right="8.0" top="4.0" />
                                        </VBox.margin>
                                     </TextField>
                                  </children>
@@ -146,7 +149,7 @@
                                           <Insets right="4.0" />
                                        </HBox.margin>
                                        <VBox.margin>
-                                          <Insets bottom="4.0" />
+                                          <Insets bottom="4.0" left="8.0" right="8.0" />
                                        </VBox.margin>
                                     </Button>
                                     <TextField fx:id="resultsOutputTextField" editable="false">
@@ -157,7 +160,7 @@
                                           <Insets left="4.0" />
                                        </HBox.margin>
                                        <VBox.margin>
-                                          <Insets top="4.0" />
+                                          <Insets left="8.0" right="8.0" top="4.0" />
                                        </VBox.margin>
                                     </TextField>
                                  </children>
@@ -171,11 +174,11 @@
                   </VBox>
                   <GridPane hgap="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="986.0" vgap="14.0">
                     <columnConstraints>
-                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="146.0" minWidth="10.0" prefWidth="133.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="252.0" minWidth="10.0" prefWidth="92.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="168.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="289.0" minWidth="10.0" prefWidth="215.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="248.0" minWidth="10.0" prefWidth="215.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="201.0" minWidth="10.0" prefWidth="215.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -223,7 +226,7 @@
                         <TextField fx:id="ligandConc13" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="13" />
                         <TextField fx:id="ligandConc14" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="14" />
                         <Label text="Point 2" GridPane.rowIndex="2" />
-                        <Label text="Point 1 (free receptor)" GridPane.rowIndex="1" />
+                        <Label text="Point 1" GridPane.rowIndex="1" />
                         <Label text="Point 3" GridPane.rowIndex="3" />
                         <Label text="Point 4" GridPane.rowIndex="4" />
                         <Label text="Point 5" GridPane.rowIndex="5" />
@@ -274,7 +277,6 @@
                         <Label text="File name" GridPane.columnIndex="2" />
                         <TextField fx:id="receptorConc3" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                         <TextField fx:id="ligandConc3" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Enter peak list locations and concentrations..." GridPane.columnSpan="2" />
                      </children>
                      <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
