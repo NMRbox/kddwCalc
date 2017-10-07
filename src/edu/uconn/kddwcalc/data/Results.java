@@ -84,7 +84,7 @@ public class Results {
      * @see LeastSquaresFitter#fit
      * @see LeastSquaresFitter#fitCumulativeData 
      */
-    public double getKd() {
+    private double getKd() {
         return kd;
     }
     
@@ -97,7 +97,7 @@ public class Results {
      * @see LeastSquaresFitter#fit
      * @see LeastSquaresFitter#fitCumulativeData 
      */
-    public double getPercentBound() {
+    private double getPercentBound() {
         return percentBound;
     }
     
@@ -109,7 +109,7 @@ public class Results {
      * @see LeastSquaresFitter#fit
      * @see LeastSquaresFitter#fitDwForAResidue
      */
-    public double[] getBoundCSPArray() {
+    private double[] getBoundCSPArray() {
         return boundCSPArray;
     }
     
