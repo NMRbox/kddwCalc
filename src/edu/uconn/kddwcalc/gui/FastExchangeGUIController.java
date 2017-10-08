@@ -331,7 +331,7 @@ public class FastExchangeGUIController {
     private void analyzeButtonPressed (ActionEvent event) {   
         try {
            FastExchangeDataAnalyzer.analyze(prepAndMakeRawDataObject());
-           displayResultsWrittenPopUp();
+           displayResultsWrittenPopUp(); // only reach this if extensive validation passed
         }
 
         // note: NumberFormatException will be caught by its superclass IllegalArgumentException
@@ -432,6 +432,7 @@ public class FastExchangeGUIController {
                 fillProteinConcTextFields(savedData.getLigandConcs(), savedData.getReceptorConcs());
 
                 
+                
                 List<File> savedFileList = savedData.getDataFiles();
                 for(int ctr = 0; ctr < MAX_NUM_EXP_PTS; ctr++) {
                     if (ctr < savedFileList.size())
@@ -490,8 +491,7 @@ public class FastExchangeGUIController {
      * @throws IOException
      * @throws Arrays
      */
-    private RawData prepAndMakeRawDataObject()
-                                             throws IOException, ArraysInvalidException {
+    private RawData prepAndMakeRawDataObject()throws IOException, ArraysInvalidException {
 
         return RawData.createRawData(fileList, 
                                      ligandConcTextFieldList,
