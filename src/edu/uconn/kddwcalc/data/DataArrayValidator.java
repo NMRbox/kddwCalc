@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import javafx.scene.control.TextField;
 
 /**
  * A class with a single public static method that tests a set of arrays to make sure they have the 
@@ -46,13 +47,13 @@ public class DataArrayValidator {
      * @return true if all three argument {@link List} objects have the same length 
      */
     
-    public static boolean isListLengthsAllEqual(List<Path> pathList, 
-                                                List<Double> ligandConcList,
-                                                List<Double> receptorConcList) {
+    public static boolean isListLengthsAllEqual(List<File> fileList, 
+                                                double[] ligandConcList,
+                                                double[] receptorConcList) {
         
-        return (pathList.size()       ==  ligandConcList.size()
-            &&  ligandConcList.size() ==  receptorConcList.size()
-            &&  pathList.size()       ==  receptorConcList.size());
+        return (fileList.size()       ==  ligandConcList.length
+            &&  ligandConcList.length ==  receptorConcList.length
+            &&  fileList.size()       ==  receptorConcList.length);
     }
     
     public static boolean isListLengthsAllEqual(List<Double> ligandConcList,

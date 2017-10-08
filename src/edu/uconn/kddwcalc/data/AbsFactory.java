@@ -1,5 +1,6 @@
 package edu.uconn.kddwcalc.data;
 
+import edu.uconn.kddwcalc.gui.RawData;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -41,33 +42,44 @@ public abstract class AbsFactory {
     public final TitrationSeries analyzeDataFiles(RawData dataObject) throws IOException {
         final TitrationSeries dataSet = new TitrationSeries();
         
-        // open files by getting a List<Scanner> from the List<Path>
-        final List<Scanner> scanners = makeScannersFromPaths(dataObject.getDataFiles());
+        List<Scanner> scanners = null; 
         
-        // iterate through the files and concentrations and group them
-        //    as long as there is more data in the first file.
-        // each iteration of the while loop creates a full titration curve
-        //    for a single residue
-        while(scanners.get(0).hasNext()) {
-       
-            final Titration titration = new Titration(dataObject.getMultiplier());
-            
-            // each iteration of for loop adds a single point to the titration.
-            // the control variable is the number of data files, which is the 
-            //   number of individial titraiton points collected
-            for(int ctr = 0; ctr < dataObject.getDataFiles().size(); ctr++) {
-                TitrationPoint point = makeTitrationPoint(scanners.get(ctr), 
-                    dataObject.getLigandConcs().get(ctr), dataObject.getReceptorConcs().get(ctr),
-                    dataObject.getResonanceReversal());
-                
-                titration.addPoint(point);
-            }   
-            
-            dataSet.addTitration(titration);   
+        try {
+            // open files by getting a List<Scanner> from the List<Path>
+            scanners = makeScannersFromPaths(dataObject.getDataPaths());
+
+            // iterate through the files and concentrations and group them
+            //    as long as there is more data in the first file.
+            // each iteration of the while loop creates a full titration curve
+            //    for a single residue
+            while(scanners.get(0).hasNext()) {
+
+                final Titration titration = new Titration(Double.valueOf(dataObject.getMultiplier()));
+
+                // each iteration of for loop adds a single point to the titration.
+                // the control variable is the number of data files, which is the 
+                //   number of individial titraiton points collected
+                for(int ctr = 0; ctr < dataObject.getDataFiles().size(); ctr++) {
+                    TitrationPoint point = makeTitrationPoint(scanners.get(ctr), 
+                        dataObject.getLigandConcs()[ctr], 
+                        dataObject.getReceptorConcs()[ctr],
+                        dataObject.getResonanceReversal());
+
+                    titration.addPoint(point);
+                }   
+
+                dataSet.addTitration(titration);   
+        
+            } 
+        }
+        catch (IOException e) {
+            throw new IOException(e);
         }
         
-        closeFiles(scanners);
-
+        finally {
+            closeFiles(scanners);
+        }
+        
         return dataSet;
     }    
     

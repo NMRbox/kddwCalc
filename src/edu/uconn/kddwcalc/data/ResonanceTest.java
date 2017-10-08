@@ -1,5 +1,6 @@
 package edu.uconn.kddwcalc.data;
 
+import edu.uconn.kddwcalc.gui.RawData;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -165,11 +166,12 @@ public class ResonanceTest {
         
         */
         
-        RawData rawData = RawData.createRawData(paths, ligandConcs, receptorConcs, 0.1 , false);
+        //RawData rawData = RawData.createRawData(paths, 
+        //                                       ligandConcs, receptorConcs, 0.1 , false);
         
-        AbsFactory factory = FactoryMaker.createFactory(TypesOfTitrations.AMIDEHSQC);
+        //AbsFactory factory = FactoryMaker.createFactory(TypesOfTitrations.AMIDEHSQC);
         
-        TitrationSeries series = factory.analyzeDataFiles(rawData);
+        //TitrationSeries series = factory.analyzeDataFiles(rawData);
         
         //series.printTitrationSeries();
         
@@ -212,18 +214,18 @@ public class ResonanceTest {
         }
         
         */
-        Results results = null;
+        //Results results = null;
         
-        try
-        {
-            results = LeastSquaresFitter.fit(series);
-        }
-        catch(ArraysInvalidException e)
-        {
-            
-        }
-        
-        results.writeResultsToDisk();
+       // try
+       // {
+         //   results = LeastSquaresFitter.fit(series);
+        //}
+        //catch(ArraysInvalidException e)
+        //{
+       //     
+       // }
+       // 
+       // results.writeResultsToDisk();
         
         
  
