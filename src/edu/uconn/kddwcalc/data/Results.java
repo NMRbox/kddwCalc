@@ -13,7 +13,6 @@ import java.util.NoSuchElementException;
  * 
  * @author Alex R.
  * 
- * @see AggResults
  * @see LeastSquaresFitter
  * @see LeastSquaresFitter#fit 
  * @see LeastSquaresFitter#fitCumulativeData 
@@ -53,9 +52,8 @@ public class Results {
      * @param kd the binding affinity for the receptor and ligand
      * @param percentBound the percent bound at the highest ligand:receptor ratio (i.e. the final titration point)
      * @param boundCSPArray contains per-residue dw between free and bound with the kd fixed to the value
-     * from the cumulative fitting in {@link AggResults}
+     * from the cumulative fitting
      * @param presentationFit [x,y] coordinates as [ligand ratio, percent bound] for publication figure
-     * from {@link AggResults}
      * 
      * @return a {@link Results} instance with all instance variables initialized
      */

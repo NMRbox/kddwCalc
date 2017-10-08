@@ -193,7 +193,6 @@ public class FastExchangeGUIController {
         setToDefaultGUIValues(); // must be after initializeAllListeners()
         
         setTooltips();
-
     }
 
     /**

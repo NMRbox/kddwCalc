@@ -34,7 +34,8 @@ import javafx.scene.control.TextField;
  * A class that contains raw data and the location of raw data from the user.
  * 
  * As of 171008, this can be saved and then loaded to populate GUI data fields
- *  or it can be sent to {@link LeastSquaresFitter#fit} method to get {@link Results} object back
+ *  or it can be sent to {@link edu.uconn.kddwcalc.data.LeastSquaresFitter#fit} to get 
+ * {@link edu.uconn.kddwcalc.data.Results} object back
  * 
  * @author Alex R.
  * 
@@ -237,23 +238,32 @@ public class RawData implements Serializable {
         return resonanceReversal;
     }
     
+    /**
+     * Gets the information about which nuclei were observed in experiment
+     * 
+     * @return enum with information about which type was performed
+     */
     public final TypesOfTitrations getType() {
         return type;
     }
     
+    /**
+     * Gets the name/location where sorted peak lists will be written
+     * 
+     * @return the object containing name/location info
+     */
     public final File getDataOutputFile() {
         return dataOutputFile;
     }
     
+    /**
+     * Gets the name/location where results will be written
+     * 
+     * @return the object containing name/location info
+     */
     public final File getResultsFile() {
         return resultsFile;
     }
-    
-    public final List<Path> getDataPaths() {
-        return makePaths();
-    }
-    
-    
     
     /**
      * Takes the <code>List{@literal <}File{@literal >}</code> and turns it into
@@ -262,8 +272,7 @@ public class RawData implements Serializable {
      * @return {@link List} objects with locations of NMR chemical shift peak
      * list.
      */
-    private List<Path> makePaths() {
-
+    public final List<Path> getDataPaths() {
         return new ArrayList<>(dataFiles.stream()
                                         .map(File::toPath)
                                         .collect(Collectors.toList()));

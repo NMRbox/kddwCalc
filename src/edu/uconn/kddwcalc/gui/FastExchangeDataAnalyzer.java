@@ -25,6 +25,13 @@ public class FastExchangeDataAnalyzer {
         this.rawDataInstance = rawDataInstance;
     }
     
+    /**
+     * Takes the user data in a {@link RawData} object, analyzes it and outputs the results to disk
+     * 
+     * @param rawDataInstance contains data from the user input
+     * @throws IOException if unable to read/write files
+     * @throws ArraysInvalidException if data is duplicated or arrays have different lengths (they cant)
+     */
     public static void analyze(RawData rawDataInstance) 
         throws IOException, ArraysInvalidException {
         

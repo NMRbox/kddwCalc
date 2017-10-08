@@ -8,11 +8,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER_RIGHT" stylesheets="@FastExchangeGUIStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.uconn.kddwcalc.gui.FastExchangeGUIController">
+<VBox alignment="CENTER_RIGHT" prefHeight="600.0" prefWidth="1246.0" stylesheets="@FastExchangeGUIStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.uconn.kddwcalc.gui.FastExchangeGUIController">
    <children>
-      <HBox>
+      <HBox prefHeight="765.0" prefWidth="1246.0">
          <children>
-            <SplitPane dividerPositions="0.1708542713567839">
+            <SplitPane dividerPositions="0.1708542713567839" prefHeight="767.0" prefWidth="1246.0">
                <items>
                   <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="250.0">
                      <children>

@@ -40,13 +40,12 @@ public class DataArrayValidator {
      * Tests to make sure the user inputted an equal number of ligand concentrations, receptor concentrations, and
      * peak list files with chemical shifts. 
      * 
-     * @param pathList peak lists
+     * @param fileList peak lists
      * @param ligandConcList ligand concentrations
      * @param receptorConcList receptor concentrations
      * 
      * @return true if all three argument {@link List} objects have the same length 
      */
-    
     public static boolean isListLengthsAllEqual(List<File> fileList, 
                                                 double[] ligandConcList,
                                                 double[] receptorConcList) {
@@ -54,12 +53,6 @@ public class DataArrayValidator {
         return (fileList.size()       ==  ligandConcList.length
             &&  ligandConcList.length ==  receptorConcList.length
             &&  fileList.size()       ==  receptorConcList.length);
-    }
-    
-    public static boolean isListLengthsAllEqual(List<Double> ligandConcList,
-                                                List<Double> receptorConcList) {
-        
-        return ligandConcList.size() == receptorConcList.size();
     }
     
     /**
