@@ -1,5 +1,7 @@
-package edu.uconn.kddwcalc.data;
+package edu.uconn.kddwcalc.processing;
 
+import edu.uconn.kddwcalc.data.Titration;
+import edu.uconn.kddwcalc.data.TitrationSeries;
 import java.util.List;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresBuilder;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer;

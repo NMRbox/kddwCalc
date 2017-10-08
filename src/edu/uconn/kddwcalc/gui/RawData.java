@@ -16,8 +16,8 @@
 
 package edu.uconn.kddwcalc.gui;
 
-import edu.uconn.kddwcalc.data.ArraysInvalidException;
-import edu.uconn.kddwcalc.data.DataArrayValidator;
+import edu.uconn.kddwcalc.processing.ArraysInvalidException;
+import edu.uconn.kddwcalc.processing.DataArrayValidator;
 import edu.uconn.kddwcalc.data.TypesOfTitrations;
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +35,7 @@ import javafx.scene.control.TextField;
  * 
  * As of 171008, this can be saved and then loaded to populate GUI data fields
  *  or it can be sent to {@link edu.uconn.kddwcalc.data.LeastSquaresFitter#fit} to get 
- * {@link edu.uconn.kddwcalc.data.Results} object back
+ * {@link edu.uconn.kddwcalc.processing.Results} object back
  * 
  * @author Alex R.
  * 
@@ -54,7 +54,7 @@ public class RawData implements Serializable {
 
     
     /**
-     * Seven argument {@link RawData} constructor. Should only reach this point after quite a bit of validation has been
+     * Private seven-argument {@link RawData} constructor. Should only reach this point after quite a bit of validation has been
      * done.
      * 
      * @param dataFiles Location on disk of peak list data from user.

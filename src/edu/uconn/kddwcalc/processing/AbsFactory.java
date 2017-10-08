@@ -1,5 +1,9 @@
-package edu.uconn.kddwcalc.data;
+package edu.uconn.kddwcalc.processing;
 
+import edu.uconn.kddwcalc.data.Resonance;
+import edu.uconn.kddwcalc.data.Titration;
+import edu.uconn.kddwcalc.data.TitrationPoint;
+import edu.uconn.kddwcalc.data.TitrationSeries;
 import edu.uconn.kddwcalc.gui.RawData;
 import java.io.IOException;
 import java.nio.file.Path;

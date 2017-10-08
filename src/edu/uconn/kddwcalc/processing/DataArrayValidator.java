@@ -1,4 +1,4 @@
-package edu.uconn.kddwcalc.data;
+package edu.uconn.kddwcalc.processing;
 
 import java.io.File;
 import java.util.Arrays;

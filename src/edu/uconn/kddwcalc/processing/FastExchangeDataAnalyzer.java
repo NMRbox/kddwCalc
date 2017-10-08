@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.uconn.kddwcalc.gui;
+package edu.uconn.kddwcalc.processing;
 
-import edu.uconn.kddwcalc.data.ArraysInvalidException;
-import edu.uconn.kddwcalc.data.FactoryMaker;
-import edu.uconn.kddwcalc.data.LeastSquaresFitter;
+import edu.uconn.kddwcalc.processing.FactoryMaker;
+import edu.uconn.kddwcalc.processing.LeastSquaresFitter;
 import edu.uconn.kddwcalc.data.TitrationSeries;
+import edu.uconn.kddwcalc.gui.RawData;
 import java.io.IOException;
 
 /**

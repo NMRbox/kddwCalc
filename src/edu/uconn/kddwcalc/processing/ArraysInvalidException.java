@@ -1,4 +1,4 @@
-package edu.uconn.kddwcalc.data;
+package edu.uconn.kddwcalc.processing;
 
 /**
  * Exception that is thrown if the data arrays have a different number of elements. 

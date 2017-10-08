@@ -1,4 +1,6 @@
-package edu.uconn.kddwcalc.data;
+package edu.uconn.kddwcalc.processing;
+
+import edu.uconn.kddwcalc.data.TypesOfTitrations;
 
 /**
  * A class containing a single simple static factory to instantiate a subclass of {@link AbsFactory}.

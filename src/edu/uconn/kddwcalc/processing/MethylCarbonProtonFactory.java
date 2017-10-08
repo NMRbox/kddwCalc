@@ -1,5 +1,10 @@
-package edu.uconn.kddwcalc.data;
+package edu.uconn.kddwcalc.processing;
 
+import edu.uconn.kddwcalc.data.MethylCarbon;
+import edu.uconn.kddwcalc.data.MethylCarbonProtonTitrationPoint;
+import edu.uconn.kddwcalc.data.MethylProton;
+import edu.uconn.kddwcalc.data.Resonance;
+import edu.uconn.kddwcalc.data.TitrationPoint;
 import java.util.Scanner;
 
 /**
