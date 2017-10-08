@@ -1,10 +1,8 @@
 package edu.uconn.kddwcalc.data;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
-import javafx.scene.control.TextField;
 
 /**
  * A class with a single public static method that tests a set of arrays to make sure they have the 
@@ -41,18 +39,20 @@ public class DataArrayValidator {
      * peak list files with chemical shifts. 
      * 
      * @param fileList peak lists
-     * @param ligandConcList ligand concentrations
-     * @param receptorConcList receptor concentrations
+     * @param ligandConcArray ligand concentrations
+     * @param receptorConcArray receptor concentrations
      * 
      * @return true if all three argument {@link List} objects have the same length 
      */
     public static boolean isListLengthsAllEqual(List<File> fileList, 
-                                                double[] ligandConcList,
-                                                double[] receptorConcList) {
+                                                double[] ligandConcArray,
+                                                double[] receptorConcArray) {
         
-        return (fileList.size()       ==  ligandConcList.length
-            &&  ligandConcList.length ==  receptorConcList.length
-            &&  fileList.size()       ==  receptorConcList.length);
+        return (fileList.size()       ==  ligandConcArray.length
+            &&  ligandConcArray.length ==  receptorConcArray.length
+            &&  fileList.size()       ==  receptorConcArray.length)
+            && isValid(ligandConcArray, receptorConcArray)
+            && !isFileDuplicated(fileList);
     }
     
     /**
@@ -98,5 +98,23 @@ public class DataArrayValidator {
             isDuplicates = false;             // same length before and after removing duplicates
         
         return isDuplicates;    
+    }
+    
+    /**
+     * Checks if the same peak list file was added twice by the user
+     * 
+     * @param fileList peak list files. cant be duplicated
+     * 
+     * @return true if a file is duplicated, false otherwise (hope to return false)
+     */
+    private static boolean isFileDuplicated(List<File> fileList) {
+        
+        boolean isFileDuplicates = true;
+        
+        if (fileList.stream().distinct().count() == fileList.size())
+            isFileDuplicates = false;
+        
+        return isFileDuplicates;
+            
     }
 } // end class DataArrayValidator

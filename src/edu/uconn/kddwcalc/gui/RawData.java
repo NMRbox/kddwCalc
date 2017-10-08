@@ -141,7 +141,8 @@ public class RawData implements Serializable {
         
         // tests to make sure the lists above are the same length. must because theres one for each exp point
         if (!DataArrayValidator.isListLengthsAllEqual(tempFileList, tempLigandArray, tempReceptorArray))
-            throw new ArraysInvalidException("List had different lengths in RawData.createRawData");
+            throw new ArraysInvalidException("List had different lengths in RawData.createRawData. Might be an"
+                + " issue with duplication in peak lists or missing concentratoion value");
         
         /*
         * This block of code tests each peak list to ensure it has the same number of lines. Each line is a residue,

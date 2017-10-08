@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Formatter;
-import java.util.FormatterClosedException;
-import java.util.NoSuchElementException;
 
 /**
  * A class that holds the final results of fitting fast exchange NMR titration data. This class also contains
@@ -64,11 +62,11 @@ public class Results {
         if (kd < 0.0 || percentBound < 0.0)
             throw new IllegalArgumentException("negative kd or %bound in Results");
         
-        for(double csp : boundCSPArray)
-        {
-            if (csp < 0.0)
-                throw new IllegalArgumentException("negative csp in Results");
-        }
+        Arrays.stream(boundCSPArray)
+              .forEach(csp -> { 
+                  if (csp < 0.0) 
+                     throw new IllegalArgumentException("negative csp in Results"); 
+              });
         
         return new Results(kd, percentBound, boundCSPArray, presentationFit);
     }

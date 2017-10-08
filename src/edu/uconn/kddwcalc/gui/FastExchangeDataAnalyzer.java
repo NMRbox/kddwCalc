@@ -9,7 +9,6 @@ import edu.uconn.kddwcalc.data.ArraysInvalidException;
 import edu.uconn.kddwcalc.data.FactoryMaker;
 import edu.uconn.kddwcalc.data.LeastSquaresFitter;
 import edu.uconn.kddwcalc.data.TitrationSeries;
-import edu.uconn.kddwcalc.data.TypesOfTitrations;
 import java.io.IOException;
 
 /**
