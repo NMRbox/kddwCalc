@@ -1,4 +1,4 @@
-package edu.uconn.kddwcalc.processing;
+package edu.uconn.kddwcalc.fitting;
 
 import java.io.File;
 import java.io.FileNotFoundException;

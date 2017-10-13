@@ -1,10 +1,10 @@
 package edu.uconn.kddwcalc.gui;
 
-import edu.uconn.kddwcalc.processing.FastExchangeDataAnalyzer;
-import edu.uconn.kddwcalc.processing.AbsFactory;
-import edu.uconn.kddwcalc.processing.ArraysInvalidException;
-import edu.uconn.kddwcalc.processing.LeastSquaresFitter;
-import edu.uconn.kddwcalc.processing.Results;
+import edu.uconn.kddwcalc.sorting.FastExchangeDataAnalyzer;
+import edu.uconn.kddwcalc.sorting.AbsFactory;
+import edu.uconn.kddwcalc.sorting.ArraysInvalidException;
+import edu.uconn.kddwcalc.fitting.LeastSquaresFitter;
+import edu.uconn.kddwcalc.fitting.Results;
 import edu.uconn.kddwcalc.data.TitrationSeries;
 import edu.uconn.kddwcalc.data.TypesOfTitrations;
 import java.io.File;

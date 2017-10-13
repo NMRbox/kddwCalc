@@ -1,4 +1,4 @@
-package edu.uconn.kddwcalc.processing;
+package edu.uconn.kddwcalc.sorting;
 
 import edu.uconn.kddwcalc.data.Resonance;
 import edu.uconn.kddwcalc.data.Titration;

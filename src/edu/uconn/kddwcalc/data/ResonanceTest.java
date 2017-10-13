@@ -1,6 +1,6 @@
 package edu.uconn.kddwcalc.data;
 
-import edu.uconn.kddwcalc.processing.ArraysInvalidException;
+import edu.uconn.kddwcalc.sorting.ArraysInvalidException;
 import edu.uconn.kddwcalc.gui.RawData;
 import java.io.IOException;
 import java.nio.file.Path;

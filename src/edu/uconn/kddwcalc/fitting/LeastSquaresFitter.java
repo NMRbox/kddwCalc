@@ -1,7 +1,9 @@
-package edu.uconn.kddwcalc.processing;
+package edu.uconn.kddwcalc.fitting;
 
 import edu.uconn.kddwcalc.data.Titration;
 import edu.uconn.kddwcalc.data.TitrationSeries;
+import edu.uconn.kddwcalc.sorting.ArraysInvalidException;
+import edu.uconn.kddwcalc.sorting.DataArrayValidator;
 import java.util.List;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresBuilder;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer;
