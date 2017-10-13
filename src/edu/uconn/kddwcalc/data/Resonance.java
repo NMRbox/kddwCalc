@@ -5,7 +5,7 @@ package edu.uconn.kddwcalc.data;
  * 
  * @author Alex R.
  * 
- * @see AbsFactory
+ * @see edu.uconn.kddwcalc.sorting.AbsFactory
  * @see TitrationPoint
  * 
  * @since 1.8

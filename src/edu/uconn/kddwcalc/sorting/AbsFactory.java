@@ -175,14 +175,14 @@ public abstract class AbsFactory {
 
     /**
      * A method to read in a chemical shift. Note that the actual creation of the {@link Resonance}
-     * is delegated to subclass to make concrete {@link AmideNitrogen} or {@link MethylCarbon} 
-     * {@link Resonance}.
+     * is delegated to subclass to make concrete {@link edu.uconn.kddwcalc.data.AmideNitrogen} or 
+     * {@link edu.uconn.kddwcalc.data.MethylCarbon} 
      * 
      * @param scanner instance to read chemical shift data from peak list
      * 
      * @see Resonance
-     * @see AmideNitrogen
-     * @see MethylCarbon
+     * @see edu.uconn.kddwcalc.data.AmideNitrogen
+     * @see edu.uconn.kddwcalc.data.MethylCarbon
 
      * @return a concrete subclass of {@link Resonance} based on overridden method call
      */
@@ -190,14 +190,14 @@ public abstract class AbsFactory {
     
     /**
      * An abstract method to read in a chemical shift. Note that the actual creation of the {@link Resonance}
-     * is delegated to subclass to make concrete {@link AmideProton} or {@link MethylProton} 
-     * {@link Resonance} objects.
+     * is delegated to subclass to make concrete {@link edu.uconn.kddwcalc.data.AmideProton} or 
+     * {@link edu.uconn.kddwcalc.data.MethylProton}
      * 
      * @param scanner instance to read chemical shift data from peak list
      * 
      * @see Resonance
-     * @see AmideProton
-     * @see MethylProton
+     * @see edu.uconn.kddwcalc.data.AmideProton
+     * @see edu.uconn.kddwcalc.data.MethylProton
      * 
      * @return a concrete subclass of <code>Resonance</code> based on overridden method call
      */

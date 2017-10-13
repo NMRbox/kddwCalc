@@ -18,7 +18,7 @@ package edu.uconn.kddwcalc.data;
 public class AmideNitrogenProtonTitrationPoint extends TitrationPoint {
     /**
      * Initializes an instance of the class by calling the four-argument constructor from 
-     * superclass {@link TitrationPoint}
+     * superclass {@link edu.uconn.kddwcalc.data.TitrationPoint}
      * 
      * @param ligandConc the ligand concentration
      * @param receptorConc the receptor concentration

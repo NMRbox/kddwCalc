@@ -16,8 +16,8 @@ import java.util.Scanner;
  * @see Resonance
  * @see TitrationPoint
  * @see MethylCarbonProtonTitrationPoint
- * @see Titration
- * @see TitrationSeries
+ * @see edu.uconn.kddwcalc.data.Titration
+ * @see edu.uconn.kddwcalc.data.TitrationSeries
  * @see MethylCarbon
  * @see MethylProton
  * 

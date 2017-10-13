@@ -8,7 +8,7 @@ import java.util.List;
  * A class that contains all the data from a fast exchange NMR titration *for a single residue* to determine affinity, 
  * delta-omega (dw) and other parameters
  * 
- * @see AbsFactory
+ * @see edu.uconn.kddwcalc.sorting.AbsFactory
  * @see TitrationSeries
  * @see TitrationPoint
  * 
@@ -37,7 +37,7 @@ public class Titration {
      * @param pnt contains the information for one peak from one spectrum 
      * (ligand and receptor concentrations and two chemical shifts (subclasses of {@link Resonance})
      * 
-     * @see AbsFactory
+     * @see edu.uconn.kddwcalc.sorting.AbsFactory
      */
     public final void addPoint(TitrationPoint pnt) {
         titration.add(pnt);

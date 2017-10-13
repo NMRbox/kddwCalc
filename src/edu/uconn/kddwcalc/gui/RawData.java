@@ -34,7 +34,7 @@ import javafx.scene.control.TextField;
  * A class that contains raw data and the location of raw data from the user.
  * 
  * As of 171008, this can be saved and then loaded to populate GUI data fields
- *  or it can be sent to {@link edu.uconn.kddwcalc.data.LeastSquaresFitter#fit} to get 
+ *  or it can be sent to {@link edu.uconn.kddwcalc.fitting.LeastSquaresFitter#fit} to get 
  * {@link edu.uconn.kddwcalc.fitting.Results} object back
  * 
  * @author Alex R.

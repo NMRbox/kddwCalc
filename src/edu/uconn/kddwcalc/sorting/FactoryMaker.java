@@ -11,7 +11,7 @@ import edu.uconn.kddwcalc.data.TypesOfTitrations;
  * @author Alex R.
  * 
  * @see AbsFactory
- * @see TitrationSeries
+ * @see edu.uconn.kddwcalc.data.TitrationSeries
  * @see edu.uconn.kddwcalc.gui.FastExchangeGUIController
  * 
  * 

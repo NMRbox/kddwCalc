@@ -6,8 +6,8 @@ package edu.uconn.kddwcalc.data;
  * 
  * @author Alex R.
  * 
- * @see AbsFactory
- * @see MethylCarbonProtonFactory
+ * @see edu.uconn.kddwcalc.sorting.AbsFactory
+ * @see edu.uconn.kddwcalc.sorting.MethylCarbonProtonFactory
  * @see MethylCarbonProtonTitrationPoint
  * @see MethylCarbon
  * 

@@ -17,8 +17,8 @@ import java.util.Scanner;
  * @see Resonance
  * @see TitrationPoint
  * @see AmideNitrogenProtonTitrationPoint
- * @see Titration
- * @see TitrationSeries
+ * @see edu.uconn.kddwcalc.data.Titration
+ * @see edu.uconn.kddwcalc.data.TitrationSeries
  * @see AmideProton
  * @see AmideNitrogen
  * 

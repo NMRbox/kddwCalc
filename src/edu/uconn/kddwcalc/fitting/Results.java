@@ -128,7 +128,7 @@ public class Results {
     }
     
     /**
-     * Overloaded version for testing with {@link ResonanceTest}
+     * Overloaded version for testing with {@link edu.uconn.kddwcalc.data.ResonanceTest}
      * 
      * @throws FileNotFoundException if issue arises when writing final results
      */

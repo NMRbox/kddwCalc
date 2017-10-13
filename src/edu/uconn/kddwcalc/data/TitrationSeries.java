@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
  * 
  * @see Titration
  * @see TitrationPoint
- * @see AbsFactory
- * @see LeastSquaresFitter
+ * @see edu.uconn.kddwcalc.sorting.AbsFactory
+ * @see edu.uconn.kddwcalc.fitting.LeastSquaresFitter
  * 
  * @since 1.8
  */

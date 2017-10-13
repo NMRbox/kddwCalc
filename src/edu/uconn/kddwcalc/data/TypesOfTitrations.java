@@ -3,12 +3,12 @@ package edu.uconn.kddwcalc.data;
 import edu.uconn.kddwcalc.gui.FastExchangeGUIController;
 
 /**
- * Represent the types of titrations. This is used for the switch in {@link FactoryMaker}.
+ * Represent the types of titrations. This is used for the switch in {@link edu.uconn.kddwcalc.sorting.FactoryMaker}.
  * 
  * @author Alex R.
  * 
- * @see FactoryMaker
- * @see AbsFactory
+ * @see edu.uconn.kddwcalc.sorting.FactoryMaker
+ * @see edu.uconn.kddwcalc.sorting.AbsFactory
  * @see FastExchangeGUIController
  */
 public enum TypesOfTitrations {

@@ -1,8 +1,8 @@
 /**
- * Provides the classes necessary to process fast exchange NMR titration data and get a {@link Results} object.
+ * Provides the classes necessary to process a {@link edu.uconn.kddwcalc.gui.RawData} object and 
+ * get a {@link edu.uconn.kddwcalc.data.TitrationSeries} object.
  * 
- * As of 171007, a {@link RawData} object is the means of passing data to this package (i.e. from
- * the user to the Factories in this package for sorting and fitting.
+ * Creation of the {@link edu.uconn.kddwcalc.data.TitrationSeries} object is done using the Abstract Factory pattern
  * 
  * @author Alex R.
  * 
