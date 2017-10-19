@@ -4,7 +4,6 @@ import edu.uconn.kddwcalc.data.Titration;
 import edu.uconn.kddwcalc.data.TitrationSeries;
 import edu.uconn.kddwcalc.sorting.ArraysInvalidException;
 import edu.uconn.kddwcalc.sorting.DataArrayValidator;
-import java.util.List;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresBuilder;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresProblem;
@@ -48,6 +47,7 @@ public class LeastSquaresFitter {
      * @return a {@link Results} object containing Kd and other values from the fitting
      */
     public static Results fit(TitrationSeries series) throws ArraysInvalidException {
+        
         final double[] ligandConcArray = series.getLigandConcArray();
         final double[] receptorConcArray = series.getReceptorConcArray();
         
@@ -64,15 +64,15 @@ public class LeastSquaresFitter {
         double[][] presentationFit = aggResultsObject.getPresentationFit();
         
         double[] boundCSPArrayByResidue =
-                     series.getTitrationSeries().stream() // now have Stream<Titration>
-                               .mapToDouble((Titration titr) ->  {
-                                   return LeastSquaresFitter.fitDwForAResidue(ligandConcArray, 
-                                                                              receptorConcArray, 
-                                                                              titr.getCSPsByResidueArray(), 
-                                                                              kd);
-                               })
-                               .toArray(); 
-        
+                     series.getTitrationSeries()
+                           .stream() // now have Stream<Titration>
+                           .mapToDouble((Titration titr) ->  {
+                               return LeastSquaresFitter.fitDwForAResidue(ligandConcArray, 
+                                                                          receptorConcArray, 
+                                                                          titr.getCSPsByResidueArray(), 
+                                                                          kd);
+                           })
+                           .toArray();
         
         return Results.makeResultsObject(kd, percentBound, boundCSPArrayByResidue, presentationFit);
     }   
@@ -164,7 +164,7 @@ public class LeastSquaresFitter {
      * @param ligandConcArray Total ligand concentrations
      * @param receptorConcArray Total protein concentrations (labeled species)
      * @param cspArray Contains chemical shift perturbations of an individual residues
-     * @param kdFromCumData The affinity constant (Kd)
+     * @param kdFromAggData The affinity constant (Kd)
      * 
      * @throws ArraysInvalidException if the protein concentrations are equal or there are 
      * duplicates in cspArray.
@@ -174,7 +174,7 @@ public class LeastSquaresFitter {
     private static double fitDwForAResidue(double[] ligandConcArray,
                                            double[] receptorConcArray,
                                            double[] cspArray,
-                                           double kdFromCumData) {
+                                           double kdFromAggData) {
         
         
         if (!DataArrayValidator.isValid(ligandConcArray, receptorConcArray))
@@ -195,9 +195,9 @@ public class LeastSquaresFitter {
                 double L0 = ligandConcArray[ctr];
                 double P0 = receptorConcArray[ctr];
                 
-                value.setEntry(ctr, calcModel(P0, L0, kdFromCumData, dw));
+                value.setEntry(ctr, calcModel(P0, L0, kdFromAggData, dw));
                 
-                jacobian.setEntry(ctr, 0, calcModelDerivativeDw(P0, L0, kdFromCumData));
+                jacobian.setEntry(ctr, 0, calcModelDerivativeDw(P0, L0, kdFromAggData));
             }
             
             return new Pair<>(value, jacobian);
