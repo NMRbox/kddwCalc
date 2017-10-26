@@ -16,8 +16,8 @@
 
 package edu.uconn.kddwcalc.gui;
 
-import edu.uconn.kddwcalc.sorting.ArraysInvalidException;
-import edu.uconn.kddwcalc.sorting.DataArrayValidator;
+import edu.uconn.kddwcalc.analyze.ArraysInvalidException;
+import edu.uconn.kddwcalc.analyze.DataArrayValidator;
 import edu.uconn.kddwcalc.data.TypesOfTitrations;
 import java.io.File;
 import java.io.IOException;
@@ -32,10 +32,6 @@ import javafx.scene.control.TextField;
 
 /**
  * A class that contains raw data and the location of raw data from the user.
- * 
- * As of 171008, this can be saved and then loaded to populate GUI data fields
- *  or it can be sent to {@link edu.uconn.kddwcalc.fitting.LeastSquaresFitter#fit} to get 
- * {@link edu.uconn.kddwcalc.fitting.Results} object back
  * 
  * @author Alex R.
  * 

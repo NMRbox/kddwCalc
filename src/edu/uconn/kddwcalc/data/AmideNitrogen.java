@@ -6,8 +6,8 @@ package edu.uconn.kddwcalc.data;
  * 
  * @author Alex R
  * 
- * @see edu.uconn.kddwcalc.sorting.AbsFactory
- * @see edu.uconn.kddwcalc.sorting.AmideNitrogenProtonFactory
+ * @see edu.uconn.kddwcalc.analyze.AbsFactory
+ * @see edu.uconn.kddwcalc.analyze.AmideNitrogenProtonFactory
  * @see AmideNitrogenProtonTitrationPoint
  * @see AmideProton
  * 

@@ -1,4 +1,4 @@
-package edu.uconn.kddwcalc.sorting;
+package edu.uconn.kddwcalc.analyze;
 
 /**
  * Exception that is thrown if the data arrays have a different number of elements. 

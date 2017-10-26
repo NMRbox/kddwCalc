@@ -56,17 +56,15 @@ public class AmideNitrogenProtonTitrationPoint extends TitrationPoint {
                                                                       Resonance resonance1, 
                                                                       Resonance resonance2) {
         
-        // if its not a amide nitrogen, throw exception
         if(!(resonance1 instanceof AmideNitrogen))
             throw new IllegalArgumentException("when instantiating a AmideNitrogenTitration point, resonance 1"
                 + " was not a AmideNitrogen");
-        // if its not a amide proton like its supposed to be, throw exception
+
         if (!(resonance2 instanceof AmideProton))
             throw new IllegalArgumentException("when instantiating a AmideNitrogenTitration point, resonance 2"
                 + " was not a AmideProton");
         
        
-        
         // after testing the validity (positive values for concentration, and referecnes arent null for resonances)
         //     if data is valid, fall through to return
         if (!(TitrationPoint.isValidData(ligandConc, receptorConc, resonance1, resonance2)))
@@ -74,8 +72,5 @@ public class AmideNitrogenProtonTitrationPoint extends TitrationPoint {
                 + " from TitrationPoint returned false somehow");
         
         return new AmideNitrogenProtonTitrationPoint(ligandConc, receptorConc, resonance1, resonance2);   
-    }
-    
-    
-        
+    }    
 }

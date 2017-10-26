@@ -11,10 +11,7 @@ import java.util.Formatter;
  * 
  * @author Alex R.
  * 
- * @see LeastSquaresFitter
- * @see LeastSquaresFitter#fit 
- * @see LeastSquaresFitter#fitCumulativeData 
- * @see LeastSquaresFitter#fitDwForAResidue 
+ * @see edu.uconn.kddwcalc.fitting.LeastSquaresFitter
  * 
  * @since 1.8
  */

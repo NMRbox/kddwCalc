@@ -1,8 +1,8 @@
 package edu.uconn.kddwcalc.gui;
 
-import edu.uconn.kddwcalc.sorting.FastExchangeDataAnalyzer;
-import edu.uconn.kddwcalc.sorting.AbsFactory;
-import edu.uconn.kddwcalc.sorting.ArraysInvalidException;
+import edu.uconn.kddwcalc.analyze.FastExchangeDataAnalyzer;
+import edu.uconn.kddwcalc.analyze.AbsFactory;
+import edu.uconn.kddwcalc.analyze.ArraysInvalidException;
 import edu.uconn.kddwcalc.fitting.LeastSquaresFitter;
 import edu.uconn.kddwcalc.fitting.Results;
 import edu.uconn.kddwcalc.data.TitrationSeries;

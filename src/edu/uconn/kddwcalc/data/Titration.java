@@ -8,7 +8,7 @@ import java.util.List;
  * A class that contains all the data from a fast exchange NMR titration *for a single residue* to determine affinity, 
  * delta-omega (dw) and other parameters
  * 
- * @see edu.uconn.kddwcalc.sorting.AbsFactory
+ * @see edu.uconn.kddwcalc.analyze.AbsFactory
  * @see TitrationSeries
  * @see TitrationPoint
  * 
@@ -16,7 +16,7 @@ import java.util.List;
  * 
  * @since 1.8
  */
-public class Titration {
+public class Titration implements Calculatable {
     
     private final List<TitrationPoint> titration = new ArrayList<>();
     private final double multiplier;
@@ -37,7 +37,7 @@ public class Titration {
      * @param pnt contains the information for one peak from one spectrum 
      * (ligand and receptor concentrations and two chemical shifts (subclasses of {@link Resonance})
      * 
-     * @see edu.uconn.kddwcalc.sorting.AbsFactory
+     * @see edu.uconn.kddwcalc.analyze.AbsFactory
      */
     public final void addPoint(TitrationPoint pnt) {
         titration.add(pnt);
@@ -48,7 +48,8 @@ public class Titration {
      * 
      * @return an array containing the receptor concentrations
      */
-    public double[] getReceptorConcArray() {
+    @Override
+    public double[] getReceptorConcs() {
         return titration.stream()
                         .mapToDouble(TitrationPoint::getReceptorConc)
                         .toArray();
@@ -59,7 +60,8 @@ public class Titration {
      * 
      * @return an array containing the ligand concentrations
      */
-    public double[] getLigandConcArray() {
+    @Override
+    public double[] getLigandConcs() {
         return titration.stream()
                         .mapToDouble(TitrationPoint::getLigandConc)
                         .toArray();
@@ -95,7 +97,8 @@ public class Titration {
      * 
      * @return array of <code>double</code> with the chemical shift perturbations as 1H-ppm
      */
-    public double[] getCSPsByResidueArray() {
+    @Override
+    public double[] getObservables() {
         return getCSPsFrom2DPoints().stream()
                                     .mapToDouble(Double::doubleValue)
                                     .toArray();

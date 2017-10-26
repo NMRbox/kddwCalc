@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
  * 
  * @see Titration
  * @see TitrationPoint
- * @see edu.uconn.kddwcalc.sorting.AbsFactory
+ * @see edu.uconn.kddwcalc.analyze.AbsFactory
  * @see edu.uconn.kddwcalc.fitting.LeastSquaresFitter
  * 
  * @since 1.8
  */
-public class TitrationSeries {   
+public class TitrationSeries implements Calculatable {   
     private final List<Titration> titrationSeries = new ArrayList<>();
     
     /**
@@ -59,7 +59,8 @@ public class TitrationSeries {
      * 
      * @return array containing the cumulative chemical shifts 
      */
-    public double[] getCumulativeShifts() {
+    @Override
+    public double[] getObservables() {
 
         List<List<Double>> aggCSPintermediate = 
             titrationSeries.stream()  // now have Stream<Titration>
@@ -98,8 +99,9 @@ public class TitrationSeries {
      * 
      * @return the receptor concentrations
      */
-    public double[] getReceptorConcArray() {
-        return titrationSeries.get(0).getReceptorConcArray();
+    @Override
+    public double[] getReceptorConcs() {
+        return titrationSeries.get(0).getReceptorConcs();
     }
     
     /**
@@ -107,8 +109,9 @@ public class TitrationSeries {
      * 
      * @return the array of ligand concentrations
      */
-    public double[] getLigandConcArray() {
-        return titrationSeries.get(0).getLigandConcArray();
+    @Override
+    public double[] getLigandConcs() {
+        return titrationSeries.get(0).getLigandConcs();
                 
     }
     
@@ -120,6 +123,8 @@ public class TitrationSeries {
     public List<Titration> getTitrationSeries() {
         return titrationSeries;
     } 
+
+    
     
     
 } // end class TitrationSeries

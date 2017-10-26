@@ -8,4 +8,4 @@
  * 
  * @since 1.8
  */
-package edu.uconn.kddwcalc.sorting;
+package edu.uconn.kddwcalc.analyze;

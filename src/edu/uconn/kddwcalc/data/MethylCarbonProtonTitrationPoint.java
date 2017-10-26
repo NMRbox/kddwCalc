@@ -57,12 +57,10 @@ public class MethylCarbonProtonTitrationPoint extends TitrationPoint {
                                                                      double receptorConc,
                                                                      Resonance resonance1, 
                                                                      Resonance resonance2) {
-        // if its not a methylcarbon, throw exception
         if(!(resonance1 instanceof MethylCarbon))
             throw new IllegalArgumentException("when instantiating a MethylCarbonTitration point, resonance 1"
                 + " was not a MethylCarbon");
         
-        // if its not a methyl proton like its supposed to be, throw exception
         if (!(resonance2 instanceof MethylProton))
             throw new IllegalArgumentException("when instantiating a MethylCarbonTitration point, resonance 2"
                 + " was not a MethylProton");

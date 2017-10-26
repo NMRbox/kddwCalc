@@ -15,7 +15,7 @@ import javafx.util.Duration;
  * 
  * @author Alex R
  */
-public class KdDwCalc extends Application {
+public class KdCalc extends Application {
     
     private static final double LOADING_SCREEN_TOTAL_TIME = 7000; // ms
     
@@ -30,6 +30,8 @@ public class KdDwCalc extends Application {
     public void start(Stage menuStage) throws IOException {  
         
         Parent menuRoot = FXMLLoader.load(getClass().getResource("Menu.fxml"));
+        
+        menuStage.setTitle("KdCalc - Menu");
         
         Scene menu = new Scene(menuRoot);
         
@@ -94,4 +96,4 @@ public class KdDwCalc extends Application {
     
     
     
-} // end class KdDwCalc
+} // end class KdCalc

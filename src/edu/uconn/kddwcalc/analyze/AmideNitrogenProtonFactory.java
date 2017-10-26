@@ -1,11 +1,11 @@
-package edu.uconn.kddwcalc.sorting;
+package edu.uconn.kddwcalc.analyze;
 
 import edu.uconn.kddwcalc.data.AmideNitrogen;
 import edu.uconn.kddwcalc.data.AmideNitrogenProtonTitrationPoint;
 import edu.uconn.kddwcalc.data.AmideProton;
 import edu.uconn.kddwcalc.data.Resonance;
 import edu.uconn.kddwcalc.data.TitrationPoint;
-import edu.uconn.kddwcalc.sorting.AbsFactory;
+import edu.uconn.kddwcalc.analyze.AbsFactory;
 import java.util.Scanner;
 
 /**

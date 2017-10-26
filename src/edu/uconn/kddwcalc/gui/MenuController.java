@@ -44,7 +44,7 @@ public class MenuController {
         
         Stage fastExchangeStage = new Stage();
         fastExchangeStage.setResizable(false);
-        fastExchangeStage.setTitle("Fast Exchange NMR Titration Data Input");
+        fastExchangeStage.setTitle("KdCalc - Fast Exchange NMR Titration Data Input");
         fastExchangeStage.setScene(scene);
         fastExchangeStage.show();
     }

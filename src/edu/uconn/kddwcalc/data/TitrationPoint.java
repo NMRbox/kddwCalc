@@ -30,6 +30,7 @@ public abstract class TitrationPoint {
                           double receptorConc,
                           Resonance resonance1, 
                           Resonance resonance2) {
+        
         this.ligandConc = ligandConc;
         this.receptorConc = receptorConc;
         
@@ -42,8 +43,7 @@ public abstract class TitrationPoint {
      * 
      * @return the ligand concentration
      */
-    public double getLigandConc()
-    {
+    public double getLigandConc() {
         return ligandConc;
     }
     
@@ -52,8 +52,7 @@ public abstract class TitrationPoint {
      * 
      * @return the receptor concentration 
      */
-    public double getReceptorConc()
-    {
+    public double getReceptorConc() {
         return receptorConc;
     }
     
@@ -62,18 +61,16 @@ public abstract class TitrationPoint {
      * 
      * @return the first resonance object
      */
-    public Resonance getResonance1()
-    {
+    public Resonance getResonance1() {
         return resonance1;
     }
     
     /**
      * Gets the second resonance. As of 170824 (AR) this is amide proton or methyl proton
      * 
-     * @return the second resonance objct 
+     * @return the second resonance object 
      */
-    public Resonance getResonance2()
-    {
+    public Resonance getResonance2() {
         return resonance2;
     }
     
@@ -88,13 +85,13 @@ public abstract class TitrationPoint {
      * @return <code>true</code> if validation is passed, <code>false</code> if values don't pass 
      */
     public static boolean isValidData (double ligandConc, double receptorConc,
-        Resonance resonance1, Resonance resonance2)
-    {
+        Resonance resonance1, Resonance resonance2) {
+        
         if (ligandConc < 0 || receptorConc < 0)
             throw new IllegalArgumentException("Concentrations are less than zero, cant be");
         
         if (resonance1 == null || resonance2 == null)
-            throw new NullPointerException("During instantitaion of a TitrationPoint, the resoonances had"
+            throw new NullPointerException("During instantitaion of a TitrationPoint, the resonances had"
                 + "a null reference (resonances need to be instantiated before TitrationPoint)");
         
         return true;    
@@ -106,10 +103,8 @@ public abstract class TitrationPoint {
      * @return a {@link String} with the ligand and receptor concentration and the two chemical shifts 
      */
     @Override 
-    public String toString()
-    {
+    public String toString() {
         return String.format("%10.3f %16.3f %13.5f %15.5f",
             ligandConc, receptorConc, resonance1.getChemShift(), resonance2.getChemShift());
-    }
-    
+    }  
 }

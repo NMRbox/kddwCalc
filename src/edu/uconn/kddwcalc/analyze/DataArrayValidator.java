@@ -1,4 +1,4 @@
-package edu.uconn.kddwcalc.sorting;
+package edu.uconn.kddwcalc.analyze;
 
 import java.io.File;
 import java.util.Arrays;
