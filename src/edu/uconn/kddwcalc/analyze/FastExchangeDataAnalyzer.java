@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.uconn.kddwcalc.analyze;
 
 import edu.uconn.kddwcalc.fitting.Results;
@@ -18,13 +13,6 @@ import java.io.IOException;
  * @author Rizzo
  */
 public class FastExchangeDataAnalyzer {
-    
-    private final RawData rawDataInstance;
-    
-    private FastExchangeDataAnalyzer(RawData rawDataInstance) {
-        
-        this.rawDataInstance = rawDataInstance;
-    }
     
     /**
      * Takes the user data in a {@link RawData} object, analyzes it and outputs the results to disk

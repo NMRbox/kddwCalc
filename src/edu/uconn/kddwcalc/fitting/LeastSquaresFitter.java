@@ -1,6 +1,5 @@
 package edu.uconn.kddwcalc.fitting;
 
-import edu.uconn.kddwcalc.data.TitrationSeries;
 import edu.uconn.kddwcalc.analyze.ArraysInvalidException;
 import edu.uconn.kddwcalc.analyze.DataArrayValidator;
 import edu.uconn.kddwcalc.data.Calculatable;
@@ -22,13 +21,13 @@ import org.apache.commons.math3.util.Pair;
  * free and fully bound signals. 
  * 
  * Clients of this class will pass in a Calculatable object
- * object which contains all the data necessary for fitting and receive a Results object back which contains
- * all the results needed.
+ * object which contains all the data necessary for fitting and receive a 
+ * Results object back
  * 
  * 
  * @author Alex R.
  *
- * @see TitrationSeries
+ * @see Calculatable
  * @see Results
  */
 public class LeastSquaresFitter {
@@ -41,7 +40,7 @@ public class LeastSquaresFitter {
      * <code> public Pair@ltRealVector, RealMatrix@gt value (final RealVector paramPoint) </code>
      * 
      * In this case, RealVector paramPoint is a two element vector (array) where the first
-     * element is the kd and the second element is dw
+     * element is the kd and the second element is the maximum observable at fully bound
      * 
      * @param dataset a {@link edu.uconn.kddwcalc.data.Calculatable} object to fit
      * 
@@ -92,52 +91,53 @@ public class LeastSquaresFitter {
         
         double kd =  optimum.getPoint().getEntry(0);   
         
-        double dwMax =  optimum.getPoint().getEntry(1);  // at fully bound
+        double maxObservable =  optimum.getPoint().getEntry(1);  // at fully bound
         
         double[][] presentationFit = makeArrayOfPresentationFit(ligandConcs, 
                                                                 receptorConcs, 
                                                                 kd, 
-                                                                dwMax, 
+                                                                maxObservable, 
                                                                 observables);
 
-        return ResultsTwoParamKdMaxObs.makeTwoParamResults(kd, dwMax, presentationFit);
+        return ResultsTwoParamKdMaxObs.makeTwoParamResults(kd, maxObservable, presentationFit);
     
     }
     
     /**
-     * A static helper method that uses the Kd from the cumulative fit to determine total dw
-     * between free and bound states for a residue using least squares.
+     * A static helper method that uses the Kd (probably from two parameter fit) 
+     * to determine total the maximum difference in observable between free and bound states
      * 
      * This method contains within it a lambda expression that overrides the method:
      * <code> public Pair@ltRealVector, RealMatrix@gt value (final RealVector paramPoint) </code>
      * 
      * In this case, RealVector paramPoint is a one element vector (array) where the only
-     * element is dw (kd is fixed to cumulative value)
+     * element is the maximum observable (kd is fixed)
      * 
      * @param ligandConcArray Total ligand concentrations
      * @param receptorConcArray Total protein concentrations (labeled species)
-     * @param cspArray Contains chemical shift perturbations of an individual residues
+     * @param observables Contains chemical shift perturbations of an individual residues
      * @param kdFromTwoParamFit The affinity constant (Kd)
      * 
      * @return value of the total difference in the observable between free
      *  and fully bound
      */
     public static double fitOneParamMaxObs(double[] ligandConcArray,
-                                            double[] receptorConcArray,
-                                            double[] cspArray,
-                                            double kdFromTwoParamFit) {
+                                           double[] receptorConcArray,
+                                           double[] observables,
+                                           double kdFromTwoParamFit) {
         
         
         if (!DataArrayValidator.isValid(ligandConcArray, receptorConcArray))
-            throw new IllegalArgumentException("in LeastSquaresFitter.fitDwForAResidue");
+            throw new IllegalArgumentException("in LeastSquaresFitter.fitOneParamMaxObs");
         
         // only checking for duplicates technically, single element in array created by varargs
-        if (!DataArrayValidator.isValid(cspArray))
-            throw new IllegalArgumentException("in LeastSquaresFitter.fitDwForAResidue, for aggExpCSPs");
+        if (!DataArrayValidator.isValid(observables))
+            throw new IllegalArgumentException("in LeastSquaresFitter.fitOneParamMaxObs, "
+                + "an issue with observable values (experimental data)");
         
         
         MultivariateJacobianFunction function = (final RealVector paramPoint) -> {
-            final double dw = paramPoint.getEntry(0);
+            final double observable = paramPoint.getEntry(0);
             
             RealVector value = new ArrayRealVector(ligandConcArray.length);
             RealMatrix jacobian = new Array2DRowRealMatrix(ligandConcArray.length, 2);
@@ -146,7 +146,7 @@ public class LeastSquaresFitter {
                 double L0 = ligandConcArray[ctr];
                 double P0 = receptorConcArray[ctr];
                 
-                value.setEntry(ctr, calcModel(P0, L0, kdFromTwoParamFit, dw));
+                value.setEntry(ctr, calcModel(P0, L0, kdFromTwoParamFit, observable));
                 
                 jacobian.setEntry(ctr, 0, calcModelDerivativeMaxObs(P0, L0, kdFromTwoParamFit));
             }
@@ -157,7 +157,7 @@ public class LeastSquaresFitter {
         // iniial guess is 10 uM with a cumulative shift of 0.1 ppm proton
         final double[] startingGuess = {10, 0.1};
         
-        LeastSquaresOptimizer.Optimum optimum = buildAndGetOptimum(startingGuess, function, cspArray);
+        LeastSquaresOptimizer.Optimum optimum = buildAndGetOptimum(startingGuess, function, observables);
         
         return optimum.getPoint().getEntry(0);
     }
@@ -165,8 +165,8 @@ public class LeastSquaresFitter {
     
     /**
      * A static helper method that uses {@link LeastSquaresBuilder} to create a {@link LeastSquaresProblem}
-     * which is then evaluated using LM minimization. Note that this is used for both the two-parameter (kd, dw)
-     * cumulative fit and the one-parameter per-residue (dw) fit.
+     * which is then evaluated using LM minimization. Note that this is used for both the two-parameter (kd, observable)
+ cumulative fit and the one-parameter per-residue (observable) fit.
      * 
      * @param startingGuess Initial values for parameters. 
      * @param function The function to minimize
@@ -195,12 +195,12 @@ public class LeastSquaresFitter {
     /**
      * A static helper method that creates a two-column array of data that are [x,y] values
      * for plotting the data. X-axis is ligand ratio (ligand / receptor) and y-axis is percent bound
-     * which is from modelCSP / dwMax
+     *which is from expObservable / maxObservable
      * 
      * @param ligandConcArray
      * @param receptorConcArray
      * @param kd
-     * @param dwMax
+     * @param maxObservable
      * @param observables
      * 
      * @see #calcModel
@@ -210,7 +210,7 @@ public class LeastSquaresFitter {
     private static double[][] makeArrayOfPresentationFit(double[] ligandConcArray, 
                                                          double[] receptorConcArray, 
                                                          double kd, 
-                                                         double dwMax,
+                                                         double maxObservable,
                                                          double[] observables) 
                                                          throws ArraysInvalidException {    
         
@@ -225,16 +225,14 @@ public class LeastSquaresFitter {
         
         for(int ctr = 0; ctr < ligandConcArray.length; ctr++) {
             presentationFit[ctr][1] = 
-                calcModel(receptorConcArray[ctr], ligandConcArray[ctr], kd, dwMax) / dwMax;
+                calcModel(receptorConcArray[ctr], ligandConcArray[ctr], kd, maxObservable) / maxObservable;
         }
         
         for(int ctr = 0; ctr < ligandConcArray.length; ctr++) {
-            presentationFit[ctr][2] = observables[ctr] / dwMax;
+            presentationFit[ctr][2] = observables[ctr] / maxObservable;
         }
         
         return presentationFit;
-        
-        // TODO this method needs to be a 3 column array that also gives exprimental values
     }
     
     /**
@@ -262,7 +260,7 @@ public class LeastSquaresFitter {
         }
     
     /**
-     * A method that evaluates the first derivative with respect to dw (dM/d(dw))
+     * A method that evaluates the first derivative with respect to observable (dM/d(observable))
      * of the equation in method <code>calcModel</code>. This is required for the
      * Jacobian matrix in LM minimization
      * 

@@ -145,6 +145,8 @@ public class FastExchangeGUIController {
     private static final String AMIDE_SECOND_RADIO_BUTTON_MESSAGE = "Proton Nitrogen";
     private static final String METHYL_FIRST_RADIO_BUTTON_MESSAGE = "Carbon Proton";
     private static final String METHYL_SECOND_RADIO_BUTTON_MESSAGE = "Proton Carbon";
+    private static final String AMIDE_HSQC_LABEL = "1H-15N amide HSQC";
+    private static final String METHYL_HMQC_LABEL = "1H-13C methyl HMQC";
 
     // its global because i cant figure out how to pass it to the analyze and save button handlers
     private ReadOnlyObjectWrapper<File> wrappedDataOutputFile;
@@ -173,7 +175,7 @@ public class FastExchangeGUIController {
      */
     public void initialize() {
 
-        initializeRadioButtonUserData();
+        initializeRadioButtons();
         
         ligandConcTextFieldList = compileLigandConcTextFields();
         receptorConcTextFieldList = compileReceptorConcTextFields();
@@ -201,10 +203,10 @@ public class FastExchangeGUIController {
         
         ligandConc1.setText("0.0"); // line must come after clearFileList...method
         
-        
         typeOfTitrationToggleGroup.selectToggle(amideHSQCRadioButton);
-        orderNucleiFirstRadioButton.setText(AMIDE_FIRST_RADIO_BUTTON_MESSAGE);
-        orderNucleiSecondRadioButton.setText(AMIDE_SECOND_RADIO_BUTTON_MESSAGE);
+        
+        nucleiToggleGroup.selectToggle(orderNucleiFirstRadioButton);
+        
         multiplierTextField.setText(Double.toString(AMIDE_HSQC_DEFAULT_MULT));
 
         dataOutputTextField.setText(DEFAULT_OUTPUT_DATA_FILENAME);
@@ -215,7 +217,10 @@ public class FastExchangeGUIController {
         wrappedResultsOutputFile.setValue(
             new File(System.getProperty("user.home"), DEFAULT_OUTPUT_RESULTS_FILENAME));
         
-        // turn off file chooser buttons except first
+        
+        // make buttons to choose data files unlickable until. always allow 
+        // the button beforehand was chosen. this enforces some order
+        // on what the user can do. first line can always be cohosen
         compileDataFileChooserButtons().stream()
                                        .filter(button -> !button.equals(chooser1))
                                        .forEach(button -> button.disableProperty().setValue(true));
@@ -224,12 +229,17 @@ public class FastExchangeGUIController {
     /**
      * Sets userData for all {@link RadioButton} objects.
      */
-    private void initializeRadioButtonUserData() {
+    private void initializeRadioButtons() {
 
         amideHSQCRadioButton.setUserData(TypesOfTitrations.AMIDEHSQC);
         methylHMQCRadioButton.setUserData(TypesOfTitrations.METHYLHMQC);
+        amideHSQCRadioButton.setText(AMIDE_HSQC_LABEL);
+        methylHMQCRadioButton.setText(METHYL_HMQC_LABEL);
+        
         orderNucleiFirstRadioButton.setUserData(false);
         orderNucleiSecondRadioButton.setUserData(true);
+        orderNucleiFirstRadioButton.setText(AMIDE_FIRST_RADIO_BUTTON_MESSAGE);
+        orderNucleiSecondRadioButton.setText(AMIDE_SECOND_RADIO_BUTTON_MESSAGE);
     }
 
     /**

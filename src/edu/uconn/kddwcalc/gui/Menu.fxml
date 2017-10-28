@@ -28,7 +28,6 @@
     <Menu mnemonicParsing="false" text="Help">
       <items>
         <MenuItem mnemonicParsing="false" text="Email:  alex.rizzo2000@gmail.com" />
-            <MenuItem mnemonicParsing="false" text="Text:  203-980-7015" />
       </items>
     </Menu>
   </menus>

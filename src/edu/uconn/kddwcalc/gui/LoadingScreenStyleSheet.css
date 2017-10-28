@@ -1,9 +1,17 @@
-
+// https://pixabay.com/en/schrecksee-allgäu-hochgebirgssee-2534484/
+// website where picture was taken. 
 
 #programTitleLabel {
    -fx-font: bold italic 36pt "Helvetica Neue";
+   -fx-font-color: white;
+}
+   
+#myNameLabel {     
+   -fx-font:  20pt "Helvetica Neue";
+   -fx-font-color: white;   
 }
 
 #loadingLabel {
    -fx-font: 12pt "Helvetica Neue";
+   -fx-font-color:white;
 }

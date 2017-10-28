@@ -112,7 +112,7 @@ public class Titration implements Calculatable {
      * @see TitrationSeries
      */
     public void printTitration(Formatter output) {
-        output.format("Titration with multiplier of %.2f%nCSPs: %s%n"
+        output.format("Titration with multiplier of %.5f%nCSPs: %s%n"
             + "LigandConc     ReceptorConc    Resonance1      Resonance2%n", multiplier, getCSPsFrom2DPoints().toString());
         
         titration.stream() // results in a Stream<TitrationPoint>
