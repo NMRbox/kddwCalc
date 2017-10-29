@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.FormatterClosedException;
@@ -339,9 +341,17 @@ public class FastExchangeGUIController {
      */
     @FXML 
     private void analyzeButtonPressed (ActionEvent event) {   
+        
+        Instant start = Instant.now();
+        
         try {
            FastExchangeDataAnalyzer.analyze(prepAndMakeRawDataObject());
-           displayResultsWrittenPopUp(); // only reach this if extensive validation passed
+           
+           Instant end = Instant.now(); // for clocking the calculation
+           
+            System.out.println(Duration.between(start, end).toNanos() / 1_000_000L + " ms");
+           
+            displayResultsWrittenPopUp(); // only reach this if extensive validation passed
         }
 
         // note: NumberFormatException will be caught by its superclass IllegalArgumentException

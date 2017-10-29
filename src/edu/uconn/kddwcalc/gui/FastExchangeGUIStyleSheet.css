@@ -5,8 +5,7 @@
     -fx-background-insets: 0,1,2,3,0;
     -fx-text-fill: whitesmoke;
     -fx-font-weight: bold;
-    -fx-font-size: 24px;
-    -fx-padding: 10 20 10 20;   
+    -fx-font-size: 24px;  
 }
 
 Label, TextField, RadioButton {
