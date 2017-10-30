@@ -26,7 +26,7 @@ public class FastExchangeDataAnalyzer {
         
         // sorts data from user and creates a TitrationSeries object
         TitrationSeries series = FactoryMaker.createFactory(rawDataInstance.getType()) // returns AbsFactory subclass
-                                             .analyzeDataFiles(rawDataInstance); // returns TitrationSeries
+                                             .sortDataFiles(rawDataInstance); // returns TitrationSeries
 
         // prints sorted data to disk
         series.printTitrationSeries(rawDataInstance.getDataOutputFile());
@@ -38,9 +38,7 @@ public class FastExchangeDataAnalyzer {
                      series.getTitrationSeries()
                            .stream() // now have Stream<Titration>
                            .mapToDouble((Titration titr) ->  {
-                               return LeastSquaresFitter.fitOneParamMaxObs(series.getLigandConcs(), 
-                                                                           series.getReceptorConcs(), 
-                                                                           titr.getObservables(), 
+                               return LeastSquaresFitter.fitOneParamMaxObs(titr, 
                                                                            twoParamResults.getKd());
                            })
                            .toArray();

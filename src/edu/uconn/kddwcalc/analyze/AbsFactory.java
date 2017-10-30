@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 /**
  * Abstract superclass in an abstract factory pattern hierarchy. In the template method 
- * {@link #analyzeDataFiles analyzeDataFiles}, the unsorted data comes from the user and is sorted into 
+ * {@link #sortDataFiles sortDataFiles}, the unsorted data comes from the user and is sorted into 
  * a <code>List{@literal <}Titration{@literal >}</code>. A {@link Titration} is composed of a 
  * a <code>List{@literal <}TitrationPoint{@literal >}</code>. A {@link TitrationPoint} is composed
  * of two {@link Resonance} objects and two protein concentrations (receptor and ligand). 
@@ -43,7 +43,7 @@ public abstract class AbsFactory {
      * 
      * @throws IOException if an exception occurs when opening peak list data files
      */
-    public final TitrationSeries analyzeDataFiles(RawData dataObject) throws IOException {
+    public final TitrationSeries sortDataFiles(RawData dataObject) throws IOException {
         final TitrationSeries dataSet = new TitrationSeries();
         
         List<Scanner> scanners = null; 

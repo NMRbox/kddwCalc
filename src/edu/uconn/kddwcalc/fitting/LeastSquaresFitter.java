@@ -113,19 +113,18 @@ public class LeastSquaresFitter {
      * In this case, RealVector paramPoint is a one element vector (array) where the only
      * element is the maximum observable (kd is fixed)
      * 
-     * @param ligandConcArray Total ligand concentrations
-     * @param receptorConcArray Total protein concentrations (labeled species)
-     * @param observables Contains chemical shift perturbations of an individual residues
+     * @param dataset data to fit maximum observable only. kd is set from global fit
      * @param kdFromTwoParamFit The affinity constant (Kd)
      * 
      * @return value of the total difference in the observable between free
      *  and fully bound
      */
-    public static double fitOneParamMaxObs(double[] ligandConcArray,
-                                           double[] receptorConcArray,
-                                           double[] observables,
+    public static double fitOneParamMaxObs(Calculatable dataset,
                                            double kdFromTwoParamFit) {
         
+        final double[] ligandConcArray = dataset.getLigandConcs();
+        final double[] receptorConcArray = dataset.getReceptorConcs();
+        final double[] observables = dataset.getObservables();
         
         if (!DataArrayValidator.isValid(ligandConcArray, receptorConcArray))
             throw new IllegalArgumentException("in LeastSquaresFitter.fitOneParamMaxObs");
@@ -142,6 +141,9 @@ public class LeastSquaresFitter {
             RealVector value = new ArrayRealVector(ligandConcArray.length);
             RealMatrix jacobian = new Array2DRowRealMatrix(ligandConcArray.length, 2);
             
+            
+            // TODO , use Stream<Titration>. makes no sense to sort data
+            // and them pull out as individual arrays here.
             for(int ctr = 0; ctr < ligandConcArray.length; ctr++) {
                 double L0 = ligandConcArray[ctr];
                 double P0 = receptorConcArray[ctr];
