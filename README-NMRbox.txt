@@ -1,4 +1,5 @@
 To compile on Ubuntu:
+apt get install openjdk-8-jre openjfx
 
 apt get install libcommons-math3-java
 
