@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
  * @since 1.8
  */
 public class TitrationSeries implements Calculatable {   
+    
     private final List<Titration> titrationSeries = new ArrayList<>();
     
     /**

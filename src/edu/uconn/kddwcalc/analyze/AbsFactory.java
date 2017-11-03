@@ -44,6 +44,7 @@ public abstract class AbsFactory {
      * @throws IOException if an exception occurs when opening peak list data files
      */
     public final TitrationSeries sortDataFiles(RawData dataObject) throws IOException {
+        
         final TitrationSeries dataSet = new TitrationSeries();
         
         List<Scanner> scanners = null; 
@@ -95,6 +96,10 @@ public abstract class AbsFactory {
      * @return {@link Scanner} instances to begin reading peak list data
      */
     private List<Scanner> makeScannersFromPaths(List<Path> paths) throws IOException {
+        
+        // dont try to change this to use streams and method references, the
+        // checked IOException is an issue
+        
         final List<Scanner> scanners = new ArrayList<>();
         
         try {

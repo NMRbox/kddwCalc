@@ -14,7 +14,7 @@ package edu.uconn.kddwcalc.data;
  * @since 1.8
  */
 public class MethylProton extends Resonance {
-    private static final int METHYL_PROTON_MAX_SHIFT = 3;
+    private static final int METHYL_PROTON_MAX_SHIFT = 4;
     private static final int METHYL_PROTON_MIN_SHIFT = -3;
 
     /**

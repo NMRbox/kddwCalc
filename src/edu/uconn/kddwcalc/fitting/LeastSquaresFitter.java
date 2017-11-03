@@ -195,7 +195,7 @@ public class LeastSquaresFitter {
     }
     
     /**
-     * A static helper method that creates a two-column array of data that are [x,y] values
+     * A static helper method that creates a three-column array of data that are [x,y] values
      * for plotting the data. X-axis is ligand ratio (ligand / receptor) and y-axis is percent bound
      *which is from expObservable / maxObservable
      * 
