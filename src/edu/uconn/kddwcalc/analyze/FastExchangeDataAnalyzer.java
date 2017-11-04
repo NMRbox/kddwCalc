@@ -69,14 +69,18 @@ public class FastExchangeDataAnalyzer {
                                            List<ResultsTwoParamKdMaxObs> twoParamResultsList,
                                            File resultsFile) throws FileNotFoundException, IOException {
         
-        try (Formatter output = new Formatter(resultsFile)) {
+        try {
             
-            writeCumulativeResults(output,
+            writeCumulativeResults(resultsFile,
                                    aggTwoParamResults,
                                    boundCSPArrayByResidue);
             
             writeTwoParamResultsByResidue(resultsFile,
                                           twoParamResultsList);
+            
+            writeKdsForEachResidueToSingleFile(resultsFile,
+                                               twoParamResultsList);
+            
         }
         catch (FileNotFoundException e) {
             throw new FileNotFoundException("Was an issue opening the file to write results");
@@ -101,23 +105,22 @@ public class FastExchangeDataAnalyzer {
                      .collect(Collectors.toList());
     }
     
-    
-    
-    
     /**
      */
-    private static void writeCumulativeResults(Formatter output,
+    private static void writeCumulativeResults(File resultsFile,
                                                ResultsTwoParamKdMaxObs aggTwoParamResults,
-                                               double[] boundCSPArrayByResidue) {
+                                               double[] boundCSPArrayByResidue) throws FileNotFoundException {
         
-        output.format("Results from cumulative fit:%n%n%s%n%n", 
+        try (Formatter output = new Formatter(resultsFile)) {
+            
+            output.format("Results from cumulative fit:%n%n%s%n%n", 
             aggTwoParamResults.toString());
         
-        output.format("dw for fully bound:%n");    
-        Arrays.stream(boundCSPArrayByResidue)
+            output.format("dw for fully bound:%n");    
+            Arrays.stream(boundCSPArrayByResidue)
               .forEach(csp -> output.format("%.6f%n", csp));
-        
-    } // end writeResults
+        }  
+    } // end writeCumulativeResults
     /**
      * 
      * 
@@ -162,4 +165,28 @@ public class FastExchangeDataAnalyzer {
             }    
         }
     } // end method writeTwoParamResultsByResidue 
+
+    private static void writeKdsForEachResidueToSingleFile(File resultsFile, 
+                                                           List<ResultsTwoParamKdMaxObs> twoParamResultsList) 
+                                                        throws FileNotFoundException {
+        
+        // create a new path below where results file goes
+        Path newPath = Paths.get(resultsFile.toPath().getParent().toString(), "KdsByResidue.txt");
+        
+        try (Formatter output = new Formatter(newPath.toFile())) {
+            
+            output.format(String.format("Kds for each residue. Note that these "
+                + "are not weighted by the magnitude of the CSP, so some "
+                + "values that seem way off may be subject to greater noise "
+                + "relative to signal%n%n"));
+            
+            output.format(String.format("%10s%10s%n", "Kd (uM)", "dw" ));
+            
+            twoParamResultsList.stream()
+                               .forEach(result -> {
+                                   output.format(String.format("%10.2f%10.6f%n",
+                                       result.getKd(), result.getMaxObservable()));
+                               });
+        }
+   }
 } // end class FastExchangeDataAnalyzer
