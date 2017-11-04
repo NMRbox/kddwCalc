@@ -5,8 +5,8 @@ import java.util.Formatter;
 import java.util.List;
 
 /**
- * A class that contains all the data from a fast exchange NMR titration *for a single residue* to determine affinity, 
- * delta-omega (dw) and other parameters
+ * A class that contains all the data from a fast exchange NMR listOfPoints *for a single residue* to determine affinity, 
+ delta-omega (dw) and other parameters
  * 
  * @see edu.uconn.kddwcalc.analyze.AbsFactory
  * @see TitrationSeries
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class Titration implements Calculatable {
     
-    private final List<TitrationPoint> titration = new ArrayList<>();
+    private final List<TitrationPoint> listOfPoints;
     private final double multiplier;
     
     /**
@@ -27,20 +27,38 @@ public class Titration implements Calculatable {
      * 
      * @param multiplier the value from the user that indicates how to scale the two nuclei into 1H-ppm
      */
-    public Titration(double multiplier) {
+    private Titration(List<TitrationPoint> listOfPoints, double multiplier) {
+        
+        this.listOfPoints = listOfPoints;
         this.multiplier = multiplier;
     }
     
+//    /**
+//     * Adds a {@link TitrationPoint} to the instance variable <code>listOfPoints</code>
+//     * 
+//     * @param pnt contains the information for one peak from one spectrum 
+//     * (ligand and receptor concentrations and two chemical shifts (subclasses of {@link Resonance})
+//     * 
+//     * @see edu.uconn.kddwcalc.analyze.AbsFactory
+//     */
+//    public final void addPoint(TitrationPoint pnt) {
+//        listOfPoints.add(pnt);
+//    }
+    
     /**
-     * Adds a {@link TitrationPoint} to the instance variable <code>titration</code>
      * 
-     * @param pnt contains the information for one peak from one spectrum 
-     * (ligand and receptor concentrations and two chemical shifts (subclasses of {@link Resonance})
      * 
-     * @see edu.uconn.kddwcalc.analyze.AbsFactory
+     * @param listOfPoints the experimental points
+     * @param multiplier the scaling factor for the two dimensions
+     * 
+     * @return instance of <code>Titration</code> 
      */
-    public final void addPoint(TitrationPoint pnt) {
-        titration.add(pnt);
+    public static Titration makeTitration(List<TitrationPoint> listOfPoints,
+                                          double multiplier) {
+        
+        // TODO add some kind of validation here
+        
+        return new Titration(listOfPoints, multiplier);
     }
     
     /**
@@ -50,9 +68,9 @@ public class Titration implements Calculatable {
      */
     @Override
     public double[] getReceptorConcs() {
-        return titration.stream()
-                        .mapToDouble(TitrationPoint::getReceptorConc)
-                        .toArray();
+        return listOfPoints.stream()
+                           .mapToDouble(TitrationPoint::getReceptorConc)
+                           .toArray();
     }
     
     /**
@@ -62,13 +80,13 @@ public class Titration implements Calculatable {
      */
     @Override
     public double[] getLigandConcs() {
-        return titration.stream()
-                        .mapToDouble(TitrationPoint::getLigandConc)
-                        .toArray();
+        return listOfPoints.stream()
+                           .mapToDouble(TitrationPoint::getLigandConc)
+                           .toArray();
     }
     
     /**
-     * Takes the two {@link Resonance} variables from instance variable <code>titration</code> and extracts the 
+     * Takes the two {@link Resonance} variables from instance variable <code>listOfPoints</code> and extracts the 
      * chemical shift perturbation. Effectively, this uses the equation for distance
      * [sqrt((xn-x0)^2 + (yn-y0)^2)] with scaling based on the multiplier. The first point should have a CSP = 0,
      * while the remaining points are calculated from the first point with free receptor.
@@ -81,11 +99,11 @@ public class Titration implements Calculatable {
     public List<Double> getCSPsFrom2DPoints() {
         final List<Double> csps = new ArrayList<>();
         
-        for(int ctr = 0; ctr < titration.size(); ctr++) {
-            csps.add(Math.sqrt(Math.pow(titration.get(ctr).getResonance2().getChemShift() 
-                - titration.get(0).getResonance2().getChemShift(), 2.0)
-                + Math.pow(multiplier * (titration.get(ctr).getResonance1().getChemShift() 
-                - titration.get(0).getResonance1().getChemShift()), 2.0)));
+        for(int ctr = 0; ctr < listOfPoints.size(); ctr++) {
+            csps.add(Math.sqrt(Math.pow(listOfPoints.get(ctr).getResonance2().getChemShift() 
+                - listOfPoints.get(0).getResonance2().getChemShift(), 2.0)
+                + Math.pow(multiplier * (listOfPoints.get(ctr).getResonance1().getChemShift() 
+                - listOfPoints.get(0).getResonance1().getChemShift()), 2.0)));
         }
 
         return csps;
@@ -105,7 +123,7 @@ public class Titration implements Calculatable {
     }
     
     /**
-     * Prints information from an NMR titration for a single residue to a text file.
+     * Prints information from an NMR listOfPoints for a single residue to a text file.
      * 
      * @param output the {@link Formatter} instance that writes finalResults.txt
      * 
@@ -115,7 +133,7 @@ public class Titration implements Calculatable {
         output.format("Titration with multiplier of %.5f%nCSPs: %s%n"
             + "LigandConc     ReceptorConc    Resonance1      Resonance2%n", multiplier, getCSPsFrom2DPoints().toString());
         
-        titration.stream() // results in a Stream<TitrationPoint>
+        listOfPoints.stream() // results in a Stream<TitrationPoint>
                  .forEach(titrPoint -> output.format("%s%n", titrPoint.toString()));
     }
 }

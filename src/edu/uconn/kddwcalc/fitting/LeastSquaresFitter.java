@@ -52,15 +52,11 @@ public class LeastSquaresFitter {
      * @return a {@link ResultsTwoParamKdMaxObs} object with Kd, percent bound, and presentation fitting
      * 
      */
-    public static ResultsTwoParamKdMaxObs fitTwoParamKdAndMaxObs(Calculatable dataset) 
-                                                throws ArraysInvalidException {
+    public static ResultsTwoParamKdMaxObs fitTwoParamKdAndMaxObs(Calculatable dataset)  {
         
         final double[] ligandConcs = dataset.getLigandConcs();
         final double[] receptorConcs = dataset.getReceptorConcs();
         final double[] observables = dataset.getObservables();
-        
-        if (!DataArrayValidator.isValid(ligandConcs, receptorConcs, observables))
-            throw new ArraysInvalidException("in LeastSquaresFitter.fitCumulativeData");
 
         MultivariateJacobianFunction function = (final RealVector paramPoint) -> {
             double kd = paramPoint.getEntry(0);
@@ -99,7 +95,10 @@ public class LeastSquaresFitter {
                                                                 maxObservable, 
                                                                 observables);
 
-        return ResultsTwoParamKdMaxObs.makeTwoParamResults(kd, maxObservable, presentationFit);
+        return ResultsTwoParamKdMaxObs.makeTwoParamResults(kd, 
+                                                           maxObservable, 
+                                                           observables,
+                                                           presentationFit);
     
     }
     
@@ -213,11 +212,7 @@ public class LeastSquaresFitter {
                                                          double[] receptorConcArray, 
                                                          double kd, 
                                                          double maxObservable,
-                                                         double[] observables) 
-                                                         throws ArraysInvalidException {    
-        
-        if (!DataArrayValidator.isValid(ligandConcArray, receptorConcArray, observables))
-            throw new ArraysInvalidException("in LeastSquaresFitter.makeArrayOfPresentationFit");
+                                                         double[] observables) {    
         
         double [][] presentationFit = new double[ligandConcArray.length][3];
         

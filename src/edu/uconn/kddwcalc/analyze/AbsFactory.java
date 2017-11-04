@@ -45,22 +45,22 @@ public abstract class AbsFactory {
      */
     public final TitrationSeries sortDataFiles(RawData dataObject) throws IOException {
         
-        final TitrationSeries dataSet = new TitrationSeries();
-        
         List<Scanner> scanners = null; 
         
         try {
             // open files by getting a List<Scanner> from the List<Path>
             scanners = makeScannersFromPaths(dataObject.getDataPaths());
-
+            
+            final List<Titration> listOfTitration = new ArrayList<>();
+            
             // iterate through the files and concentrations and group them
             //    as long as there is more data in the first file.
             // each iteration of the while loop creates a full titration curve
             //    for a single residue
             while(scanners.get(0).hasNext()) {
 
-                final Titration titration = new Titration(Double.valueOf(dataObject.getMultiplier()));
-
+                List<TitrationPoint> listOfPoints = new ArrayList<>();
+                
                 // each iteration of for loop adds a single point to the titration.
                 // the control variable is the number of data files, which is the 
                 //   number of individial titraiton points collected
@@ -70,12 +70,17 @@ public abstract class AbsFactory {
                         dataObject.getReceptorConcs()[ctr],
                         dataObject.getResonanceReversal());
 
-                    titration.addPoint(point);
+                    listOfPoints.add(point);
                 }   
+                
+                
+                listOfTitration.add(Titration.makeTitration(listOfPoints, 
+                                                            dataObject.getMultiplier()));
 
-                dataSet.addTitration(titration);   
-        
             } 
+            
+            return TitrationSeries.makeTitrationSeries(listOfTitration);
+            
         }
         catch (IOException e) {
             throw new IOException(e);
@@ -84,8 +89,6 @@ public abstract class AbsFactory {
         finally {
             closeFiles(scanners);
         }
-        
-        return dataSet;
     }    
     
     /**

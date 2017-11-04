@@ -23,15 +23,11 @@ import java.util.stream.Collectors;
  */
 public class TitrationSeries implements Calculatable {   
     
-    private final List<Titration> titrationSeries = new ArrayList<>();
+    private final List<Titration> listOfTitrations;
     
-    /**
-     * Adds a titration to instance variable <code>titrationSeries</code>
-     * 
-     * @param titration a complete NMR fast exchange titration dataset for a single residue
-     */
-    public void addTitration(Titration titration) {
-        titrationSeries.add(titration);
+    private TitrationSeries(List<Titration> titrationSeries) {
+        
+        this.listOfTitrations = titrationSeries;
     }
     
     /**
@@ -43,7 +39,7 @@ public class TitrationSeries implements Calculatable {
      */
     public void printTitrationSeries(File file) throws FileNotFoundException {
         try (Formatter output = new Formatter(file)) {
-            titrationSeries.stream()
+            listOfTitrations.stream()
                        .forEach(titr -> {
                            titr.printTitration(output);
                            output.format("%n");
@@ -64,14 +60,14 @@ public class TitrationSeries implements Calculatable {
     public double[] getObservables() {
 
         List<List<Double>> aggCSPintermediate = 
-            titrationSeries.stream()  // now have Stream<Titration>
+            listOfTitrations.stream()  // now have Stream<Titration>
                            .map(Titration::getCSPsFrom2DPoints) // now have Stream<List<Double>>
                            .collect(Collectors.toList());        
         
         List<Double> aggCSPs = new ArrayList<>();
         
         // intialializes with values of 0.0 and sets the lenght of cumulative CSPs
-        for(int ctr = 0; ctr < titrationSeries.get(0).getCSPsFrom2DPoints().size(); ctr++) {
+        for(int ctr = 0; ctr < listOfTitrations.get(0).getCSPsFrom2DPoints().size(); ctr++) {
             aggCSPs.add(0.0);
         }
         
@@ -102,7 +98,7 @@ public class TitrationSeries implements Calculatable {
      */
     @Override
     public double[] getReceptorConcs() {
-        return titrationSeries.get(0).getReceptorConcs();
+        return listOfTitrations.get(0).getReceptorConcs();
     }
     
     /**
@@ -112,7 +108,7 @@ public class TitrationSeries implements Calculatable {
      */
     @Override
     public double[] getLigandConcs() {
-        return titrationSeries.get(0).getLigandConcs();
+        return listOfTitrations.get(0).getLigandConcs();
                 
     }
     
@@ -121,11 +117,13 @@ public class TitrationSeries implements Calculatable {
      *
      * @return the instance variable
      */    
-    public List<Titration> getTitrationSeries() {
-        return titrationSeries;
+    public List<Titration> getListOfTitrations() {
+        return listOfTitrations;
     } 
 
-    
+    public static TitrationSeries makeTitrationSeries(List<Titration> titrationSeries) {
+        return new TitrationSeries(titrationSeries);
+    }
     
     
 } // end class TitrationSeries

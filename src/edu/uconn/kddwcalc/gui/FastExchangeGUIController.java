@@ -4,7 +4,6 @@ import edu.uconn.kddwcalc.analyze.FastExchangeDataAnalyzer;
 import edu.uconn.kddwcalc.analyze.AbsFactory;
 import edu.uconn.kddwcalc.analyze.ArraysInvalidException;
 import edu.uconn.kddwcalc.fitting.LeastSquaresFitter;
-import edu.uconn.kddwcalc.fitting.Results;
 import edu.uconn.kddwcalc.data.TitrationSeries;
 import edu.uconn.kddwcalc.data.TypesOfTitrations;
 import java.io.File;
@@ -321,11 +320,10 @@ public class FastExchangeGUIController {
 
     /**
      * Executes when the analyze button is pressed. In short, this method
-     * contains the meat of the program. It creates the {@link AbsFactory}
-     * subclass, prepares the data and then sorts the peak lists. This forms
-     * a {@link TitrationSeries} which is passed as an argument to
-     * {@link LeastSquaresFitter#fit} to return a {@link Results} object.
-     * The {@link Results} is then printed to disk.
+     * begins the meat of the program. The data is compiled into a 
+     * <code>RawData</code> object which is the only public interface for
+     * the gui package and sent to the analyze package for sorting, fitting, 
+     * and output of results.
      *
      * Note: all exceptions should climb back to the catch block in
      * <code>analyzeButtonPressed</code> and show its message in the dialog
@@ -336,7 +334,7 @@ public class FastExchangeGUIController {
      *
      * @see AbsFactory
      * @see TitrationSeries
-     * @see Results
+     * @see FastExchangeDataAnalyzer
      * @see RawData
      */
     @FXML 
@@ -562,8 +560,8 @@ public class FastExchangeGUIController {
     }
 
     /**
-     * If the program reaches this method, then a {@link Results} object was
-     * written to disk. This informs the user that this has happened.
+     * If the program reaches this method, then results were written to disk. 
+     * This informs the user that this has happened.
      */
     private void displayResultsWrittenPopUp() {
 

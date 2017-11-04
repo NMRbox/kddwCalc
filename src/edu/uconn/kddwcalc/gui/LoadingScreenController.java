@@ -1,5 +1,10 @@
 package edu.uconn.kddwcalc.gui;
 
+
+//  https://pixabay.com/en/schrecksee-allgäu-hochgebirgssee-2534484
+//  website where image on loading screen was taken
+
+
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.Interpolator;
