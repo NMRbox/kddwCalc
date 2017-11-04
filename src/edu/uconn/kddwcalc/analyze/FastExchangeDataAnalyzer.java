@@ -8,6 +8,9 @@ import edu.uconn.kddwcalc.gui.RawData;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
@@ -64,7 +67,7 @@ public class FastExchangeDataAnalyzer {
     private static void writeResultsToDisk(ResultsTwoParamKdMaxObs aggTwoParamResults,
                                            double[] boundCSPArrayByResidue,
                                            List<ResultsTwoParamKdMaxObs> twoParamResultsList,
-                                           File resultsFile) throws FileNotFoundException {
+                                           File resultsFile) throws FileNotFoundException, IOException {
         
         try (Formatter output = new Formatter(resultsFile)) {
             
@@ -115,12 +118,48 @@ public class FastExchangeDataAnalyzer {
               .forEach(csp -> output.format("%.6f%n", csp));
         
     } // end writeResults
-
+    /**
+     * 
+     * 
+     * @param resultsFile
+     * @param twoParamResultsList 
+     */
+    
     private static void writeTwoParamResultsByResidue(File resultsFile, 
-                                                      List<ResultsTwoParamKdMaxObs> twoParamResultsList) {
+                                                      List<ResultsTwoParamKdMaxObs> twoParamResultsList) 
+                                                throws IOException {
         
-    }
-    
-    
-    
+        // get the absolute path to where final results are written
+        Path path = resultsFile.getAbsoluteFile().toPath();
+        
+        // create a new path below where results file goes
+        Path newPath = Paths.get(path.getParent().toString(), "individualResidueData");
+        
+        // if this program was already run once, then the output data might
+        // have already been written. this begins the process of deleting that data
+        // by getting an array of the files inside
+        Path[] oldFiles = Files.list(newPath).toArray(Path[]::new);
+        
+        // take array of old files and delete
+        for (Path pth : oldFiles) {
+            Files.delete(pth);
+        }
+        
+        // delete the directory ending in "individualResidueData" if program
+        // was already executed
+        Files.deleteIfExists(newPath);
+        
+        // create directory where individual residue results will go
+        Files.createDirectory(newPath);
+        
+        // iterate through the individual residue data and write the disk
+        for (int ctr = 0; ctr < twoParamResultsList.size(); ctr++) {
+            
+            try (Formatter output = new Formatter(Paths.get(newPath.toFile().getAbsolutePath(), 
+                                                  String.format("%s.txt", ctr)).toFile())) {
+                
+                output.format("%s", String.format(twoParamResultsList.get(ctr).toString())); 
+            }    
+        }
+    } // end method writeTwoParamResultsByResidue 
 } // end class FastExchangeDataAnalyzer
