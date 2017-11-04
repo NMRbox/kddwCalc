@@ -141,16 +141,21 @@ public class FastExchangeDataAnalyzer {
         // if this program was already run once, then the output data might
         // have already been written. this begins the process of deleting that data
         // by getting an array of the files inside
-        Path[] oldFiles = Files.list(newPath).toArray(Path[]::new);
+        System.out.println(Files.exists(newPath));
         
-        // take array of old files and delete
-        for (Path pth : oldFiles) {
-            Files.delete(pth);
+        if (Files.exists(newPath)) {
+            Path[] oldFiles = Files.list(newPath).toArray(Path[]::new);
+        
+            // take array of old files and delete
+            for (Path pth : oldFiles) {
+                Files.delete(pth);
+            } 
+            // delete the directory ending in "individualResidueData" if program
+            // was already executed
+            Files.deleteIfExists(newPath);
         }
         
-        // delete the directory ending in "individualResidueData" if program
-        // was already executed
-        Files.deleteIfExists(newPath);
+        
         
         // create directory where individual residue results will go
         Files.createDirectory(newPath);

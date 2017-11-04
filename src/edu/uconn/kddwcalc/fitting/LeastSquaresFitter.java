@@ -28,7 +28,6 @@ import org.apache.commons.math3.util.Pair;
  * @author Alex R.
  *
  * @see Calculatable
- * @see Results
  */
 public class LeastSquaresFitter {
     
@@ -46,8 +45,6 @@ public class LeastSquaresFitter {
      * 
      * @see ResultsTwoParamKdMaxObs
      * @see #makeArrayOfPresentationFit
-     * 
-     * @throws ArraysInvalidException if arrays have different lengths or duplicate data
      * 
      * @return a {@link ResultsTwoParamKdMaxObs} object with Kd, percent bound, and presentation fitting
      * 
