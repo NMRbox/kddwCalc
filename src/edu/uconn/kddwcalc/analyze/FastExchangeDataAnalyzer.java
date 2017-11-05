@@ -3,7 +3,7 @@ package edu.uconn.kddwcalc.analyze;
 import edu.uconn.kddwcalc.fitting.LeastSquaresFitter;
 import edu.uconn.kddwcalc.data.TitrationSeries;
 import edu.uconn.kddwcalc.data.Titration;
-import edu.uconn.kddwcalc.fitting.ResultsTwoParamKdMaxObs;
+import edu.uconn.kddwcalc.fitting.ResultsKdAndMaxObs;
 import edu.uconn.kddwcalc.gui.RawData;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,6 +23,11 @@ import java.util.stream.Collectors;
  */
 public class FastExchangeDataAnalyzer {
     
+    private static final String TWO_PARAM_BY_RESIDUE_DIRECTORY = "resultsByResidueTwoParam";
+        
+    private static final String ONE_PARAM_BY_RESIDUE_DIRECTORY = "resultsByResidueKdFixed";
+    
+    
     /**
      * Takes the user data in a {@link RawData} object, analyzes it and outputs the results to disk
      * 
@@ -37,7 +42,7 @@ public class FastExchangeDataAnalyzer {
         
         // figures out which Factory subclass to instantiate and then sorts
         //  
-        TitrationSeries series = FactoryMaker.createFactory(rawDataInstance.getType()) // returns AbsFactory subclass
+        TitrationSeries series = FactoryMaker.createFactory(rawDataInstance.getType()) // returns AbsFactory
                                              .sortDataFiles(rawDataInstance); // returns TitrationSeries
 
         // prints sorted data to disk
@@ -45,38 +50,44 @@ public class FastExchangeDataAnalyzer {
         
         // gets an object back containing Kd, max observable, and the presentation fit
         //    using the cumulative data
-        ResultsTwoParamKdMaxObs aggTwoParamResults = LeastSquaresFitter.fitTwoParamKdAndMaxObs(series);
+        ResultsKdAndMaxObs aggTwoParamResults = LeastSquaresFitter.fitTwoParamKdAndMaxObs(series);
         
         // uses the Kd from the aggregate two parameter fit and 
         //     finds the max observable in a one param fit (Kd fixed)
         double kd = aggTwoParamResults.getKd();
-        double[] boundCSPArrayByResidueWithFixedKd = getArrayOfCSPs(kd, series);
+        List<ResultsKdAndMaxObs> resultsByResidueFixedKd =
+            getResultsByResidueFixedKd(kd, series);
         
         // does a two parameter fitting for each residue
-        List<ResultsTwoParamKdMaxObs> twoParamResultsByResidue =
+        List<ResultsKdAndMaxObs> twoParamResultsByResidue =
             getTwoParamResultsByResidue(series);
         
         writeResultsToDisk(aggTwoParamResults,
-                           boundCSPArrayByResidueWithFixedKd, 
+                           resultsByResidueFixedKd, 
                            twoParamResultsByResidue,
                            rawDataInstance.getResultsFile());
         
     } // end method Analyze
     
     // 
-    private static void writeResultsToDisk(ResultsTwoParamKdMaxObs aggTwoParamResults,
-                                           double[] boundCSPArrayByResidue,
-                                           List<ResultsTwoParamKdMaxObs> twoParamResultsList,
+    private static void writeResultsToDisk(ResultsKdAndMaxObs aggTwoParamResults,
+                                           List<ResultsKdAndMaxObs> resultsByResidueFixedKd,
+                                           List<ResultsKdAndMaxObs> twoParamResultsList,
                                            File resultsFile) throws FileNotFoundException, IOException {
         
         try {
             
             writeCumulativeResults(resultsFile,
                                    aggTwoParamResults,
-                                   boundCSPArrayByResidue);
+                                   resultsByResidueFixedKd);
             
             writeTwoParamResultsByResidue(resultsFile,
-                                          twoParamResultsList);
+                                          twoParamResultsList,
+                                          TWO_PARAM_BY_RESIDUE_DIRECTORY);
+            
+            writeTwoParamResultsByResidue(resultsFile,
+                                          resultsByResidueFixedKd,
+                                          ONE_PARAM_BY_RESIDUE_DIRECTORY);
             
             writeKdsForEachResidueToSingleFile(resultsFile,
                                                twoParamResultsList);
@@ -88,17 +99,7 @@ public class FastExchangeDataAnalyzer {
         
     }
 
-    private static double[] getArrayOfCSPs(double kd, TitrationSeries series) {
-
-        return series.getListOfTitrations()
-                     .stream() // now have Stream<Titration>
-                     .mapToDouble((Titration titr) ->  {
-                         return LeastSquaresFitter.fitOneParamMaxObs(titr, kd);
-                     }) // now have DoubleStream
-                     .toArray();
-    }
-
-    private static List<ResultsTwoParamKdMaxObs> getTwoParamResultsByResidue(TitrationSeries series) {
+    private static List<ResultsKdAndMaxObs> getTwoParamResultsByResidue(TitrationSeries series) {
         return series.getListOfTitrations()
                      .stream() // have Stream<Titration>
                      .map(LeastSquaresFitter::fitTwoParamKdAndMaxObs)
@@ -108,8 +109,9 @@ public class FastExchangeDataAnalyzer {
     /**
      */
     private static void writeCumulativeResults(File resultsFile,
-                                               ResultsTwoParamKdMaxObs aggTwoParamResults,
-                                               double[] boundCSPArrayByResidue) throws FileNotFoundException {
+                                               ResultsKdAndMaxObs aggTwoParamResults,
+                                               List<ResultsKdAndMaxObs> resultsByResidueKdFixed) 
+                                    throws FileNotFoundException {
         
         try (Formatter output = new Formatter(resultsFile)) {
             
@@ -117,11 +119,24 @@ public class FastExchangeDataAnalyzer {
             aggTwoParamResults.toString());
         
             output.format("dw for fully bound:%n");    
-            Arrays.stream(boundCSPArrayByResidue)
-              .forEach(csp -> output.format("%.6f%n", csp));
+            
+            resultsByResidueKdFixed.stream()
+              .forEach(result -> output.format("%.6f%n", result.getMaxObservable()));
         }  
     } // end writeCumulativeResults
     /**
+     * 
+     * 
+     * @param resultsFile
+     * @param twoParamResultsList     /**
+     * 
+     * 
+     * @param resultsFile
+     * @param twoParamResultsList     /**
+     * 
+     * 
+     * @param resultsFile
+     * @param twoParamResultsList     /**
      * 
      * 
      * @param resultsFile
@@ -129,20 +144,19 @@ public class FastExchangeDataAnalyzer {
      */
     
     private static void writeTwoParamResultsByResidue(File resultsFile, 
-                                                      List<ResultsTwoParamKdMaxObs> twoParamResultsList) 
+                                                      List<ResultsKdAndMaxObs> twoParamResultsList,
+                                                      String newDirectoryName) 
                                                 throws IOException {
         
         // get the absolute path to where final results are written
         Path path = resultsFile.getAbsoluteFile().toPath();
         
         // create a new path below where results file goes
-        Path newPath = Paths.get(path.getParent().toString(), "individualResidueData");
+        Path newPath = Paths.get(path.getParent().toString(), newDirectoryName);
         
         // if this program was already run once, then the output data might
         // have already been written. this begins the process of deleting that data
         // by getting an array of the files inside
-        System.out.println(Files.exists(newPath));
-        
         if (Files.exists(newPath)) {
             Path[] oldFiles = Files.list(newPath).toArray(Path[]::new);
         
@@ -172,7 +186,7 @@ public class FastExchangeDataAnalyzer {
     } // end method writeTwoParamResultsByResidue 
 
     private static void writeKdsForEachResidueToSingleFile(File resultsFile, 
-                                                           List<ResultsTwoParamKdMaxObs> twoParamResultsList) 
+                                                           List<ResultsKdAndMaxObs> twoParamResultsList) 
                                                         throws FileNotFoundException {
         
         // create a new path below where results file goes
@@ -194,4 +208,15 @@ public class FastExchangeDataAnalyzer {
                                });
         }
    }
+
+    private static List<ResultsKdAndMaxObs> getResultsByResidueFixedKd(double kd, TitrationSeries series) {
+        
+        return series.getListOfTitrations()
+                     .stream()
+                     .map(titr -> LeastSquaresFitter.fitOneParamMaxObs(titr, kd))
+                     .collect(Collectors.toList());
+                     
+   }
+
+   
 } // end class FastExchangeDataAnalyzer

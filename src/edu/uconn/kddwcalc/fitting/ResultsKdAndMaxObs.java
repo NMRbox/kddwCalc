@@ -6,7 +6,7 @@ package edu.uconn.kddwcalc.fitting;
  * 
  * @author Alex R.
  */
-public class ResultsTwoParamKdMaxObs {
+public class ResultsKdAndMaxObs {
     
     private final double kd; 
     private final double maxObservable;
@@ -23,10 +23,10 @@ public class ResultsTwoParamKdMaxObs {
      * 
      * @see #makeCumResults()
      */
-    private ResultsTwoParamKdMaxObs(double kd, 
-                                    double maxObservable,
-                                    double[] expObservables,
-                                    double[][] presentationFit) {
+    private ResultsKdAndMaxObs(double kd, 
+                               double maxObservable,
+                               double[] expObservables,
+                               double[][] presentationFit) {
         this.kd = kd;
         this.maxObservable = maxObservable;
         this.expObservables = expObservables;
@@ -47,19 +47,19 @@ public class ResultsTwoParamKdMaxObs {
      * 
      * @return an instance of <code>AggResults</code>, (most likely for further processing)
      */
-    public static ResultsTwoParamKdMaxObs makeTwoParamResults(double kd, 
-                                                              double maxObservable,
-                                                              double[] expObservables,
-                                                              double[][] presentationFit) {
+    public static ResultsKdAndMaxObs makeTwoParamResults(double kd, 
+                                                         double maxObservable,
+                                                         double[] expObservables,
+                                                         double[][] presentationFit) {
         if (kd < 0 || maxObservable  < 0)
             throw new IllegalArgumentException("kd < 0 or percentBound < 0 (CumResults)");
 
         // TODO code validation for presentationFit a double[][]. must all be positive
 
-        return new ResultsTwoParamKdMaxObs(kd, 
-                                           maxObservable, 
-                                           expObservables,
-                                           presentationFit); 
+        return new ResultsKdAndMaxObs(kd, 
+                                      maxObservable, 
+                                      expObservables,
+                                      presentationFit); 
     }
 
     /**

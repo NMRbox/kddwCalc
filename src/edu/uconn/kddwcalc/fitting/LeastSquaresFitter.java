@@ -43,13 +43,13 @@ public class LeastSquaresFitter {
      * 
      * @param dataset a {@link edu.uconn.kddwcalc.data.Calculatable} object to fit
      * 
-     * @see ResultsTwoParamKdMaxObs
+     * @see ResultsKdAndMaxObs
      * @see #makeArrayOfPresentationFit
      * 
-     * @return a {@link ResultsTwoParamKdMaxObs} object with Kd, percent bound, and presentation fitting
+     * @return a {@link ResultsKdAndMaxObs} object with Kd, percent bound, and presentation fitting
      * 
      */
-    public static ResultsTwoParamKdMaxObs fitTwoParamKdAndMaxObs(Calculatable dataset)  {
+    public static ResultsKdAndMaxObs fitTwoParamKdAndMaxObs(Calculatable dataset)  {
         
         final double[] ligandConcs = dataset.getLigandConcs();
         final double[] receptorConcs = dataset.getReceptorConcs();
@@ -92,10 +92,10 @@ public class LeastSquaresFitter {
                                                                 maxObservable, 
                                                                 observables);
 
-        return ResultsTwoParamKdMaxObs.makeTwoParamResults(kd, 
-                                                           maxObservable, 
-                                                           observables,
-                                                           presentationFit);
+        return ResultsKdAndMaxObs.makeTwoParamResults(kd, 
+                                                      maxObservable, 
+                                                      observables,
+                                                      presentationFit);
     
     }
     
@@ -115,8 +115,8 @@ public class LeastSquaresFitter {
      * @return value of the total difference in the observable between free
      *  and fully bound
      */
-    public static double fitOneParamMaxObs(Calculatable dataset,
-                                           double kdFromTwoParamFit) {
+    public static ResultsKdAndMaxObs fitOneParamMaxObs(Calculatable dataset,
+                                                       double kdFromTwoParamFit) {
         
         final double[] ligandConcArray = dataset.getLigandConcs();
         final double[] receptorConcArray = dataset.getReceptorConcs();
@@ -157,7 +157,20 @@ public class LeastSquaresFitter {
         
         LeastSquaresOptimizer.Optimum optimum = buildAndGetOptimum(startingGuess, function, observables);
         
-        return optimum.getPoint().getEntry(0);
+        double maxObservable = optimum.getPoint().getEntry(0); // one parameter fit result
+        
+        double[][] presentationFit = 
+            makeArrayOfPresentationFit(ligandConcArray, 
+                                       receptorConcArray, 
+                                       kdFromTwoParamFit, 
+                                       maxObservable, 
+                                       observables);
+        
+        return ResultsKdAndMaxObs.makeTwoParamResults(kdFromTwoParamFit, 
+                                                      maxObservable, 
+                                                      observables, 
+                                                      presentationFit);
+            
     }
     
     
