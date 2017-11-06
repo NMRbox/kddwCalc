@@ -33,7 +33,14 @@ Some dialog windows are from ControlsFX
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
  
+****************************
+****************************
+****************************
+****************************
+
+
  Non-linear least squares fitting was performed using the Apache Commons Mathematics Libary:
+ 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
