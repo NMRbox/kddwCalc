@@ -1,5 +1,17 @@
 package edu.uconn.kddwcalc.fitting;
 
+import java.io.File; 
+import java.io.IOException;
+import java.util.Arrays;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.image.WritableImage;
+import javax.imageio.ImageIO;
+
 /**
  * A class which holds results from a two parameter fit of binding data. The two
  * parameters are (1) Kd and (2) the maximum observable at fully bound.
@@ -119,5 +131,56 @@ public class ResultsKdAndMaxObs {
         
         return string.toString();
     }
+    
+    public void writeFitImageToDisk(File file) throws IOException {
+        
+        int maxLigandRatio = 4; // TODO change
+        
+        // define axes
+        final NumberAxis xAxis = new NumberAxis(0, maxLigandRatio, 0.5);
+        final NumberAxis yAxis = new NumberAxis(0, 1, 0.25);
+        xAxis.setLabel("Ligand/Protein ratio");
+        yAxis.setLabel("Percent bound");
+        
+        
+        //creating the chart
+        final LineChart<Number,Number> lineChart = 
+                new LineChart<>(xAxis,yAxis);
+        
+        // if this is true, then the scene is only partially printed
+        lineChart.setAnimated(false);
+        
+        XYChart.Series expSeries = new XYChart.Series();
+        XYChart.Series modelSeries = new XYChart.Series();
+        
+        
+        Arrays.stream(presentationFit)
+              .forEach( (double[] line) -> {
+                  expSeries.getData().add(new XYChart.Data(line[0], line[2]));
+                  modelSeries.getData().add(new XYChart.Data(line[0], line[1]));
+              });//}); 
+        
+        
+        Scene scene  = new Scene(lineChart, 660, 600);
+        
+        scene.getStylesheets().add(
+            getClass().getResource("chartStyleSheet.css").toExternalForm());
+        
+        lineChart.getData().add(expSeries);
+        lineChart.getData().add(modelSeries);
+        
+        WritableImage image = lineChart.snapshot(new SnapshotParameters(), null);
+        
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+        } 
+        catch (IOException e) {
+            throw new IOException("Issue saving images of fits");
+                
+        }
+        
+    }
+    
+    
 }
 

@@ -2,7 +2,6 @@ package edu.uconn.kddwcalc.analyze;
 
 import edu.uconn.kddwcalc.fitting.LeastSquaresFitter;
 import edu.uconn.kddwcalc.data.TitrationSeries;
-import edu.uconn.kddwcalc.data.Titration;
 import edu.uconn.kddwcalc.fitting.ResultsKdAndMaxObs;
 import edu.uconn.kddwcalc.gui.RawData;
 import java.io.File;
@@ -11,7 +10,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,15 +21,12 @@ import java.util.stream.Collectors;
  */
 public class FastExchangeDataAnalyzer {
     
-    private static final String TWO_PARAM_BY_RESIDUE_DIRECTORY = "resultsByResidueTwoParam";
-        
+    private static final String TWO_PARAM_BY_RESIDUE_DIRECTORY = "resultsByResidueTwoParamFit";   
     private static final String ONE_PARAM_BY_RESIDUE_DIRECTORY = "resultsByResidueKdFixed";
     
     
     /**
      * Takes the user data in a {@link RawData} object, analyzes it and outputs the results to disk
-     * 
-     * 
      * 
      * @param rawDataInstance contains data from the user input
      * @throws IOException if unable to read/write files
@@ -42,15 +37,17 @@ public class FastExchangeDataAnalyzer {
         
         // figures out which Factory subclass to instantiate and then sorts
         //  
-        TitrationSeries series = FactoryMaker.createFactory(rawDataInstance.getType()) // returns AbsFactory
-                                             .sortDataFiles(rawDataInstance); // returns TitrationSeries
+        TitrationSeries series = 
+            FactoryMaker.createFactory(rawDataInstance.getType()) // returns AbsFactory
+                        .sortDataFiles(rawDataInstance); // returns TitrationSeries
 
         // prints sorted data to disk
         series.printTitrationSeries(rawDataInstance.getDataOutputFile());
         
         // gets an object back containing Kd, max observable, and the presentation fit
         //    using the cumulative data
-        ResultsKdAndMaxObs aggTwoParamResults = LeastSquaresFitter.fitTwoParamKdAndMaxObs(series);
+        ResultsKdAndMaxObs aggTwoParamResults = 
+            LeastSquaresFitter.fitTwoParamKdAndMaxObs(series);
         
         // uses the Kd from the aggregate two parameter fit and 
         //     finds the max observable in a one param fit (Kd fixed)
@@ -111,7 +108,7 @@ public class FastExchangeDataAnalyzer {
     private static void writeCumulativeResults(File resultsFile,
                                                ResultsKdAndMaxObs aggTwoParamResults,
                                                List<ResultsKdAndMaxObs> resultsByResidueKdFixed) 
-                                    throws FileNotFoundException {
+                                    throws FileNotFoundException, IOException {
         
         try (Formatter output = new Formatter(resultsFile)) {
             
@@ -123,21 +120,16 @@ public class FastExchangeDataAnalyzer {
             resultsByResidueKdFixed.stream()
               .forEach(result -> output.format("%.6f%n", result.getMaxObservable()));
         }  
+        
+        // create a new path below where results file goes
+        Path newPath = Paths.get(resultsFile.toPath().getParent().toString(), "finalFit.png");
+        
+        
+        aggTwoParamResults.writeFitImageToDisk(newPath.toFile());
+        
+        
     } // end writeCumulativeResults
     /**
-     * 
-     * 
-     * @param resultsFile
-     * @param twoParamResultsList     /**
-     * 
-     * 
-     * @param resultsFile
-     * @param twoParamResultsList     /**
-     * 
-     * 
-     * @param resultsFile
-     * @param twoParamResultsList     /**
-     * 
      * 
      * @param resultsFile
      * @param twoParamResultsList 
@@ -181,10 +173,15 @@ public class FastExchangeDataAnalyzer {
                                                   String.format("%s.txt", ctr)).toFile())) {
                 
                 output.format("%s", String.format(twoParamResultsList.get(ctr).toString())); 
-            }    
+            }
+            
+            twoParamResultsList.get(ctr)
+                               .writeFitImageToDisk(Paths.get(newPath.toFile().getAbsolutePath(), 
+                                                  String.format("%sFit.png", ctr)).toFile());
         }
     } // end method writeTwoParamResultsByResidue 
 
+    
     private static void writeKdsForEachResidueToSingleFile(File resultsFile, 
                                                            List<ResultsKdAndMaxObs> twoParamResultsList) 
                                                         throws FileNotFoundException {

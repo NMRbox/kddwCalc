@@ -110,10 +110,9 @@ public class LeastSquaresFitter {
      * element is the maximum observable (kd is fixed)
      * 
      * @param dataset data to fit maximum observable only. kd is set from global fit
-     * @param kdFromTwoParamFit The affinity constant (Kd)
+     * @param kdFromTwoParamFit The affinity constant (Kd) from cumulative fit
      * 
-     * @return value of the total difference in the observable between free
-     *  and fully bound
+     * @return object with results of fit
      */
     public static ResultsKdAndMaxObs fitOneParamMaxObs(Calculatable dataset,
                                                        double kdFromTwoParamFit) {
