@@ -1,6 +1,5 @@
 package edu.uconn.kddwcalc.fitting;
 
-import edu.uconn.kddwcalc.analyze.ArraysInvalidException;
 import edu.uconn.kddwcalc.analyze.DataArrayValidator;
 import edu.uconn.kddwcalc.data.Calculatable;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresBuilder;
