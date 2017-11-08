@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class TitrationSeries implements Calculatable {   
     
     private final List<Titration> listOfTitrations;
+    private static final String IDENTIFIER = "CumulativeFit";
     
     private TitrationSeries(List<Titration> titrationSeries) {
         
@@ -123,6 +124,11 @@ public class TitrationSeries implements Calculatable {
 
     public static TitrationSeries makeTitrationSeries(List<Titration> titrationSeries) {
         return new TitrationSeries(titrationSeries);
+    }
+
+    @Override
+    public String getIdentifier() {
+        return IDENTIFIER;
     }
     
     

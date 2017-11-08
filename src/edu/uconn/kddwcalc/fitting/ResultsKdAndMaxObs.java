@@ -1,8 +1,11 @@
 package edu.uconn.kddwcalc.fitting;
 
 import java.io.File; 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Formatter;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
@@ -24,6 +27,7 @@ public class ResultsKdAndMaxObs {
     private final double maxObservable;
     private final double[] expObservables;
     private final double[][] presentationFit;
+    private final String identifier;
 
     /**
      * Initializes an instance of AggResults with the results of least squares fitting of the cumulative CSP data
@@ -38,11 +42,13 @@ public class ResultsKdAndMaxObs {
     private ResultsKdAndMaxObs(double kd, 
                                double maxObservable,
                                double[] expObservables,
-                               double[][] presentationFit) {
+                               double[][] presentationFit,
+                               String identifier) {
         this.kd = kd;
         this.maxObservable = maxObservable;
         this.expObservables = expObservables;
         this.presentationFit = presentationFit;
+        this.identifier = identifier;
 
     }
 
@@ -62,7 +68,8 @@ public class ResultsKdAndMaxObs {
     public static ResultsKdAndMaxObs makeTwoParamResults(double kd, 
                                                          double maxObservable,
                                                          double[] expObservables,
-                                                         double[][] presentationFit) {
+                                                         double[][] presentationFit,
+                                                         String identifier) {
         if (kd < 0 || maxObservable  < 0)
             throw new IllegalArgumentException("kd < 0 or percentBound < 0 (CumResults)");
 
@@ -71,7 +78,8 @@ public class ResultsKdAndMaxObs {
         return new ResultsKdAndMaxObs(kd, 
                                       maxObservable, 
                                       expObservables,
-                                      presentationFit); 
+                                      presentationFit,
+                                      identifier); 
     }
 
     /**
@@ -112,7 +120,9 @@ public class ResultsKdAndMaxObs {
         
         StringBuilder string = new StringBuilder();
         
-        string.append(String.format("kd = %.2f uM%n", kd));
+        string.append(String.format("Titration: %s%n", getIdentifier()));
+        
+        string.append(String.format("kd = %.2f uM%n", getKd()));
         
         string.append(String.format("percent bound at final point = %.1f%n%n", 
                 expObservables[expObservables.length - 1] / maxObservable * 100));
@@ -132,7 +142,38 @@ public class ResultsKdAndMaxObs {
         return string.toString();
     }
     
+    public void writeFitImageToDiskInNewFile(File file) throws IOException {
+        
+        File newFile = Paths.get(file.getAbsolutePath(), 
+                                 String.format("%s.png", getIdentifier())).toFile();
+        
+        writeFitImageToDisk(newFile);
+    }
+    
     public void writeFitImageToDisk(File file) throws IOException {
+
+        WritableImage image = getAsWritableImage();
+        
+        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+        
+    }
+    
+    public void writeTextResultsToDisk(String pathString) throws FileNotFoundException {
+        
+        try (Formatter output = new Formatter(Paths.get(pathString, 
+                                                  String.format("%s.txt", getIdentifier())).toFile())){
+                
+            output.format("%s", String.format(toString())); 
+        }
+        
+    }
+    
+    
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    private WritableImage getAsWritableImage() {
         
         int maxLigandRatio = 4; // TODO change
         
@@ -169,18 +210,7 @@ public class ResultsKdAndMaxObs {
         lineChart.getData().add(expSeries);
         lineChart.getData().add(modelSeries);
         
-        WritableImage image = lineChart.snapshot(new SnapshotParameters(), null);
-        
-        try {
-            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-        } 
-        catch (IOException e) {
-            throw new IOException("Issue saving images of fits");
-                
-        }
-        
+        return lineChart.snapshot(new SnapshotParameters(), null);
     }
-    
-    
 }
 

@@ -94,7 +94,8 @@ public class LeastSquaresFitter {
         return ResultsKdAndMaxObs.makeTwoParamResults(kd, 
                                                       maxObservable, 
                                                       observables,
-                                                      presentationFit);
+                                                      presentationFit,
+                                                      dataset.getIdentifier());
     
     }
     
@@ -167,7 +168,8 @@ public class LeastSquaresFitter {
         return ResultsKdAndMaxObs.makeTwoParamResults(kdFromTwoParamFit, 
                                                       maxObservable, 
                                                       observables, 
-                                                      presentationFit);
+                                                      presentationFit,
+                                                      dataset.getIdentifier());
             
     }
     

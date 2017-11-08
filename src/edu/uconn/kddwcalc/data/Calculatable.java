@@ -31,4 +31,11 @@ public interface Calculatable {
      */
     public double[] getObservables();
     
+    /**
+     * 
+     * @return an identifier for this result (e.g. residue number)
+     * 
+     */
+    public String getIdentifier();
+    
 }

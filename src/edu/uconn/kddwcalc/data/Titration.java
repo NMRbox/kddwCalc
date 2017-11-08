@@ -20,6 +20,7 @@ public class Titration implements Calculatable {
     
     private final List<TitrationPoint> listOfPoints;
     private final double multiplier;
+    private final String identifier;
     
     /**
      * Initializes a {@link Titration} instance with a multiplier from the user. After this is 
@@ -27,10 +28,13 @@ public class Titration implements Calculatable {
      * 
      * @param multiplier the value from the user that indicates how to scale the two nuclei into 1H-ppm
      */
-    private Titration(List<TitrationPoint> listOfPoints, double multiplier) {
+    private Titration(List<TitrationPoint> listOfPoints, 
+                      double multiplier,
+                      String identifier) {
         
         this.listOfPoints = listOfPoints;
         this.multiplier = multiplier;
+        this.identifier = identifier;
     }
     
 //    /**
@@ -50,15 +54,17 @@ public class Titration implements Calculatable {
      * 
      * @param listOfPoints the experimental points
      * @param multiplier the scaling factor for the two dimensions
+     * @param identifier name this this data (e.g. residue number)
      * 
      * @return instance of <code>Titration</code> 
      */
     public static Titration makeTitration(List<TitrationPoint> listOfPoints,
-                                          double multiplier) {
+                                          double multiplier,
+                                          String identifier) {
         
         // TODO add some kind of validation here
         
-        return new Titration(listOfPoints, multiplier);
+        return new Titration(listOfPoints, multiplier, identifier);
     }
     
     /**
@@ -96,7 +102,7 @@ public class Titration implements Calculatable {
      * 
      * @return the chemical shift perturbations as 1H-ppm (because of scaling)
      */
-    public List<Double> getCSPsFrom2DPoints() {
+    public List<Double> getCSPsFrom2DPoints() {  // TODO change this to get double
         final List<Double> csps = new ArrayList<>();
         
         for(int ctr = 0; ctr < listOfPoints.size(); ctr++) {
@@ -130,10 +136,20 @@ public class Titration implements Calculatable {
      * @see TitrationSeries
      */
     public void printTitration(Formatter output) {
-        output.format("Titration with multiplier of %.5f%nCSPs: %s%n"
-            + "LigandConc     ReceptorConc    Resonance1      Resonance2%n", multiplier, getCSPsFrom2DPoints().toString());
+        output.format("Titration: %s%nMultiplier: %.5f%nCSPs: %s%n"
+            + "LigandConc     ReceptorConc    Resonance1      Resonance2%n",
+            getIdentifier(), getMultiplier(), getCSPsFrom2DPoints().toString());
         
         listOfPoints.stream() // results in a Stream<TitrationPoint>
                  .forEach(titrPoint -> output.format("%s%n", titrPoint.toString()));
+    }
+
+    private double getMultiplier() {
+        return multiplier;
+    }
+    
+    @Override
+    public String getIdentifier() {
+        return identifier;
     }
 }

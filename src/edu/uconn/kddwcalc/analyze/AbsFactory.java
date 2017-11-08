@@ -57,6 +57,9 @@ public abstract class AbsFactory {
             //    as long as there is more data in the first file.
             // each iteration of the while loop creates a full titration curve
             //    for a single residue
+            
+            int number = 0;
+            
             while(scanners.get(0).hasNext()) {
 
                 List<TitrationPoint> listOfPoints = new ArrayList<>();
@@ -75,8 +78,10 @@ public abstract class AbsFactory {
                 
                 
                 listOfTitration.add(Titration.makeTitration(listOfPoints, 
-                                                            dataObject.getMultiplier()));
-
+                                                            dataObject.getMultiplier(),
+                                                            String.valueOf(number)));
+                
+                number++;
             } 
             
             return TitrationSeries.makeTitrationSeries(listOfTitration);

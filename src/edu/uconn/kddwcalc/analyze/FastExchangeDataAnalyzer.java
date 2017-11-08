@@ -78,6 +78,9 @@ public class FastExchangeDataAnalyzer {
                                    aggTwoParamResults,
                                    resultsByResidueFixedKd);
             
+            writeKdsForEachResidueToSingleFile(resultsFile,
+                                               twoParamResultsList);
+            
             writeTwoParamResultsByResidue(resultsFile,
                                           twoParamResultsList,
                                           TWO_PARAM_BY_RESIDUE_DIRECTORY);
@@ -86,8 +89,7 @@ public class FastExchangeDataAnalyzer {
                                           resultsByResidueFixedKd,
                                           ONE_PARAM_BY_RESIDUE_DIRECTORY);
             
-            writeKdsForEachResidueToSingleFile(resultsFile,
-                                               twoParamResultsList);
+            
             
         }
         catch (FileNotFoundException e) {
@@ -115,19 +117,17 @@ public class FastExchangeDataAnalyzer {
             output.format("Results from cumulative fit:%n%n%s%n%n", 
             aggTwoParamResults.toString());
         
-            output.format("dw for fully bound:%n");    
+            output.format("dw for fully bound using global Kd:%n");    
             
             resultsByResidueKdFixed.stream()
-              .forEach(result -> output.format("%.6f%n", result.getMaxObservable()));
+              .forEach(result -> output.format("%4s:   %.6f%n", 
+                  result.getIdentifier(), result.getMaxObservable()));
         }  
         
         // create a new path below where results file goes
         Path newPath = Paths.get(resultsFile.toPath().getParent().toString(), "finalFit.png");
         
-        
         aggTwoParamResults.writeFitImageToDisk(newPath.toFile());
-        
-        
     } // end writeCumulativeResults
     /**
      * 
@@ -140,45 +140,20 @@ public class FastExchangeDataAnalyzer {
                                                       String newDirectoryName) 
                                                 throws IOException {
         
-        // get the absolute path to where final results are written
-        Path path = resultsFile.getAbsoluteFile().toPath();
+        Path newPath = makeDirectoryAndDeleteOld(resultsFile, newDirectoryName);
         
-        // create a new path below where results file goes
-        Path newPath = Paths.get(path.getParent().toString(), newDirectoryName);
+        twoParamResultsList.stream()
+                           .forEach(result -> { 
+                               try {
+                                   result.writeTextResultsToDisk(newPath.toFile().getAbsolutePath());
+                                   result.writeFitImageToDiskInNewFile(newPath.toFile());
+                                
+                               }
+                               catch (IOException e) {
+                                   System.out.println("Issue writing fit image to disk");
+                               }
+                           });
         
-        // if this program was already run once, then the output data might
-        // have already been written. this begins the process of deleting that data
-        // by getting an array of the files inside
-        if (Files.exists(newPath)) {
-            Path[] oldFiles = Files.list(newPath).toArray(Path[]::new);
-        
-            // take array of old files and delete
-            for (Path pth : oldFiles) {
-                Files.delete(pth);
-            } 
-            // delete the directory ending in "individualResidueData" if program
-            // was already executed
-            Files.deleteIfExists(newPath);
-        }
-        
-        
-        
-        // create directory where individual residue results will go
-        Files.createDirectory(newPath);
-        
-        // iterate through the individual residue data and write the disk
-        for (int ctr = 0; ctr < twoParamResultsList.size(); ctr++) {
-            
-            try (Formatter output = new Formatter(Paths.get(newPath.toFile().getAbsolutePath(), 
-                                                  String.format("%s.txt", ctr)).toFile())) {
-                
-                output.format("%s", String.format(twoParamResultsList.get(ctr).toString())); 
-            }
-            
-            twoParamResultsList.get(ctr)
-                               .writeFitImageToDisk(Paths.get(newPath.toFile().getAbsolutePath(), 
-                                                  String.format("%sFit.png", ctr)).toFile());
-        }
     } // end method writeTwoParamResultsByResidue 
 
     
@@ -196,12 +171,14 @@ public class FastExchangeDataAnalyzer {
                 + "values that seem way off may be subject to greater noise "
                 + "relative to signal%n%n"));
             
-            output.format(String.format("%10s%10s%n", "Kd (uM)", "dw" ));
+            output.format(String.format("%4s%11s%10s%n","ID", "Kd (uM)", "dw" ));
             
             twoParamResultsList.stream()
                                .forEach(result -> {
-                                   output.format(String.format("%10.2f%10.6f%n",
-                                       result.getKd(), result.getMaxObservable()));
+                                   output.format(String.format("%4s:%10.2f%10.6f%n",
+                                       result.getIdentifier(), 
+                                       result.getKd(), 
+                                       result.getMaxObservable()));
                                });
         }
    }
@@ -215,5 +192,17 @@ public class FastExchangeDataAnalyzer {
                      
    }
 
-   
+    private static Path makeDirectoryAndDeleteOld(File resultsFile, 
+                                                  String newDirectoryName) 
+                                              throws IOException {
+        
+        // get the absolute path to where final results are written
+        Path path = resultsFile.getAbsoluteFile().toPath();
+        
+        // create a new path below where results file goes
+        Path newPath = Paths.get(path.getParent().toString(), newDirectoryName); 
+        
+        Files.createDirectories(newPath);
+        return newPath;
+    }
 } // end class FastExchangeDataAnalyzer
