@@ -30,6 +30,8 @@ public class TitrationSeries implements Calculatable {
     private static final String IDENTIFIER = "CumulativeFit";
     private static final String SORT_PEAKLIST_FILE_NAME =
         "sortedPeakLists.txt";
+    private static final String IDENTIFIER_POINT_LIST = 
+        "identifierNumberList.txt";
     
     
     private TitrationSeries(List<Titration> titrationSeries) {
@@ -59,6 +61,29 @@ public class TitrationSeries implements Calculatable {
         catch(FileNotFoundException e) {
             throw new FileNotFoundException("Was an issue opening sortedData.txt");
         }
+        
+        Path identifierPath = Paths.get(resultsOverallDirectory.toAbsolutePath().toString(),
+            IDENTIFIER_POINT_LIST);
+        
+        try (Formatter output = new Formatter(identifierPath.toFile())) {
+            
+            output.format("Here are the numbers that identify each residue and the "
+                + "corresponding point in the spectrum for free receptor. This "
+                + "can be used to match the numbers with their assigned residues%n%n");
+            
+            listOfTitrations.stream()
+                            .forEach(titr -> {
+                                double[] freePoint = titr.getFreeReceptorPoint();
+                                output.format("%4s:  %8.3f%8.3f%n", 
+                                    titr.getIdentifier(),
+                                    freePoint[0],
+                                    freePoint[1]);
+                            });
+        }
+        catch(FileNotFoundException e) {
+            throw new FileNotFoundException("Was an issue opening identiferNumberList.txt");
+        }
+        
     }
 
     /**

@@ -69,7 +69,8 @@ public class FastExchangeDataAnalyzer {
         List<ResultsKdAndMaxObs> resultsByResidueFixedKd =
             getResultsByResidueFixedKd(kd, series);
         
-        // does a two parameter fitting for each residue
+        // does a two parameter fitting for each residue and returns the 
+        // results in a list 
         List<ResultsKdAndMaxObs> twoParamResultsByResidue =
             getTwoParamResultsByResidue(series);
         
