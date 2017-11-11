@@ -176,10 +176,10 @@ public class ResultsKdAndMaxObs {
 
     private WritableImage getAsWritableImage() {
         
-        int maxLigandRatio = 4; // TODO change
+        double maxLigandRatio = getPresentationFit()[getPresentationFit().length - 1][0]; // TODO change
         
         // define axes
-        final NumberAxis xAxis = new NumberAxis(0, maxLigandRatio, 0.5);
+        final NumberAxis xAxis = new NumberAxis(0, Math.ceil(maxLigandRatio), 0.5);
         final NumberAxis yAxis = new NumberAxis(0, 1, 0.25);
         xAxis.setLabel("Ligand/Protein ratio");
         yAxis.setLabel("Percent bound");
