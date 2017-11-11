@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,16 +41,15 @@ public class RawData implements Serializable {
     private final List<File> dataFiles;
     private final double[] ligandConcs;
     private final double[] receptorConcs;
-    private final double multiplier;
+    private final double scalingFactor;
     private final boolean resonanceReversal;
     private final TypesOfTitrations type;
-    private final File dataOutputFile;
-    private final File resultsFile;
+    private final File resultsDirectoryFile;
 
     
     /**
-     * Private seven-argument {@link RawData} constructor. Should only reach this point after quite a bit of validation has been
-     * done.
+     * Private seven-argument {@link RawData} constructor. Should only reach
+     * this point after quite a bit of validation has been done.
      * 
      * @param dataFiles Location on disk of peak list data from user.
      * @param ligandConcs Total ligand concentrations
@@ -68,16 +66,14 @@ public class RawData implements Serializable {
                     double multiplier, 
                     boolean resonanceReversal,
                     TypesOfTitrations type,
-                    File dataOutputFile,
-                    File resultsFile) {
+                    File resultsDirectoryPath) {
         this.dataFiles = dataFiles;
         this.ligandConcs = ligandConcs;
         this.receptorConcs = receptorConcs;
-        this.multiplier = multiplier;
+        this.scalingFactor = multiplier;
         this.resonanceReversal = resonanceReversal;
         this.type = type;
-        this.dataOutputFile = dataOutputFile;
-        this.resultsFile = resultsFile;
+        this.resultsDirectoryFile = resultsDirectoryPath;
     }
     
     /**
@@ -96,8 +92,7 @@ public class RawData implements Serializable {
      * @param multiplier A number to scale two different nuclei
      * @param resonanceReversal A flag that helps keep track of resonance ordering in data files
      * @param type which nuclei were observed in experiment. Affects validation
-     * @param dataOutputFile name and location to write sorted peak lists
-     * @param resultsFile name and location to write the results text file
+     * @param resultsDirectoryPath name and location to write the results text file
      * 
      * @return A {@link RawData} with unsorted peak lists and other info from user
      * 
@@ -112,8 +107,7 @@ public class RawData implements Serializable {
                                               String  multiplier, 
                                               boolean resonanceReversal,
                                               TypesOfTitrations type,
-                                              File dataOutputFile,
-                                              File resultsFile) 
+                                              File resultsDirectoryFile) 
                                               throws IOException, ArraysInvalidException {
         
         /*
@@ -164,7 +158,7 @@ public class RawData implements Serializable {
         
         }
         
-        if (type == null || dataOutputFile == null || resultsFile == null)
+        if (type == null || resultsDirectoryFile == null)
             throw new NullPointerException("null found when in RawData.createRawData");
         
         
@@ -175,15 +169,8 @@ public class RawData implements Serializable {
                            Double.valueOf(multiplier), 
                            resonanceReversal,
                            type,
-                           dataOutputFile, 
-                           resultsFile); 
+                           resultsDirectoryFile); 
     }
-    
-    
-    
-    
-    
-    
     
     /**
      * Gets the {@link java.nio.file.Path Path} for the location of the text files with the NMR chemical shift data.
@@ -213,13 +200,13 @@ public class RawData implements Serializable {
     }
     
     /**
-     * Get the multiplier, which is the value used to scale the two different nuclei. This value
+     * Get the getScalingFactor, which is the value used to scale the two different nuclei. This value
      * was provided by the user
      * 
-     * @return the multiplier value
+     * @return the getScalingFactor value
      */
-    public final Double getMultiplier() {
-        return multiplier;
+    public final Double getScalingFactor() {
+        return scalingFactor;
     }
     
     /**
@@ -245,21 +232,12 @@ public class RawData implements Serializable {
     }
     
     /**
-     * Gets the name/location where sorted peak lists will be written
-     * 
-     * @return the object containing name/location info
-     */
-    public final File getDataOutputFile() {
-        return dataOutputFile;
-    }
-    
-    /**
      * Gets the name/location where results will be written
      * 
      * @return the object containing name/location info
      */
-    public final File getResultsFile() {
-        return resultsFile;
+    public final File getResultsDirectoryFile() {
+        return resultsDirectoryFile;
     }
     
     /**
@@ -270,8 +248,8 @@ public class RawData implements Serializable {
      * list.
      */
     public final List<Path> getDataPaths() {
-        return new ArrayList<>(dataFiles.stream()
-                                        .map(File::toPath)
-                                        .collect(Collectors.toList()));
+        return dataFiles.stream()
+                        .map(File::toPath)
+                        .collect(Collectors.toList());
     }
 }

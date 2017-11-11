@@ -7,9 +7,12 @@ import edu.uconn.kddwcalc.gui.RawData;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Formatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +26,10 @@ public class FastExchangeDataAnalyzer {
     
     private static final String TWO_PARAM_BY_RESIDUE_DIRECTORY = "resultsByResidueTwoParamFit";   
     private static final String ONE_PARAM_BY_RESIDUE_DIRECTORY = "resultsByResidueKdFixed";
+    private static final String FINAL_CUMULATIVE_TXT_RESULTS = "finalResults.txt";
+    private static final String FINAL_CUMULATIVE_FIT = "finalFit.png";
+    private static final String LIST_TWO_PARAM_FIT_BY_RESIDUE = "listByResidueTwoParamFit.txt";
+    private static final String IDENTIFIER_MATCHING_LIST = "residueListWithFreePeaks.txt";
     
     
     /**
@@ -35,6 +42,13 @@ public class FastExchangeDataAnalyzer {
     public static void analyze(RawData rawDataInstance) 
         throws IOException, ArraysInvalidException {
         
+        Path resultsOverallDirectory = 
+            rawDataInstance.getResultsDirectoryFile().toPath().toAbsolutePath();
+        if (Files.exists(resultsOverallDirectory)) {
+            emptyResultsDirectory(resultsOverallDirectory);
+        }
+        Files.createDirectory(resultsOverallDirectory);
+        
         // figures out which Factory subclass to instantiate and then sorts
         //  
         TitrationSeries series = 
@@ -42,7 +56,7 @@ public class FastExchangeDataAnalyzer {
                         .sortDataFiles(rawDataInstance); // returns TitrationSeries
 
         // prints sorted data to disk
-        series.printTitrationSeries(rawDataInstance.getDataOutputFile());
+        series.printTitrationSeries(resultsOverallDirectory);
         
         // gets an object back containing Kd, max observable, and the presentation fit
         //    using the cumulative data
@@ -59,10 +73,13 @@ public class FastExchangeDataAnalyzer {
         List<ResultsKdAndMaxObs> twoParamResultsByResidue =
             getTwoParamResultsByResidue(series);
         
+        
+        // TODO add method to get identifiers and match to free receptor point
+        
         writeResultsToDisk(aggTwoParamResults,
                            resultsByResidueFixedKd, 
                            twoParamResultsByResidue,
-                           rawDataInstance.getResultsFile());
+                           resultsOverallDirectory);
         
     } // end method Analyze
     
@@ -70,32 +87,23 @@ public class FastExchangeDataAnalyzer {
     private static void writeResultsToDisk(ResultsKdAndMaxObs aggTwoParamResults,
                                            List<ResultsKdAndMaxObs> resultsByResidueFixedKd,
                                            List<ResultsKdAndMaxObs> twoParamResultsList,
-                                           File resultsFile) throws FileNotFoundException, IOException {
+                                           Path resultsOverallDirectory) 
+                                        throws FileNotFoundException, IOException {
         
-        try {
-            
-            writeCumulativeResults(resultsFile,
+            writeCumulativeResults(resultsOverallDirectory,
                                    aggTwoParamResults,
                                    resultsByResidueFixedKd);
             
-            writeKdsForEachResidueToSingleFile(resultsFile,
+            writeKdsForEachResidueToSingleFile(resultsOverallDirectory,
                                                twoParamResultsList);
             
-            writeTwoParamResultsByResidue(resultsFile,
+            writeTwoParamResultsByResidue(resultsOverallDirectory,
                                           twoParamResultsList,
                                           TWO_PARAM_BY_RESIDUE_DIRECTORY);
             
-            writeTwoParamResultsByResidue(resultsFile,
+            writeTwoParamResultsByResidue(resultsOverallDirectory,
                                           resultsByResidueFixedKd,
-                                          ONE_PARAM_BY_RESIDUE_DIRECTORY);
-            
-            
-            
-        }
-        catch (FileNotFoundException e) {
-            throw new FileNotFoundException("Was an issue opening the file to write results");
-        }
-        
+                                          ONE_PARAM_BY_RESIDUE_DIRECTORY);  
     }
 
     private static List<ResultsKdAndMaxObs> getTwoParamResultsByResidue(TitrationSeries series) {
@@ -107,12 +115,16 @@ public class FastExchangeDataAnalyzer {
     
     /**
      */
-    private static void writeCumulativeResults(File resultsFile,
+    private static void writeCumulativeResults(Path resultsOverallDirectory,
                                                ResultsKdAndMaxObs aggTwoParamResults,
                                                List<ResultsKdAndMaxObs> resultsByResidueKdFixed) 
                                     throws FileNotFoundException, IOException {
         
-        try (Formatter output = new Formatter(resultsFile)) {
+        Path thisPath = Paths.get(resultsOverallDirectory.toAbsolutePath().toString(),
+                                  FINAL_CUMULATIVE_TXT_RESULTS);
+        
+        
+        try (Formatter output = new Formatter(thisPath.toFile())) {
             
             output.format("Results from cumulative fit:%n%n%s%n%n", 
             aggTwoParamResults.toString());
@@ -124,10 +136,9 @@ public class FastExchangeDataAnalyzer {
                   result.getIdentifier(), result.getMaxObservable()));
         }  
         
-        // create a new path below where results file goes
-        Path newPath = Paths.get(resultsFile.toPath().getParent().toString(), "finalFit.png");
-        
-        aggTwoParamResults.writeFitImageToDisk(newPath.toFile());
+        aggTwoParamResults.writeFitImageInPassedPath(Paths.get(
+            resultsOverallDirectory.toAbsolutePath().toString(), 
+            FINAL_CUMULATIVE_FIT));
     } // end writeCumulativeResults
     /**
      * 
@@ -135,19 +146,20 @@ public class FastExchangeDataAnalyzer {
      * @param twoParamResultsList 
      */
     
-    private static void writeTwoParamResultsByResidue(File resultsFile, 
+    private static void writeTwoParamResultsByResidue(Path resultsOverallDirectory, 
                                                       List<ResultsKdAndMaxObs> twoParamResultsList,
                                                       String newDirectoryName) 
                                                 throws IOException {
         
-        Path newPath = makeDirectoryAndDeleteOld(resultsFile, newDirectoryName);
+        Path subDirectory = Paths.get(resultsOverallDirectory.toAbsolutePath().toString(),
+                                      newDirectoryName);
+        
+        Files.createDirectory(subDirectory);
         
         twoParamResultsList.stream()
                            .forEach(result -> { 
                                try {
-                                   result.writeTextResultsToDisk(newPath.toFile().getAbsolutePath());
-                                   result.writeFitImageToDiskInNewFile(newPath.toFile());
-                                
+                                   result.writeFitAndTextToDisk(subDirectory);
                                }
                                catch (IOException e) {
                                    System.out.println("Issue writing fit image to disk");
@@ -157,12 +169,13 @@ public class FastExchangeDataAnalyzer {
     } // end method writeTwoParamResultsByResidue 
 
     
-    private static void writeKdsForEachResidueToSingleFile(File resultsFile, 
+    private static void writeKdsForEachResidueToSingleFile(Path resultsOverallDirectory, 
                                                            List<ResultsKdAndMaxObs> twoParamResultsList) 
-                                                        throws FileNotFoundException {
+                                                        throws FileNotFoundException, IOException {
         
         // create a new path below where results file goes
-        Path newPath = Paths.get(resultsFile.toPath().getParent().toString(), "KdsByResidue.txt");
+        Path newPath = Paths.get(resultsOverallDirectory.toAbsolutePath().toString(), 
+                                 LIST_TWO_PARAM_FIT_BY_RESIDUE);
         
         try (Formatter output = new Formatter(newPath.toFile())) {
             
@@ -192,17 +205,29 @@ public class FastExchangeDataAnalyzer {
                      
    }
 
-    private static Path makeDirectoryAndDeleteOld(File resultsFile, 
-                                                  String newDirectoryName) 
-                                              throws IOException {
-        
-        // get the absolute path to where final results are written
-        Path path = resultsFile.getAbsoluteFile().toPath();
-        
-        // create a new path below where results file goes
-        Path newPath = Paths.get(path.getParent().toString(), newDirectoryName); 
-        
-        Files.createDirectories(newPath);
-        return newPath;
+    private static void emptyResultsDirectory(Path resultsOverallDirectory) 
+        throws IOException {
+    
+        Files.walkFileTree(resultsOverallDirectory, new SimpleFileVisitor<Path>() {
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                throws IOException {
+                Files.delete(file);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException e)
+                throws IOException {
+                if (e == null) {
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
+                } else {
+                    // directory iteration failed
+                    throw e;
+                }
+            }
+        });
     }
 } // end class FastExchangeDataAnalyzer

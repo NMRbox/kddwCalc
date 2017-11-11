@@ -12,7 +12,7 @@
    <children>
       <SplitPane dividerPositions="0.21401869158878506" prefHeight="767.0" prefWidth="1246.0">
          <items>
-            <VBox alignment="BOTTOM_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="627.0" prefWidth="225.0">
+            <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="627.0" prefWidth="225.0">
                <children>
                   <VBox fx:id="typeOfTitrVBox" alignment="CENTER_LEFT">
                      <children>
@@ -42,7 +42,7 @@
                         </RadioButton>
                      </children>
                      <padding>
-                        <Insets bottom="19.0" left="8.0" right="8.0" top="19.0" />
+                        <Insets bottom="30.0" left="8.0" right="8.0" top="30.0" />
                      </padding>
                   </VBox>
                   <VBox fx:id="orderVBox" alignment="CENTER_LEFT">
@@ -67,17 +67,17 @@
                         </RadioButton>
                      </children>
                      <padding>
-                        <Insets bottom="19.0" left="8.0" right="8.0" top="19.0" />
+                        <Insets bottom="30.0" left="8.0" right="8.0" top="30.0" />
                      </padding>
                   </VBox>
                   <VBox fx:id="multiplierVBox">
                      <children>
-                        <Label fx:id="multiplierLabel" text="Enter multiplier">
+                        <Label fx:id="scalingFactorLabel" text="Enter scaling factor">
                            <padding>
                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                            </padding>
                         </Label>
-                        <TextField fx:id="multiplierTextField" prefHeight="36.0" prefWidth="105.0" text="0.1">
+                        <TextField fx:id="scalingFactorTextField" prefHeight="36.0" prefWidth="105.0">
                            <padding>
                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                            </padding>
@@ -87,12 +87,12 @@
                         </TextField>
                      </children>
                      <padding>
-                        <Insets bottom="19.0" left="8.0" right="8.0" top="19.0" />
+                        <Insets bottom="30.0" left="8.0" right="8.0" top="30.0" />
                      </padding>
                   </VBox>
                   <VBox>
                      <children>
-                        <Button fx:id="dataOutputButton" mnemonicParsing="false" onAction="#dataOutputButtonPressed" styleClass="fileChooser" text="Choose data output...">
+                        <Button fx:id="resultsOutputButton" mnemonicParsing="false" onAction="#resultsOutputButtonPressed" styleClass="fileChooser" text="Choose results folder...">
                            <padding>
                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                            </padding>
@@ -103,7 +103,7 @@
                               <Insets bottom="4.0" left="8.0" right="8.0" />
                            </VBox.margin>
                         </Button>
-                        <TextField fx:id="dataOutputTextField" editable="false" prefHeight="36.0" prefWidth="167.0">
+                        <TextField fx:id="resultsOutputTextField" editable="false" prefHeight="36.0" prefWidth="167.0">
                            <padding>
                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                            </padding>
@@ -116,36 +116,7 @@
                         </TextField>
                      </children>
                      <padding>
-                        <Insets bottom="19.0" left="8.0" right="8.0" top="19.0" />
-                     </padding>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Button fx:id="resultsOutputButton" mnemonicParsing="false" onAction="#resultsOutputButtonPressed" styleClass="fileChooser" text="Choose results output...">
-                           <padding>
-                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                           </padding>
-                           <HBox.margin>
-                              <Insets right="4.0" />
-                           </HBox.margin>
-                           <VBox.margin>
-                              <Insets bottom="4.0" left="8.0" right="8.0" />
-                           </VBox.margin>
-                        </Button>
-                        <TextField fx:id="resultsOutputTextField" editable="false" prefHeight="36.0" prefWidth="190.0">
-                           <padding>
-                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                           </padding>
-                           <HBox.margin>
-                              <Insets left="4.0" />
-                           </HBox.margin>
-                           <VBox.margin>
-                              <Insets left="8.0" right="8.0" top="4.0" />
-                           </VBox.margin>
-                        </TextField>
-                     </children>
-                     <padding>
-                        <Insets bottom="19.0" left="8.0" right="8.0" top="19.0" />
+                        <Insets bottom="30.0" left="8.0" right="8.0" top="30.0" />
                      </padding>
                   </VBox>
                </children>

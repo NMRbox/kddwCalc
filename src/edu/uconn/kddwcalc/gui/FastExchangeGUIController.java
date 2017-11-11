@@ -3,7 +3,6 @@ package edu.uconn.kddwcalc.gui;
 import edu.uconn.kddwcalc.analyze.FastExchangeDataAnalyzer;
 import edu.uconn.kddwcalc.analyze.AbsFactory;
 import edu.uconn.kddwcalc.analyze.ArraysInvalidException;
-import edu.uconn.kddwcalc.fitting.LeastSquaresFitter;
 import edu.uconn.kddwcalc.data.TitrationSeries;
 import edu.uconn.kddwcalc.data.TypesOfTitrations;
 import java.io.File;
@@ -11,6 +10,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import java.util.Arrays;
 import java.util.FormatterClosedException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -113,8 +116,8 @@ public class FastExchangeGUIController {
     @FXML private TextField fileName15;
 
     // </editor-fold>
-    @FXML Label multiplierLabel;
-    @FXML TextField multiplierTextField;
+    @FXML Label scalingFactorLabel;
+    @FXML TextField scalingFactorTextField;
 
     @FXML Label typeOfTitrLabel;
     @FXML ToggleGroup typeOfTitrationToggleGroup;
@@ -126,9 +129,6 @@ public class FastExchangeGUIController {
     @FXML RadioButton orderNucleiFirstRadioButton;
     @FXML RadioButton orderNucleiSecondRadioButton;
 
-    @FXML Button dataOutputButton;
-    @FXML TextField dataOutputTextField;
-
     @FXML Button resultsOutputButton;
     @FXML TextField resultsOutputTextField;
 
@@ -139,8 +139,7 @@ public class FastExchangeGUIController {
     
     private static final double AMIDE_HSQC_DEFAULT_MULT = 0.10136;
     private static final double METHYL_HMQC_DEFAULT_MULT = 0.25143;
-    private static final String DEFAULT_OUTPUT_DATA_FILENAME = "sortedPeakLists.txt";
-    private static final String DEFAULT_OUTPUT_RESULTS_FILENAME = "finalResults.txt";
+    private static final String DEFAULT_OUTPUT_RESULTS_DIRECTORY_NAME = "Results";
     private static final int MAX_NUM_EXP_PTS = 15;
     private static final String AMIDE_FIRST_RADIO_BUTTON_MESSAGE = "Nitrogen Proton";
     private static final String AMIDE_SECOND_RADIO_BUTTON_MESSAGE = "Proton Nitrogen";
@@ -150,13 +149,12 @@ public class FastExchangeGUIController {
     private static final String METHYL_HMQC_LABEL = "1H-13C methyl HMQC";
 
     // its global because i cant figure out how to pass it to the analyze and save button handlers
-    private ReadOnlyObjectWrapper<File> wrappedDataOutputFile;
-    private ReadOnlyObjectWrapper<File> wrappedResultsOutputFile;
+    private ReadOnlyObjectWrapper<Path> wrappedResultsOutputFile;
     
     // creates a list with File objects that have references to null.
     // 
-    private final ObservableList<File> fileList = 
-            FXCollections.observableArrayList(new ArrayList<>(Arrays.asList(new File[15])));
+    private final ObservableList<Path> fileList = 
+            FXCollections.observableArrayList(new ArrayList<>(Arrays.asList(new Path[15])));
 
             
     private List<TextField> fileNameTextFieldList;
@@ -181,10 +179,8 @@ public class FastExchangeGUIController {
         ligandConcTextFieldList = compileLigandConcTextFields();
         receptorConcTextFieldList = compileReceptorConcTextFields();
 
-        File dataOutputFile = null;
-        File resultsOutputFile = null;
-        wrappedDataOutputFile = new ReadOnlyObjectWrapper<>(dataOutputFile, "wrappedDataOutputFile");
-        wrappedResultsOutputFile = new ReadOnlyObjectWrapper<>(resultsOutputFile, "wrappedResultsOutputFile");
+        Path resultsOutputPath = null;
+        wrappedResultsOutputFile = new ReadOnlyObjectWrapper<>(resultsOutputPath, "wrappedResultsOutputFile");
         
         fileNameTextFieldList = compileDataFileTextField();
 
@@ -208,15 +204,11 @@ public class FastExchangeGUIController {
         
         nucleiToggleGroup.selectToggle(orderNucleiFirstRadioButton);
         
-        multiplierTextField.setText(Double.toString(AMIDE_HSQC_DEFAULT_MULT));
+        scalingFactorTextField.setText(Double.toString(AMIDE_HSQC_DEFAULT_MULT));
 
-        dataOutputTextField.setText(DEFAULT_OUTPUT_DATA_FILENAME);
-        resultsOutputTextField.setText(DEFAULT_OUTPUT_RESULTS_FILENAME);
-
-        wrappedDataOutputFile.setValue(
-            new File(System.getProperty("user.home"), DEFAULT_OUTPUT_DATA_FILENAME));
-        wrappedResultsOutputFile.setValue(
-            new File(System.getProperty("user.home"), DEFAULT_OUTPUT_RESULTS_FILENAME));
+        resultsOutputTextField.setText(DEFAULT_OUTPUT_RESULTS_DIRECTORY_NAME);
+        wrappedResultsOutputFile.setValue(Paths.get(
+                System.getProperty("user.home"), DEFAULT_OUTPUT_RESULTS_DIRECTORY_NAME).getFileName());
         
         
         // make buttons to choose data files unlickable until. always allow 
@@ -248,35 +240,28 @@ public class FastExchangeGUIController {
      */
     private void initializeAllListeners() {
 
-        // if the name and location to write the sorted peak lists change, update the textfield below it
-        wrappedDataOutputFile.addListener((observableValue, oldValue, newValue) -> {
-            if (newValue != null)
-                dataOutputTextField.setText(newValue.getName());
-        });
-
         // if the name and location to write the results change, update the textfield below it
         wrappedResultsOutputFile.addListener((observableValue, oldValue, newValue) -> {
             if (newValue != null)
-                resultsOutputTextField.setText(newValue.getName());
+                resultsOutputTextField.setText(newValue.getFileName().toString());
         });
 
         // if the type of spectrum changes, change the labels for the 
         // order of nuclei to reflect the type of specrum chosen
-        typeOfTitrationToggleGroup.selectedToggleProperty().addListener(
-            (ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
+        typeOfTitrationToggleGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
 
                 switch ( (TypesOfTitrations) newValue.getUserData()) {
 
                     case AMIDEHSQC:
                         orderNucleiFirstRadioButton.setText(AMIDE_FIRST_RADIO_BUTTON_MESSAGE);
                         orderNucleiSecondRadioButton.setText(AMIDE_SECOND_RADIO_BUTTON_MESSAGE);
-                        multiplierTextField.setText(Double.toString(AMIDE_HSQC_DEFAULT_MULT));
+                        scalingFactorTextField.setText(Double.toString(AMIDE_HSQC_DEFAULT_MULT));
                         break;
 
                     case METHYLHMQC:
                         orderNucleiFirstRadioButton.setText(METHYL_FIRST_RADIO_BUTTON_MESSAGE);
                         orderNucleiSecondRadioButton.setText(METHYL_SECOND_RADIO_BUTTON_MESSAGE);
-                        multiplierTextField.setText(Double.toString(METHYL_HMQC_DEFAULT_MULT));
+                        scalingFactorTextField.setText(Double.toString(METHYL_HMQC_DEFAULT_MULT));
                         break;
 
                     default:
@@ -286,7 +271,7 @@ public class FastExchangeGUIController {
             });
         
         // so textFields update when files are set (either by chooser with button or loading from .ser file)
-        fileList.addListener(new ListChangeListener<File>() {
+        fileList.addListener(new ListChangeListener<Path>() {
             
             @Override
             public void onChanged(ListChangeListener.Change change) {
@@ -298,7 +283,7 @@ public class FastExchangeGUIController {
                     
                     if(fileList.get(ctr) != null) {
                         
-                        fileNameTextFieldList.get(ctr).setText(fileList.get(ctr).getName());
+                        fileNameTextFieldList.get(ctr).setText(fileList.get(ctr).getFileName().toString());
                         
                         if(!(ligandConcTextFieldList.get(ctr).equals(ligandConc1)))
                             ligandConcTextFieldList.get(ctr).setEditable(true);
@@ -378,11 +363,13 @@ public class FastExchangeGUIController {
         try {
             RawData instanceToSave = prepAndMakeRawDataObject();
         
-            File saveFile = useSaveChooser("Save Input Data", "inputDataForGUI.ser");
+            Optional<Path> saveFile = 
+                useSaveChooser("Save Input Data", "inputDataForGUI.ser");
 
-            if (saveFile != null) {
+            if (!saveFile.equals(Optional.empty())) {
 
-                try (ObjectOutputStream output = new ObjectOutputStream(Files.newOutputStream(saveFile.toPath()))) {
+                try (ObjectOutputStream output = 
+                    new ObjectOutputStream(Files.newOutputStream(saveFile.get()))) {
 
                     output.writeObject(instanceToSave);
 
@@ -416,19 +403,21 @@ public class FastExchangeGUIController {
     private void loadButtonPressed
     (ActionEvent event) throws IOException, ArraysInvalidException {
 
-        File openFile = useOpenChooser("Open Saved Data", "Serialized Files", "*.ser");
+        Optional<Path> openFile = useOpenChooser("Open Saved Data", "Serialized Files", "*.ser");
 
-        if (openFile != null) {
+        if (!openFile.equals(Optional.empty())) {
 
-            try (ObjectInputStream input = new ObjectInputStream(Files.newInputStream(openFile.toPath()))) {
+            try (ObjectInputStream input = 
+                new ObjectInputStream(Files.newInputStream(openFile.get()))) {
 
                 RawData savedData = (RawData) input.readObject();
 
-                // best way i could think of quickly to make this with least dependencies.
+                // best way i could think of quickly with least dependencies.
                 typeOfTitrationToggleGroup.selectToggle(
                     typeOfTitrationToggleGroup.getToggles()
                     .stream()
-                    .filter(toggle -> toggle.getUserData() == savedData.getType())
+                    .filter(toggle -> 
+                        toggle.getUserData() == savedData.getType())
                     .limit(1)
                     .findFirst()
                     .get());
@@ -436,22 +425,30 @@ public class FastExchangeGUIController {
                 nucleiToggleGroup.selectToggle(
                     nucleiToggleGroup.getToggles()
                     .stream()
-                    .filter(toggle -> (boolean) toggle.getUserData() == savedData.getResonanceReversal())
+                    .filter(toggle -> 
+                        (boolean) toggle.getUserData() == savedData.getResonanceReversal())
                     .limit(1)
                     .findFirst()
                     .get());
 
-                multiplierTextField.setText(savedData.getMultiplier().toString());
+                scalingFactorTextField.setText(
+                    savedData.getScalingFactor().toString());
 
                 // listeners update the corresponding textfields
-                wrappedDataOutputFile.setValue(savedData.getDataOutputFile());
-                wrappedResultsOutputFile.setValue(savedData.getResultsFile());
+                wrappedResultsOutputFile.setValue(
+                    savedData.getResultsDirectoryFile().toPath().toAbsolutePath());
 
-                fillProteinConcTextFields(savedData.getLigandConcs(), savedData.getReceptorConcs());
+                fillProteinConcTextFields(savedData.getLigandConcs(), 
+                                          savedData.getReceptorConcs());
 
                 
                 
-                List<File> savedFileList = savedData.getDataFiles();
+                List<Path> savedFileList = 
+                    savedData.getDataFiles()
+                             .stream()
+                             .map(File::toPath)
+                             .collect(Collectors.toList());
+                    
                 for(int ctr = 0; ctr < MAX_NUM_EXP_PTS; ctr++) {
                     if (ctr < savedFileList.size())
                         fileList.set(ctr, savedFileList.get(ctr));
@@ -460,8 +457,9 @@ public class FastExchangeGUIController {
                 }
 
 
-            } catch (IllegalArgumentException | NullPointerException | SecurityException |
-                NoSuchElementException | ClassCastException | IOException | ClassNotFoundException e) {
+            } catch (IllegalArgumentException | NullPointerException | 
+                SecurityException | NoSuchElementException | ClassCastException | 
+                IOException | ClassNotFoundException e) {
 
                 showExceptionDialog(e);
             }
@@ -511,14 +509,16 @@ public class FastExchangeGUIController {
      */
     private RawData prepAndMakeRawDataObject()throws IOException, ArraysInvalidException {
 
-        return RawData.createRawData(fileList, 
+        return RawData.createRawData(fileList.stream()
+                                             .filter(path -> path != null)
+                                             .map(Path::toFile)
+                                             .collect(Collectors.toList()), 
                                      ligandConcTextFieldList,
                                      receptorConcTextFieldList, 
-                                     multiplierTextField.getText(), 
+                                     scalingFactorTextField.getText(), 
                                      getResonanceReversal(),
                                      getTypeOfTitration(),
-                                     wrappedDataOutputFile.get(),
-                                     wrappedResultsOutputFile.get());
+                                     wrappedResultsOutputFile.get().toFile());
     }
 
     /**
@@ -537,18 +537,6 @@ public class FastExchangeGUIController {
     }
 
     /**
-     * Allows the user to choose a file to write the sorted peak lists.
-     * Inspection of this would make an error obvious.
-     *
-     * @param event the {@link ActionEvent} that occurred
-     */
-    @FXML
-    private void dataOutputButtonPressed(ActionEvent event) {
-
-        wrappedDataOutputFile.setValue(useSaveChooser("Save Data", DEFAULT_OUTPUT_DATA_FILENAME));
-    }
-
-    /**
      * Allows the user to choose a file to write the final results
      *
      * @param event the {@link ActionEvent} that occurred
@@ -556,7 +544,12 @@ public class FastExchangeGUIController {
     @FXML
     private void resultsOutputButtonPressed(ActionEvent event) {
 
-        wrappedResultsOutputFile.setValue(useSaveChooser("Save Results", DEFAULT_OUTPUT_RESULTS_FILENAME));
+        Optional<Path> path = useSaveChooser("Save Results", DEFAULT_OUTPUT_RESULTS_DIRECTORY_NAME);
+        
+        if (!path.equals(Optional.empty())) {
+             wrappedResultsOutputFile.setValue(path.get());
+        }
+       
     }
 
     /**
@@ -579,91 +572,106 @@ public class FastExchangeGUIController {
     @FXML
     private void Button1pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        this.fileList.set(0, chooser.showOpenDialog(null));
+        this.fileList.set(
+            0, chooser.showOpenDialog(null).toPath().toAbsolutePath());
     }
 
     @FXML
     private void Button2pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        fileList.set(1, chooser.showOpenDialog(null));
+        fileList.set(
+            1, chooser.showOpenDialog(null).toPath().toAbsolutePath());
     }
 
     @FXML
     private void Button3pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        fileList.set(2, chooser.showOpenDialog(null));
+        fileList.set(
+            2, chooser.showOpenDialog(null).toPath().toAbsolutePath());
     }
 
     @FXML
     private void Button4pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        fileList.set(3, chooser.showOpenDialog(null));
+        fileList.set(
+            3, chooser.showOpenDialog(null).toPath().toAbsolutePath());
     }
 
     @FXML
     private void Button5pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        fileList.set(4, chooser.showOpenDialog(null));
+        fileList.set(
+            4, chooser.showOpenDialog(null).toPath().toAbsolutePath());
     }
 
     @FXML
     private void Button6pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        fileList.set(5, chooser.showOpenDialog(null));
+        fileList.set(
+            5, chooser.showOpenDialog(null).toPath().toAbsolutePath());
     }
 
     @FXML
     private void Button7pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        fileList.set(6, chooser.showOpenDialog(null));
+        fileList.set(
+            6, chooser.showOpenDialog(null).toPath().toAbsolutePath());
     }
 
     @FXML
     private void Button8pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        fileList.set(7, chooser.showOpenDialog(null));
+        fileList.set(
+            7, chooser.showOpenDialog(null).toPath().toAbsolutePath());
     }
 
     @FXML
     private void Button9pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        fileList.set(8, chooser.showOpenDialog(null));
+        fileList.set(
+            8, chooser.showOpenDialog(null).toPath().toAbsolutePath());
     }
 
     @FXML
     private void Button10pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        fileList.set(9, chooser.showOpenDialog(null));
+        fileList.set(
+            9, chooser.showOpenDialog(null).toPath().toAbsolutePath());
     }
 
     @FXML
     private void Button11pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        fileList.set(10, chooser.showOpenDialog(null));
+        fileList.set(
+            10, chooser.showOpenDialog(null).toPath().toAbsolutePath());
     }
 
     @FXML
     private void Button12pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        fileList.set(11, chooser.showOpenDialog(null));
+        fileList.set(
+            11, chooser.showOpenDialog(null).toPath().toAbsolutePath());
     }
 
     @FXML
     private void Button13pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        fileList.set(12, chooser.showOpenDialog(null));
+        fileList.set(
+            12, chooser.showOpenDialog(null).toPath().toAbsolutePath());
     }
 
     @FXML
     private void Button14pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        fileList.set(13, chooser.showOpenDialog(null));
+        fileList.set(
+            13, chooser.showOpenDialog(null).toPath().toAbsolutePath());
     }
 
     @FXML
     private void Button15pressed(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        fileList.set(14, chooser.showOpenDialog(null));
+        fileList.set(
+            14, chooser.showOpenDialog(null).toPath().toAbsolutePath());
     }
     // </editor-fold>
 
@@ -745,17 +753,6 @@ public class FastExchangeGUIController {
     }
 
     /**
-     * Determines whether the user has chosen where to write the sorted data and
-     * final results
-     *
-     * @return <code>true</code> if the user has specified where to write data,
-     * otherwise <code>false</code>
-     */
-    private boolean isOutputFilesNull() {
-        return (wrappedDataOutputFile.get() == null || wrappedResultsOutputFile.get() == null);
-    }
-
-    /**
      * Shows an exception dialog from ControlsFX with the message from the
      * parameter
      *
@@ -783,7 +780,7 @@ public class FastExchangeGUIController {
      * @return the name and location where the data will be saved which is
      * chosen from {@link FileChooser}
      */
-    private File useSaveChooser(String title, String defaultFileName) {
+    private Optional<Path> useSaveChooser(String title, String defaultFileName) {
 
         FileChooser chooser = new FileChooser();
         chooser.setTitle((title));
@@ -791,7 +788,13 @@ public class FastExchangeGUIController {
 
         File file = chooser.showSaveDialog(null);
 
-        return file;
+        Optional<Path> returnOptional = Optional.empty();
+        
+        if (file != null) {
+            returnOptional = Optional.of(file.toPath().toAbsolutePath());
+        }
+        
+        return returnOptional;
     }
 
     /**
@@ -802,7 +805,7 @@ public class FastExchangeGUIController {
      * @return the name and location chosen by the user in the {link
      * FileChooser}
      */
-    private File useOpenChooser(String title, String extTitle, String extFilter) {
+    private Optional<Path> useOpenChooser(String title, String extTitle, String extFilter) {
 
         FileChooser chooser = new FileChooser();
         chooser.setTitle((title));
@@ -812,7 +815,13 @@ public class FastExchangeGUIController {
 
         File file = chooser.showOpenDialog(null);
 
-        return file;
+        Optional<Path> returnOptional = Optional.empty();
+        
+        if (file != null) {
+            returnOptional = Optional.of(file.toPath().toAbsolutePath());
+        }
+        
+        return returnOptional;
     }
 
     /**
@@ -853,12 +862,6 @@ public class FastExchangeGUIController {
      */
     private void setTooltips() {
         
-        dataOutputButton.setTooltip(
-            new Tooltip("Press to select name and location where sorted peak lists will be saved"));
-        
-        dataOutputTextField.setTooltip(
-            new Tooltip("Name of file where sorted peak lists will be saved"));
-        
         resultsOutputButton.setTooltip(
             new Tooltip("Press to select name and location where results will be saved"));
         
@@ -879,7 +882,6 @@ public class FastExchangeGUIController {
             new Tooltip("Press to analyze data. This includes validation and sorting.\n"
                 + "Data and results will be saved to disk in the locations indicated"));
         
-        
         Tooltip typeTooltip = new Tooltip("Select type of experiment performed.\n"
             + "This will affect validation");
         
@@ -898,8 +900,8 @@ public class FastExchangeGUIController {
         Tooltip multiplierTooltip = new Tooltip("Enter the value that will be used two scale the two nuclei.\n"
             + "Note how the default values scale by gyromagnetic ratio");
         
-        multiplierLabel.setTooltip(multiplierTooltip);
-        multiplierTextField.setTooltip(multiplierTooltip);
+        scalingFactorLabel.setTooltip(multiplierTooltip);
+        scalingFactorTextField.setTooltip(multiplierTooltip);
         
         
         ligandConcTextFieldList.stream()
@@ -924,7 +926,7 @@ public class FastExchangeGUIController {
 } // end class FastExchangeGUIController
  
 
-
+// The exception dialog was from ControlsFX
 /**
  * Copyright (c) 2013, 2014, ControlsFX
  * All rights reserved.

@@ -3,6 +3,7 @@ package edu.uconn.kddwcalc.fitting;
 import java.io.File; 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Formatter;
@@ -142,26 +143,26 @@ public class ResultsKdAndMaxObs {
         return string.toString();
     }
     
-    public void writeFitImageToDiskInNewFile(File file) throws IOException {
-        
-        File newFile = Paths.get(file.getAbsolutePath(), 
-                                 String.format("%s.png", getIdentifier())).toFile();
-        
-        writeFitImageToDisk(newFile);
-    }
-    
-    public void writeFitImageToDisk(File file) throws IOException {
-
+    public void writeFitImageInPassedPath(Path path) throws IOException {
         WritableImage image = getAsWritableImage();
         
-        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", path.toFile());
+    } 
+    
+    public void writeFitImageToDisk(Path path) throws IOException {
+        
+        Path filePath = Paths.get(path.toAbsolutePath().toString(),
+                                  String.format("%s.png", getIdentifier()));
+
+        writeFitImageInPassedPath(filePath);
         
     }
     
-    public void writeTextResultsToDisk(String pathString) throws FileNotFoundException {
+    public void writeTextResultsToDisk(Path path) throws FileNotFoundException {
         
-        try (Formatter output = new Formatter(Paths.get(pathString, 
-                                                  String.format("%s.txt", getIdentifier())).toFile())){
+        try (Formatter output = 
+            new Formatter(Paths.get(path.toAbsolutePath().toString(), 
+                                    String.format("%s.txt", getIdentifier())).toFile())){
                 
             output.format("%s", String.format(toString())); 
         }
@@ -212,5 +213,14 @@ public class ResultsKdAndMaxObs {
         
         return lineChart.snapshot(new SnapshotParameters(), null);
     }
+    
+    
+    
+    public void writeFitAndTextToDisk(Path path) throws IOException {
+        writeFitImageToDisk(path);
+        writeTextResultsToDisk(path);
+    }
+    
+    
 }
 

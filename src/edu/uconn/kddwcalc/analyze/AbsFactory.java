@@ -58,7 +58,7 @@ public abstract class AbsFactory {
             // each iteration of the while loop creates a full titration curve
             //    for a single residue
             
-            int number = 0;
+            int number = 1;
             
             while(scanners.get(0).hasNext()) {
 
@@ -78,7 +78,7 @@ public abstract class AbsFactory {
                 
                 
                 listOfTitration.add(Titration.makeTitration(listOfPoints, 
-                                                            dataObject.getMultiplier(),
+                                                            dataObject.getScalingFactor(),
                                                             String.valueOf(number)));
                 
                 number++;

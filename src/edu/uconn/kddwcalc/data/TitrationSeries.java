@@ -2,6 +2,8 @@ package edu.uconn.kddwcalc.data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
@@ -24,7 +26,11 @@ import java.util.stream.Collectors;
 public class TitrationSeries implements Calculatable {   
     
     private final List<Titration> listOfTitrations;
+    
     private static final String IDENTIFIER = "CumulativeFit";
+    private static final String SORT_PEAKLIST_FILE_NAME =
+        "sortedPeakLists.txt";
+    
     
     private TitrationSeries(List<Titration> titrationSeries) {
         
@@ -34,12 +40,16 @@ public class TitrationSeries implements Calculatable {
     /**
      * Prints a text 
      * 
-     * @param file where the sorted peak lists will be written 
+     * @param resultsOverallDirectory where the sorted peak lists will be written 
      * 
      * @throws FileNotFoundException if problems occur when opening sortedData.txt
      */
-    public void printTitrationSeries(File file) throws FileNotFoundException {
-        try (Formatter output = new Formatter(file)) {
+    public void printTitrationSeries(Path resultsOverallDirectory) throws FileNotFoundException {
+        
+        Path path = Paths.get(resultsOverallDirectory.toAbsolutePath().toString(),
+            SORT_PEAKLIST_FILE_NAME);
+        
+        try (Formatter output = new Formatter(path.toFile())) {
             listOfTitrations.stream()
                        .forEach(titr -> {
                            titr.printTitration(output);

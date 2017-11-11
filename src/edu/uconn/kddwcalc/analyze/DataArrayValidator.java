@@ -1,6 +1,6 @@
 package edu.uconn.kddwcalc.analyze;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,21 +38,21 @@ public class DataArrayValidator {
      * Tests to make sure the user inputted an equal number of ligand concentrations, receptor concentrations, and
      * peak list files with chemical shifts. 
      * 
-     * @param fileList peak lists
+     * @param pathList peak lists
      * @param ligandConcArray ligand concentrations
      * @param receptorConcArray receptor concentrations
      * 
      * @return true if all three argument {@link List} objects have the same length 
      */
-    public static boolean isListLengthsAllEqual(List<File> fileList, 
+    public static <T> boolean isListLengthsAllEqual(List<T> list, 
                                                 double[] ligandConcArray,
                                                 double[] receptorConcArray) {
         
-        return (fileList.size()       ==  ligandConcArray.length
+        return (list.size()       ==  ligandConcArray.length
             &&  ligandConcArray.length ==  receptorConcArray.length
-            &&  fileList.size()       ==  receptorConcArray.length)
+            &&  list.size()       ==  receptorConcArray.length)
             && isValid(ligandConcArray, receptorConcArray)
-            && !isFileDuplicated(fileList);
+            && !isFileDuplicated(list);
     }
     
     /**
@@ -103,15 +103,15 @@ public class DataArrayValidator {
     /**
      * Checks if the same peak list file was added twice by the user
      * 
-     * @param fileList peak list files. cant be duplicated
+     * @param pathList peak list files. cant be duplicated
      * 
      * @return true if a file is duplicated, false otherwise (hope to return false)
      */
-    private static boolean isFileDuplicated(List<File> fileList) {
+    private static <T> boolean isFileDuplicated(List<T> pathList) {
         
         boolean isFileDuplicates = true;
         
-        if (fileList.stream().distinct().count() == fileList.size())
+        if (pathList.stream().distinct().count() == pathList.size())
             isFileDuplicates = false;
         
         return isFileDuplicates;
