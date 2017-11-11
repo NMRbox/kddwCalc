@@ -92,7 +92,7 @@ public class RawData implements Serializable {
      * @param multiplier A number to scale two different nuclei
      * @param resonanceReversal A flag that helps keep track of resonance ordering in data files
      * @param type which nuclei were observed in experiment. Affects validation
-     * @param resultsDirectoryPath name and location to write the results text file
+     * @param resultsDirectoryFile name and location to write the results text file
      * 
      * @return A {@link RawData} with unsorted peak lists and other info from user
      * 

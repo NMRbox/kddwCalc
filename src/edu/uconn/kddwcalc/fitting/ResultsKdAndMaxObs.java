@@ -1,6 +1,5 @@
 package edu.uconn.kddwcalc.fitting;
 
-import java.io.File; 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -61,6 +60,7 @@ public class ResultsKdAndMaxObs {
      * @param maxObservable the percentage of receptor bound at the highest point
      * @param expObservables an array of experimental data as (point - point0)
      * @param presentationFit [x,y] coordinates as [ligand ratio, percent bound] for publication figure
+     * @param identifier a number gives to each residue. its not the assigned residue number
      * 
      * @see LeastSquaresFitter#fitTwoParamKdAndMaxObs
      * 

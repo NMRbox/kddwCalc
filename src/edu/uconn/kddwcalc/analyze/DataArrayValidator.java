@@ -38,7 +38,8 @@ public class DataArrayValidator {
      * Tests to make sure the user inputted an equal number of ligand concentrations, receptor concentrations, and
      * peak list files with chemical shifts. 
      * 
-     * @param pathList peak lists
+     * @param <T> any object, its the list length that matters
+     * @param list the list that must be the same length as the arrays
      * @param ligandConcArray ligand concentrations
      * @param receptorConcArray receptor concentrations
      * 

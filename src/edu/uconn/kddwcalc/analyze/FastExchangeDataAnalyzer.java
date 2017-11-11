@@ -4,7 +4,6 @@ import edu.uconn.kddwcalc.fitting.LeastSquaresFitter;
 import edu.uconn.kddwcalc.data.TitrationSeries;
 import edu.uconn.kddwcalc.fitting.ResultsKdAndMaxObs;
 import edu.uconn.kddwcalc.gui.RawData;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -19,7 +18,10 @@ import java.util.stream.Collectors;
 
 
 /**
- *
+ * Static method <code>Analyze</code> take the data, sorts it, creates the results,
+ *  and then prints all results to disk.
+ *  
+ * 
  * @author Rizzo
  */
 public class FastExchangeDataAnalyzer {
@@ -50,7 +52,6 @@ public class FastExchangeDataAnalyzer {
         Files.createDirectory(resultsOverallDirectory);
         
         // figures out which Factory subclass to instantiate and then sorts
-        //  
         TitrationSeries series = 
             FactoryMaker.createFactory(rawDataInstance.getType()) // returns AbsFactory
                         .sortDataFiles(rawDataInstance); // returns TitrationSeries
@@ -74,9 +75,6 @@ public class FastExchangeDataAnalyzer {
         List<ResultsKdAndMaxObs> twoParamResultsByResidue =
             getTwoParamResultsByResidue(series);
         
-        
-        // TODO add method to get identifiers and match to free receptor point
-        
         writeResultsToDisk(aggTwoParamResults,
                            resultsByResidueFixedKd, 
                            twoParamResultsByResidue,
@@ -84,7 +82,7 @@ public class FastExchangeDataAnalyzer {
         
     } // end method Analyze
     
-    // 
+    // writes all results to disk. 
     private static void writeResultsToDisk(ResultsKdAndMaxObs aggTwoParamResults,
                                            List<ResultsKdAndMaxObs> resultsByResidueFixedKd,
                                            List<ResultsKdAndMaxObs> twoParamResultsList,
@@ -115,6 +113,13 @@ public class FastExchangeDataAnalyzer {
     }
     
     /**
+     * 
+     * @param resultsOverallDirectory
+     * @param aggTwoParamResults
+     * @param resultsByResidueKdFixed 
+     * 
+     * @throws FileNotFoundException
+     * @throws IOException 
      */
     private static void writeCumulativeResults(Path resultsOverallDirectory,
                                                ResultsKdAndMaxObs aggTwoParamResults,
@@ -141,12 +146,15 @@ public class FastExchangeDataAnalyzer {
             resultsOverallDirectory.toAbsolutePath().toString(), 
             FINAL_CUMULATIVE_FIT));
     } // end writeCumulativeResults
+    
     /**
      * 
-     * @param resultsFile
-     * @param twoParamResultsList 
+     * @param resultsOverallDirectory the directory enclosing newDirectoryName
+     * @param twoParamResultsList the results to write out
+     * @param newDirectoryName subdirectory name where results will be written into
+     * 
+     * @throws IOException 
      */
-    
     private static void writeTwoParamResultsByResidue(Path resultsOverallDirectory, 
                                                       List<ResultsKdAndMaxObs> twoParamResultsList,
                                                       String newDirectoryName) 
@@ -170,6 +178,15 @@ public class FastExchangeDataAnalyzer {
     } // end method writeTwoParamResultsByResidue 
 
     
+    /**
+     * Writes the Kd and maximum observable at fully bound into a single file.
+     * 
+     * @param resultsOverallDirectory where to write the data
+     * @param twoParamResultsList the results to write out
+     * 
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     private static void writeKdsForEachResidueToSingleFile(Path resultsOverallDirectory, 
                                                            List<ResultsKdAndMaxObs> twoParamResultsList) 
                                                         throws FileNotFoundException, IOException {
@@ -197,6 +214,15 @@ public class FastExchangeDataAnalyzer {
         }
    }
 
+    /**
+     * Takes the global Kd from the cumulative fit and fits each residue on an
+     * individual basis with the maximum observable at fully bound as the only
+     * parameter
+     * 
+     * @param kd the Kd from the global fit that will be used in one param fitting
+     * @param series the data to fit
+     * @return 
+     */
     private static List<ResultsKdAndMaxObs> getResultsByResidueFixedKd(double kd, TitrationSeries series) {
         
         return series.getListOfTitrations()
@@ -206,6 +232,15 @@ public class FastExchangeDataAnalyzer {
                      
    }
 
+    /**
+     * Deletes previous results if the user has chosen to write results into a
+     * directory that already exists.
+     * 
+     * @param resultsOverallDirectory the directory containing previous results
+     *                                that will be deleted
+     * 
+     * @throws IOException if an Exception occurs during deletion
+     */
     private static void emptyResultsDirectory(Path resultsOverallDirectory) 
         throws IOException {
     

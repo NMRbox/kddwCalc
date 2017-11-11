@@ -1,8 +1,7 @@
 /**
- * Provides the classes necessary to process a {@link edu.uconn.kddwcalc.gui.RawData} object and 
- * get a {@link edu.uconn.kddwcalc.data.TitrationSeries} object.
- * 
- * Creation of the {@link edu.uconn.kddwcalc.data.TitrationSeries} object is done using the Abstract Factory pattern
+ * Provides the classes necessary to process a {@link edu.uconn.kddwcalc.gui.RawData} 
+ * object, get a {@link edu.uconn.kddwcalc.data.TitrationSeries} object, fit 
+ * using Apache Commons Math Library and then write results to disk.
  * 
  * @author Alex R.
  * 
