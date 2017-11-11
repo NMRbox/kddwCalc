@@ -17,7 +17,7 @@
                   <Image url="@loadingScreen.jpg" />
                </image>
             </ImageView>
-            <Label fx:id="programTitleLabel" layoutX="49.0" layoutY="34.0" prefHeight="59.0" prefWidth="297.0" text="KdCalc 1.0" textFill="WHITE">
+            <Label fx:id="programTitleLabel" layoutX="49.0" layoutY="34.0" prefHeight="59.0" prefWidth="297.0" text="KdCalc" textFill="WHITE">
                <font>
                   <Font name="System Bold Italic" size="10.0" />
                </font>
@@ -27,7 +27,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="myNameLabel" layoutX="74.0" layoutY="86.0" prefHeight="59.0" prefWidth="297.0" text="By Alex R." textFill="WHITE">
+            <Label fx:id="myNameLabel" layoutX="82.0" layoutY="86.0" prefHeight="59.0" prefWidth="297.0" text="By Alex R." textFill="WHITE">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>

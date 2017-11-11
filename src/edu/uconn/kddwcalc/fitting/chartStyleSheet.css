@@ -34,11 +34,11 @@ and open the template in the editor.
 
 /*  changes size of chart title, does work */
 .chart-title {
-   -fx-font: 12pt sans-serif;
+   -fx-font: 12pt Arial;
 }
 
 .axis {
-   -fx-tick-label-font: 12pt sans-serif;
+   -fx-tick-label-font: 12pt Arial;
    -fx-tick-label-fill: black;
    -fx-minor-tick-visible: false;
    -fx-tick-label-gap: 4; /* distance betwen tick and number */
@@ -46,7 +46,7 @@ and open the template in the editor.
 }
 
 .axis-label {
-   -fx-font: 12pt sans-serif;
+   -fx-font: 12pt Arial;
 }
 
 .axis-tick-mark {

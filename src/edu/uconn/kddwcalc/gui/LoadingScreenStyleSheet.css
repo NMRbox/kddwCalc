@@ -1,16 +1,16 @@
 
 
 #programTitleLabel {
-   -fx-font: bold italic 36pt "Helvetica Neue";
+   -fx-font: bold italic 36pt Arial;
    -fx-font-color: white;
 }
    
 #myNameLabel {     
-   -fx-font: bold 20pt "Helvetica Neue";
+   -fx-font: 24pt Arial;
    -fx-font-color: white;   
 }
 
 #loadingLabel  {
-   -fx-font: bold 12pt "Helvetica Neue";
+   -fx-font: 14pt Arial;
    -fx-font-color:white;
 }

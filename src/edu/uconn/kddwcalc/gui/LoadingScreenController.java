@@ -47,33 +47,18 @@ public class LoadingScreenController implements Initializable {
         loadingTimeline.setAutoReverse(false);
         
         
-        KeyFrame keyFrame1 = new KeyFrame(Duration.millis(KEYFRAME_DURATION * 1),
-                                          new KeyValue(loadingLabel.textProperty(), "Loading packages..."),
-                                          new KeyValue(loadingProgressBar.progressProperty(), 0.15, Interpolator.DISCRETE));
+        KeyFrame keyFrame1 = makeKeyFrame(1.0, "Loading packages...", 0.15);
         
-        KeyFrame keyFrame2 = new KeyFrame(Duration.millis(KEYFRAME_DURATION * 2),
-                                          new KeyValue(loadingLabel.textProperty(), "Turning on modules..."),
-                                          new KeyValue(loadingProgressBar.progressProperty(), 0.300, Interpolator.DISCRETE));
+        KeyFrame keyFrame2 = makeKeyFrame(2.0, "Initializing modules...", 0.3);
         
-        KeyFrame keyFrame3 = new KeyFrame(Duration.millis(KEYFRAME_DURATION * 3),
-                                          new KeyValue(loadingLabel.textProperty(), "Creating GUI..."),
-                                          new KeyValue(loadingProgressBar.progressProperty(), 0.45, Interpolator.DISCRETE));
+        KeyFrame keyFrame3 = makeKeyFrame(3.0, "Creating GUI...", 0.45);
         
-        KeyFrame keyFrame4 = new KeyFrame(Duration.millis(KEYFRAME_DURATION * 4),
-                                          new KeyValue(loadingLabel.textProperty(), 
-                                              "Loading Apache Commons Mathematics Library..."),
-                                          new KeyValue(loadingProgressBar.progressProperty(), 0.60, Interpolator.DISCRETE));
+        KeyFrame keyFrame4 = makeKeyFrame(4.0, "Loading Apache Commons Mathematics Library...", 0.6);
         
-        KeyFrame keyFrame5 = new KeyFrame(Duration.millis(KEYFRAME_DURATION * 6),
-                                          new KeyValue(loadingLabel.textProperty(), "Starting..."),
-                                          new KeyValue(loadingProgressBar.progressProperty(), 0.90, Interpolator.DISCRETE));
+        KeyFrame keyFrame5 = makeKeyFrame(6.0, "Starting...", 0.90);
         
-        KeyFrame keyFrame6 = new KeyFrame(Duration.millis(KEYFRAME_DURATION * 6.8),
-                                          new KeyValue(loadingLabel.textProperty(), ""),
-                                          new KeyValue(loadingProgressBar.progressProperty(), 1.0, Interpolator.DISCRETE));
+        KeyFrame keyFrame6 = makeKeyFrame(6.8, "", 1.0);
         
-
-       
         loadingTimeline.getKeyFrames().addAll(keyFrame1, keyFrame2, keyFrame3,
                                               keyFrame4, keyFrame5, keyFrame6);
         
@@ -87,6 +72,13 @@ public class LoadingScreenController implements Initializable {
      */
     public Timeline getLoadingTimeline() {
         return loadingTimeline;
+    }
+    
+    private KeyFrame makeKeyFrame(double duration, String text, double loadingProgress) {
+        return new KeyFrame(Duration.millis(KEYFRAME_DURATION * duration),
+                               new KeyValue(loadingLabel.textProperty(), text),
+                               new KeyValue(loadingProgressBar.progressProperty(), 
+                                            loadingProgress, Interpolator.DISCRETE));
     }
     
 }
