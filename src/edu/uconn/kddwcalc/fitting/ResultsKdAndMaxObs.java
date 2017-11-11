@@ -162,28 +162,36 @@ public class ResultsKdAndMaxObs {
         
         try (Formatter output = 
             new Formatter(Paths.get(path.toAbsolutePath().toString(), 
-                                    String.format("%s.txt", getIdentifier())).toFile())){
+                                    String.format("%s.txt", getIdentifier()))
+                          .toFile())){
                 
             output.format("%s", String.format(toString())); 
         }
         
     }
     
-    
+    /**
+     * 
+     * @return the number associated with this residue. was added in AbsFactory
+     * and probably does not represent the assigned residue number
+     */
     public String getIdentifier() {
         return identifier;
     }
 
     private WritableImage getAsWritableImage() {
         
-        double maxLigandRatio = getPresentationFit()[getPresentationFit().length - 1][0]; // TODO change
+        // for x-axis
+        double maxLigandRatio = 
+            getPresentationFit()[getPresentationFit().length - 1][0];
         
-        // define axes
-        final NumberAxis xAxis = new NumberAxis(0, Math.ceil(maxLigandRatio), 0.5);
-        final NumberAxis yAxis = new NumberAxis(0, 1, 0.25);
+        // define axes, round so x-axis is a little bigger than maxLigandRadio
+        final NumberAxis xAxis = 
+            new NumberAxis(0, Math.ceil(maxLigandRatio), 0.5);
+        final NumberAxis yAxis = 
+            new NumberAxis(0, 1, 0.25);
         xAxis.setLabel("Ligand/Protein ratio");
         yAxis.setLabel("Percent bound");
-        
         
         //creating the chart
         final LineChart<Number,Number> lineChart = 
@@ -212,7 +220,7 @@ public class ResultsKdAndMaxObs {
         lineChart.getData().add(modelSeries);
         
         return lineChart.snapshot(new SnapshotParameters(), null);
-    }
+    } // end method getAsWritableImage
     
     
     
