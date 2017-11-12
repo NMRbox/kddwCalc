@@ -132,7 +132,7 @@ public class FastExchangeDataAnalyzer {
         
         try (Formatter output = new Formatter(thisPath.toFile())) {
             
-            output.format("Results from cumulative fit:%n%n%s%n%n", 
+            output.format("%s%n%n", 
             aggTwoParamResults.toString());
         
             output.format("dw for fully bound using global Kd:%n");    

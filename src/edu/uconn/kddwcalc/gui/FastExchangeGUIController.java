@@ -366,7 +366,7 @@ public class FastExchangeGUIController {
             Optional<Path> saveFile = 
                 useSaveChooser("Save Input Data", "inputDataForGUI.ser");
 
-            if (!saveFile.equals(Optional.empty())) {
+            if (saveFile.isPresent()) {
 
                 try (ObjectOutputStream output = 
                     new ObjectOutputStream(Files.newOutputStream(saveFile.get()))) {
@@ -405,8 +405,9 @@ public class FastExchangeGUIController {
 
         Optional<Path> openFile = useOpenChooser("Open Saved Data", "Serialized Files", "*.ser");
 
-        if (!openFile.equals(Optional.empty())) {
+        if (openFile.isPresent()) {
 
+            
             try (ObjectInputStream input = 
                 new ObjectInputStream(Files.newInputStream(openFile.get()))) {
 
@@ -546,7 +547,7 @@ public class FastExchangeGUIController {
 
         Optional<Path> path = useSaveChooser("Save Results", DEFAULT_OUTPUT_RESULTS_DIRECTORY_NAME);
         
-        if (!path.equals(Optional.empty())) {
+        if (path.isPresent()) {
              wrappedResultsOutputFile.setValue(path.get());
         }
        
@@ -788,13 +789,7 @@ public class FastExchangeGUIController {
 
         File file = chooser.showSaveDialog(null);
 
-        Optional<Path> returnOptional = Optional.empty();
-        
-        if (file != null) {
-            returnOptional = Optional.of(file.toPath().toAbsolutePath());
-        }
-        
-        return returnOptional;
+        return file == null ? Optional.empty() : Optional.of(file.toPath().toAbsolutePath());
     }
 
     /**
@@ -814,14 +809,9 @@ public class FastExchangeGUIController {
             new ExtensionFilter("All Files", "*.*"));
 
         File file = chooser.showOpenDialog(null);
-
-        Optional<Path> returnOptional = Optional.empty();
         
-        if (file != null) {
-            returnOptional = Optional.of(file.toPath().toAbsolutePath());
-        }
+        return file == null ? Optional.empty() : Optional.of(file.toPath().toAbsolutePath());
         
-        return returnOptional;
     }
 
     /**

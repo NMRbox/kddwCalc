@@ -144,6 +144,7 @@ public class ResultsKdAndMaxObs {
     }
     
     public void writeFitImageInPassedPath(Path path) throws IOException {
+        
         WritableImage image = getAsWritableImage();
         
         ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", path.toFile());
@@ -155,7 +156,6 @@ public class ResultsKdAndMaxObs {
                                   String.format("%s.png", getIdentifier()));
 
         writeFitImageInPassedPath(filePath);
-        
     }
     
     public void writeTextResultsToDisk(Path path) throws FileNotFoundException {
@@ -167,7 +167,6 @@ public class ResultsKdAndMaxObs {
                 
             output.format("%s", String.format(toString())); 
         }
-        
     }
     
     /**
