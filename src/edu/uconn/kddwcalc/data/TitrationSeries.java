@@ -1,10 +1,12 @@
 package edu.uconn.kddwcalc.data;
 
+import edu.uconn.kddwcalc.fitting.Calculatable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,10 +55,10 @@ public class TitrationSeries implements Calculatable {
         
         try (Formatter output = new Formatter(path.toFile())) {
             listOfTitrations.stream()
-                       .forEach(titr -> {
-                           titr.printTitration(output);
-                           output.format("%n");
-                       });
+                            .forEach(titr -> {
+                                titr.printTitration(output);
+                               output.format("%n");
+                            });
         }
         catch(FileNotFoundException e) {
             throw new FileNotFoundException("Was an issue opening sortedData.txt");
@@ -95,36 +97,26 @@ public class TitrationSeries implements Calculatable {
     @Override
     public double[] getObservables() {
 
-        List<List<Double>> aggCSPintermediate = 
+        List<double[]> aggCSPintermediate = 
             listOfTitrations.stream()  // now have Stream<Titration>
-                           .map(Titration::getCSPsFrom2DPoints) // now have Stream<List<Double>>
-                           .collect(Collectors.toList());        
+                            .map(Titration::getObservables) // now have Stream<List<Double>>
+                            .collect(Collectors.toList());     
         
-        List<Double> aggCSPs = new ArrayList<>();
+        double[] aggCSPs = 
+                new double[listOfTitrations.get(0).getObservables().length];
         
-        // intialializes with values of 0.0 and sets the lenght of cumulative CSPs
-        for(int ctr = 0; ctr < listOfTitrations.get(0).getCSPsFrom2DPoints().size(); ctr++) {
-            aggCSPs.add(0.0);
-        }
+        Arrays.fill(aggCSPs, 0.0);
         
-        for(List<Double> cspsForOneResidue : aggCSPintermediate) {
-            for(int ctr = 0; ctr < cspsForOneResidue.size(); ctr++) {
-                Double temp = Double.sum(cspsForOneResidue.get(ctr), aggCSPs.get(ctr));
+        for(double[] cspsForOneResidue : aggCSPintermediate) {
+            for(int ctr = 0; ctr < cspsForOneResidue.length; ctr++) {
+                Double temp = Double.sum(cspsForOneResidue[ctr], aggCSPs[ctr]);
                 
-                aggCSPs.set(ctr, temp);
+                aggCSPs[ctr] = temp;
             }
         }
         
-        
-        // target array in least squaures solver must be double[] not List<Double>
-        double[] aggShiftsArray = new double[aggCSPs.size()];
-        
-        for(int ctr = 0; ctr < aggShiftsArray.length; ctr++) {
-            aggShiftsArray[ctr] = aggCSPs.get(ctr);
-        }
-        
-        return aggShiftsArray;   
-        
+        return aggCSPs;
+    
     } // end method GetCumulativeShifts()
     
     /**
@@ -158,6 +150,10 @@ public class TitrationSeries implements Calculatable {
     } 
 
     public static TitrationSeries makeTitrationSeries(List<Titration> titrationSeries) {
+        
+        if(titrationSeries.stream().anyMatch(titr -> titr == null))
+            throw new IllegalArgumentException("was a null titration in makeTitrationSeries");
+        
         return new TitrationSeries(titrationSeries);
     }
 

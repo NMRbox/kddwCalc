@@ -4,7 +4,7 @@
  * analysis.
  * 
  */
-package edu.uconn.kddwcalc.data;
+package edu.uconn.kddwcalc.fitting;
 
 /**
  *
