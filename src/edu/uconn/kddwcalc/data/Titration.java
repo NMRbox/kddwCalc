@@ -1,6 +1,7 @@
 package edu.uconn.kddwcalc.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
 
@@ -62,7 +63,11 @@ public class Titration implements Calculatable {
                                           double scalingFactor,
                                           String identifier) {
         
-        // TODO add some kind of validation here
+        if (scalingFactor <= 0)
+            throw new IllegalArgumentException("scaling factor zero or negative");
+        
+        if (listOfPoints.stream().anyMatch(pnt -> pnt == null))
+            throw new IllegalArgumentException("null point creating Titration");
         
         return new Titration(listOfPoints, scalingFactor, identifier);
     }
@@ -136,12 +141,13 @@ public class Titration implements Calculatable {
      * @see TitrationSeries
      */
     public void printTitration(Formatter output) {
-        output.format("Titration: %s%nMultiplier: %.5f%nCSPs: %s%n"
+        output.format("Titration: %s%nScaling Factor: %.5f%nCSPs: %s%n"
             + "LigandConc     ReceptorConc    Resonance1      Resonance2%n",
-            getIdentifier(), getScalingFactor(), getCSPsFrom2DPoints().toString());
+            getIdentifier(), getScalingFactor(), Arrays.toString(getObservables()));
         
         listOfPoints.stream() // results in a Stream<TitrationPoint>
-                 .forEach(titrPoint -> output.format("%s%n", titrPoint.toString()));
+                    .forEach(titrPoint -> 
+                                 output.format("%s%n", titrPoint.toString()));
     }
 
     private double getScalingFactor() {

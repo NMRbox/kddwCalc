@@ -332,9 +332,9 @@ public class FastExchangeGUIController {
            
            Instant end = Instant.now(); // for clocking the calculation
            
-            System.out.println(Duration.between(start, end).toNanos() / 1_000_000L + " ms");
+           System.out.println(Duration.between(start, end).toNanos() / 1_000_000L + " ms");
            
-            displayResultsWrittenPopUp(); // only reach this if extensive validation passed
+           displayResultsWrittenPopUp(); // only reach this if extensive validation passed
         }
 
         // note: NumberFormatException will be caught by its superclass IllegalArgumentException
