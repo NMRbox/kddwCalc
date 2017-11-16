@@ -1,11 +1,9 @@
 package edu.uconn.kddwcalc.data;
 
 import edu.uconn.kddwcalc.fitting.Calculatable;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
@@ -99,7 +97,7 @@ public class TitrationSeries implements Calculatable {
 
         List<double[]> aggCSPintermediate = 
             listOfTitrations.stream()  // now have Stream<Titration>
-                            .map(Titration::getObservables) // now have Stream<List<Double>>
+                            .map(Titration::getObservables) // now have Stream<double[]>
                             .collect(Collectors.toList());     
         
         double[] aggCSPs = 
@@ -107,17 +105,17 @@ public class TitrationSeries implements Calculatable {
         
         Arrays.fill(aggCSPs, 0.0);
         
-        for(double[] cspsForOneResidue : aggCSPintermediate) {
-            for(int ctr = 0; ctr < cspsForOneResidue.length; ctr++) {
-                Double temp = Double.sum(cspsForOneResidue[ctr], aggCSPs[ctr]);
-                
-                aggCSPs[ctr] = temp;
+        aggCSPintermediate.stream().forEach(cspsOneResi -> {
+            
+            for(int ctr = 0; ctr < cspsOneResi.length; ctr++) {
+                aggCSPs[ctr] = cspsOneResi[ctr] + aggCSPs[ctr];
             }
-        }
+        
+        });
         
         return aggCSPs;
-    
-    } // end method GetCumulativeShifts()
+        
+    } // end method getObservables()
     
     /**
      * Gets the array of receptor concentrations
@@ -148,7 +146,14 @@ public class TitrationSeries implements Calculatable {
     public List<Titration> getListOfTitrations() {
         return listOfTitrations;
     } 
-
+    
+    /**
+     * A simple factory to create an object of class <code>TitrationSeries</code>.
+     * 
+     * @param titrationSeries the List<Titration> that was passed int
+     * 
+     * @return an initialized object of class <code>TitrationSeries</code>.
+     */
     public static TitrationSeries makeTitrationSeries(List<Titration> titrationSeries) {
         
         if(titrationSeries.stream().anyMatch(titr -> titr == null))
@@ -156,11 +161,14 @@ public class TitrationSeries implements Calculatable {
         
         return new TitrationSeries(titrationSeries);
     }
-
+    
+    /**
+     * Gets a unique identifier for this dataset
+     * 
+     * @return a {@link String} object with the identifier 
+     */
     @Override
     public String getIdentifier() {
         return IDENTIFIER;
-    }
-    
-    
+    }  
 } // end class TitrationSeries

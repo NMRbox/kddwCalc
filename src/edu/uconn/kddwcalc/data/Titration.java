@@ -1,7 +1,6 @@
 package edu.uconn.kddwcalc.data;
 
 import edu.uconn.kddwcalc.fitting.Calculatable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
@@ -98,29 +97,29 @@ public class Titration implements Calculatable {
     }
     
     /**
-     * Takes the two {@link Resonance} variables from instance variable <code>listOfPoints</code> and extracts the 
-     * chemical shift perturbation. Effectively, this uses the equation for distance
- [sqrt((xn-x0)^2 + (yn-y0)^2)] with scaling based on the scalingFactor. The first point should have a CSP = 0,
- while the remaining points are calculated from the first point with free receptor.
- 
- Note the use of {@link TitrationPoint#getResonance1}  and {@link TitrationPoint#getResonance2}. 
-     * This introduces coupling between this class and others.
+     * Effectively, this uses the equation for distance
+     *[sqrt((xn-x0)^2 + (yn-y0)^2)] with scaling based on the scalingFactor. 
+     * The first point should have a CSP = 0, while the remaining points are 
+     * calculated from the first point with free receptor.
+     *
+     * Note the use of {@link TitrationPoint#getResonance1}  and 
+     * {@link TitrationPoint#getResonance2. This introduces coupling between this class and others.
      * 
      * @return the chemical shift perturbations as 1H-ppm (because of scaling)
      */
     @Override
-    public double[] getObservables() {  // TODO change this to get double
-        final double[] csps = new double[listOfPoints.size()];
-        
-        for(int ctr = 0; ctr < listOfPoints.size(); ctr++) {
-            csps[ctr] = (Math.sqrt(Math.pow(listOfPoints.get(ctr).getResonance2().getChemShift() 
-                - listOfPoints.get(0).getResonance2().getChemShift(), 2.0)
-                + Math.pow(scalingFactor * (listOfPoints.get(ctr).getResonance1().getChemShift() 
-                - listOfPoints.get(0).getResonance1().getChemShift()), 2.0)));
-        }
+    public double[] getObservables() {
 
-        return csps;
-    }
+        return listOfPoints.stream().mapToDouble(point -> {
+               
+            return Math.sqrt(Math.pow(point.getResonance2().getChemShift() 
+                - listOfPoints.get(0).getResonance2().getChemShift(), 2.0)
+                + Math.pow(scalingFactor * (point.getResonance1().getChemShift() 
+                - listOfPoints.get(0).getResonance1().getChemShift()), 2.0));
+                })
+                .toArray();
+        
+    } // end method getObservables
     
     /**
      * Prints information from an NMR listOfPoints for a single residue to a text file.
