@@ -152,13 +152,12 @@ public class FastExchangeGUIController {
     private ReadOnlyObjectWrapper<Path> wrappedResultsOutputFile;
     
     // creates a list with File objects that have references to null.
-    // 
     private final ObservableList<Path> fileList = 
-            FXCollections.observableArrayList(new ArrayList<>(Arrays.asList(new Path[15])));
+            FXCollections.observableArrayList(
+                    new ArrayList<>(Arrays.asList(new Path[MAX_NUM_EXP_PTS])));
 
             
     private List<TextField> fileNameTextFieldList;
-    
     private List<TextField> ligandConcTextFieldList;
     private List<TextField> receptorConcTextFieldList;
 
@@ -328,7 +327,7 @@ public class FastExchangeGUIController {
         Instant start = Instant.now();
         
         try {
-           FastExchangeDataAnalyzer.analyze(prepAndMakeRawDataObject());
+           FastExchangeDataAnalyzer.analyzeRawData(prepAndMakeRawDataObject());
            
            Instant end = Instant.now(); // for clocking the calculation
            

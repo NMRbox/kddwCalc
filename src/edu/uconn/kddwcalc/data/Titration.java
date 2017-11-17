@@ -63,10 +63,10 @@ public class Titration implements Calculatable {
                                           double scalingFactor,
                                           String identifier) {
         
-        if (scalingFactor <= 0)
+        if(scalingFactor <= 0)
             throw new IllegalArgumentException("scaling factor zero or negative");
         
-        if (listOfPoints.stream().anyMatch(pnt -> pnt == null))
+        if(listOfPoints.stream().anyMatch(pnt -> pnt == null))
             throw new IllegalArgumentException("null point creating Titration");
         
         return new Titration(listOfPoints, scalingFactor, identifier);

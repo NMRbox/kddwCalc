@@ -6,6 +6,9 @@
  */
 package edu.uconn.kddwcalc.fitting;
 
+import java.io.FileNotFoundException;
+import java.nio.file.Path;
+
 /**
  *
  * @author Alex R.
@@ -37,5 +40,6 @@ public interface Calculatable {
      * 
      */
     public String getIdentifier();
+    
     
 }

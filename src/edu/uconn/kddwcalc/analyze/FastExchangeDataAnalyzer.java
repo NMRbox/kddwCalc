@@ -16,9 +16,8 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 /**
- * Static method <code>Analyze</code> take the data, sorts it, creates the results,
+ * Static method <code>AnalyzeRawData</code> take the data, sorts it, creates the results,
  *  and then prints all results to disk.
  *  
  * 
@@ -41,12 +40,13 @@ public class FastExchangeDataAnalyzer {
      * @throws IOException if unable to read/write files
      * @throws ArraysInvalidException if data is duplicated or arrays have different lengths (they cant)
      */
-    public static void analyze(RawData rawDataInstance) 
+    public static void analyzeRawData(RawData rawDataInstance) 
         throws IOException, ArraysInvalidException {
         
         Path resultsOverallDirectory = 
             rawDataInstance.getResultsDirectoryFile().toPath().toAbsolutePath();
-        if (Files.exists(resultsOverallDirectory)) {
+        
+        if(Files.exists(resultsOverallDirectory)) {
             emptyResultsDirectory(resultsOverallDirectory);
         }
         Files.createDirectory(resultsOverallDirectory);
@@ -79,6 +79,10 @@ public class FastExchangeDataAnalyzer {
                            resultsByResidueFixedKd, 
                            twoParamResultsByResidue,
                            resultsOverallDirectory);
+        // at this point, control of the program goes back to the GUI and waits
+        // hopefully, the user has gotten good results and is done. otherwise, 
+        // an exception might have been thrown and (hopefully) caught at the GUI
+        // so the user can fix the input
         
     } // end method Analyze
     

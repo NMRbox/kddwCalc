@@ -46,10 +46,11 @@ public class TitrationSeries implements Calculatable {
      * 
      * @throws FileNotFoundException if problems occur when opening sortedData.txt
      */
-    public void printTitrationSeries(Path resultsOverallDirectory) throws FileNotFoundException {
+    public void printTitrationSeries(Path resultsOverallDirectory) 
+            throws FileNotFoundException  {
         
         Path path = Paths.get(resultsOverallDirectory.toAbsolutePath().toString(),
-            SORT_PEAKLIST_FILE_NAME);
+                              SORT_PEAKLIST_FILE_NAME);
         
         try (Formatter output = new Formatter(path.toFile())) {
             listOfTitrations.stream()
@@ -95,23 +96,20 @@ public class TitrationSeries implements Calculatable {
     @Override
     public double[] getObservables() {
 
-        List<double[]> aggCSPintermediate = 
-            listOfTitrations.stream()  // now have Stream<Titration>
-                            .map(Titration::getObservables) // now have Stream<double[]>
-                            .collect(Collectors.toList());     
-        
-        double[] aggCSPs = 
+        final double[] aggCSPs = 
                 new double[listOfTitrations.get(0).getObservables().length];
         
         Arrays.fill(aggCSPs, 0.0);
         
-        aggCSPintermediate.stream().forEach(cspsOneResi -> {
-            
-            for(int ctr = 0; ctr < cspsOneResi.length; ctr++) {
-                aggCSPs[ctr] = cspsOneResi[ctr] + aggCSPs[ctr];
-            }
-        
-        });
+        // mutates a nonlocal variable (aggCSPs) 
+        listOfTitrations.stream()  // now have Stream<Titration>
+                        .map(Titration::getObservables) // now have Stream<double[]>
+                        .forEach(cspsOneResi -> {
+                            for(int ctr = 0; ctr < cspsOneResi.length; ctr++) {
+                                aggCSPs[ctr] = cspsOneResi[ctr] + aggCSPs[ctr];
+                            }
+
+                        });    
         
         return aggCSPs;
         
