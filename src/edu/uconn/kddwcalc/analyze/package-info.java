@@ -1,5 +1,6 @@
 /**
- * Contains the business rules of the applications.
+ * Contains the business rules of the applications to sort, fit, and 
+ * print to disk.
  * 
  * @author Alex R.
  * 
