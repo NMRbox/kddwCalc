@@ -1,4 +1,4 @@
-package edu.uconn.kddwcalc.analyze;
+package edu.uconn.kddwcalc.input;
 
 import edu.uconn.kddwcalc.data.Resonance;
 import edu.uconn.kddwcalc.data.Titration;

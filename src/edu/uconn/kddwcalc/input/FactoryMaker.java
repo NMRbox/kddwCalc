@@ -1,5 +1,8 @@
-package edu.uconn.kddwcalc.analyze;
+package edu.uconn.kddwcalc.input;
 
+import edu.uconn.kddwcalc.input.MethylCarbonProtonFactory;
+import edu.uconn.kddwcalc.input.AbsFactory;
+import edu.uconn.kddwcalc.input.AmideNitrogenProtonFactory;
 import edu.uconn.kddwcalc.data.TypesOfTitrations;
 
 /**

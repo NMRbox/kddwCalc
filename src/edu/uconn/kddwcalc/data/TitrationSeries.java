@@ -7,8 +7,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 /**
  * The {@link TitrationSeries} class holds a complete fast exchange NMR data to fit Kd, dw

@@ -1,4 +1,4 @@
-package edu.uconn.kddwcalc.analyze;
+package edu.uconn.kddwcalc.input;
 
 import edu.uconn.kddwcalc.data.MethylCarbon;
 import edu.uconn.kddwcalc.data.MethylCarbonProtonTitrationPoint;

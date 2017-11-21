@@ -3,6 +3,7 @@ package edu.uconn.kddwcalc.gui;
 import java.io.IOException;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,6 +17,8 @@ import javafx.util.Duration;
  * @author Alex R
  */
 public class KdCalc extends Application {
+    
+    public static final String VERSION = "2.0";
     
     private static final double LOADING_SCREEN_TOTAL_TIME = 7000; // ms
     
@@ -47,6 +50,15 @@ public class KdCalc extends Application {
         runLoadingScreenAndShowMenu(new Stage(), menuStage);
     }
 
+    @Override
+    public void init() throws Exception {
+        Parameters p = getParameters();
+        if (p.getUnnamed().contains("-version")) {
+            System.out.println("Version: " + VERSION);
+            Platform.exit();
+        }
+    }
+    
     /**
      * Program <code>main</code> method where execution starts.
      * 

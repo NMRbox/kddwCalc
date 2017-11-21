@@ -1,7 +1,7 @@
 package edu.uconn.kddwcalc.gui;
 
-import edu.uconn.kddwcalc.analyze.FastExchangeDataAnalyzer;
-import edu.uconn.kddwcalc.analyze.AbsFactory;
+import edu.uconn.kddwcalc.analyze.Analyzer;
+import edu.uconn.kddwcalc.input.AbsFactory;
 import edu.uconn.kddwcalc.analyze.ArraysInvalidException;
 import edu.uconn.kddwcalc.data.TitrationSeries;
 import edu.uconn.kddwcalc.data.TypesOfTitrations;
@@ -179,7 +179,8 @@ public class FastExchangeGUIController {
         receptorConcTextFieldList = compileReceptorConcTextFields();
 
         Path resultsOutputPath = null;
-        wrappedResultsOutputFile = new ReadOnlyObjectWrapper<>(resultsOutputPath, "wrappedResultsOutputFile");
+        wrappedResultsOutputFile = new ReadOnlyObjectWrapper<>(resultsOutputPath, 
+                                                    "wrappedResultsOutputFile");
         
         fileNameTextFieldList = compileDataFileTextField();
 
@@ -195,7 +196,8 @@ public class FastExchangeGUIController {
      */
     private void setToDefaultGUIValues() {
         
-        clearFileListAndMakeTextFieldsUneditable(); // on open, doesnt do much. needed for clear button
+        clearFileListAndMakeTextFieldsUneditable(); // on open, doesnt do much. 
+                                                      //needed for clear button
         
         ligandConc1.setText("0.0"); // line must come after clearFileList...method
         
@@ -318,7 +320,7 @@ public class FastExchangeGUIController {
      *
      * @see AbsFactory
      * @see TitrationSeries
-     * @see FastExchangeDataAnalyzer
+     * @see Analyzer
      * @see RawData
      */
     @FXML 
@@ -327,11 +329,15 @@ public class FastExchangeGUIController {
         Instant start = Instant.now();
         
         try {
-           FastExchangeDataAnalyzer.analyzeRawData(prepAndMakeRawDataObject());
+           Analyzer.analyzeRawData(prepAndMakeRawDataObject());
+           
+           // at this point, the results were either printed to disk or 
+           // an exception was throw. hopefully this was caught and the user
+           // has a chance to reenter the data
            
            Instant end = Instant.now(); // for clocking the calculation
-           
-           System.out.println(Duration.between(start, end).toNanos() / 1_000_000L + " ms");
+           System.out.println(
+                   Duration.between(start, end).toNanos() / 1_000_000L + " ms");
            
            displayResultsWrittenPopUp(); // only reach this if extensive validation passed
         }

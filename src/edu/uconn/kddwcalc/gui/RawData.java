@@ -8,7 +8,7 @@
 * add a couple of small validations. 1) each ArrayList must have same number of elements
 * and 2) each text file associated with each path must have the same number of lines. 
 *
-* multipler is how to scale the two nuclei (carbon/proton different than carbon/nitrogen)
+* scalingFactor is how to scale the two nuclei (carbon/proton different than carbon/nitrogen)
 *
 * resonanceReverseal is related to how the points are listed in the text files (the order),
 * i.e. is it proton then carbon, or carbon then proton.
@@ -54,7 +54,7 @@ public class RawData implements Serializable {
      * @param dataFiles Location on disk of peak list data from user.
      * @param ligandConcs Total ligand concentrations
      * @param receptorConcs Total receptor concentration
-     * @param multiplier A number to scale two different nuclei
+     * @param scalingFactor A number to scale two different nuclei
      * @param resonanceReversal A flag that helps keep track of resonance ordering in data files
      * @param type The type of titration selected (i.e. 1H-15N HSQC)
      * @param dataOutputFile name and location where sorted peak lists will be output
@@ -63,14 +63,14 @@ public class RawData implements Serializable {
     private RawData(List<File> dataFiles, 
                     double[] ligandConcs,
                     double[] receptorConcs, 
-                    double multiplier, 
+                    double scalingFactor, 
                     boolean resonanceReversal,
                     TypesOfTitrations type,
                     File resultsDirectoryPath) {
         this.dataFiles = dataFiles;
         this.ligandConcs = ligandConcs;
         this.receptorConcs = receptorConcs;
-        this.scalingFactor = multiplier;
+        this.scalingFactor = scalingFactor;
         this.resonanceReversal = resonanceReversal;
         this.type = type;
         this.resultsDirectoryFile = resultsDirectoryPath;
@@ -89,7 +89,7 @@ public class RawData implements Serializable {
      * @param dataFiles Location on disk of peak list data from user
      * @param ligandConcs Total ligand concentrations
      * @param receptorConcs Total receptor concentration
-     * @param multiplier A number to scale two different nuclei
+     * @param scalingFactor A number to scale two different nuclei
      * @param resonanceReversal A flag that helps keep track of resonance ordering in data files
      * @param type which nuclei were observed in experiment. Affects validation
      * @param resultsDirectoryFile name and location to write the results text file
@@ -104,7 +104,7 @@ public class RawData implements Serializable {
     public final static RawData createRawData(List<File> dataFiles, 
                                               List<TextField> ligandConcs,
                                               List<TextField> receptorConcs, 
-                                              String  multiplier, 
+                                              String  scalingFactor, 
                                               boolean resonanceReversal,
                                               TypesOfTitrations type,
                                               File resultsDirectoryFile) 
@@ -132,7 +132,7 @@ public class RawData implements Serializable {
         // tests to make sure the lists above are the same length. must because theres one for each exp point
         if (!DataArrayValidator.isListLengthsAllEqual(tempFileList, tempLigandArray, tempReceptorArray))
             throw new ArraysInvalidException("List had different lengths in RawData.createRawData. Might be an"
-                + " issue with duplication in peak lists or missing concentratoion value");
+                + " issue with duplication in peak lists or missing concentration value");
         
         /*
         * This block of code tests each peak list to ensure it has the same number of lines. Each line is a residue,
@@ -144,17 +144,19 @@ public class RawData implements Serializable {
         try {
             for (int ctr = 0; ctr < tempFileList.size(); ctr++)
             {
-                numLines[ctr] = Files.lines(tempFileList.get(ctr).toPath()).count();
+                numLines[ctr] = 
+                        Files.lines(tempFileList.get(ctr).toPath()).count();
             }
         }
         catch(IOException e) {
 
         // if every number in that array isnt the same    
          if (Arrays.stream(numLines).distinct().count() != 1)
-             throw new IllegalArgumentException("Data files dont all have same number of lines in"
-                     + "RawData.createRawData");
+             throw new IllegalArgumentException("Data files dont all have same "
+                     + "number of lines in RawData.createRawData");
          
-         throw new IllegalArgumentException("Error when opening file in class RawData", e);
+         throw new IllegalArgumentException("Error when opening file in "
+                 + "class RawData", e);
         
         }
         
@@ -166,7 +168,7 @@ public class RawData implements Serializable {
         return new RawData(tempFileList, 
                            tempLigandArray,
                            tempReceptorArray, 
-                           Double.valueOf(multiplier), 
+                           Double.valueOf(scalingFactor), 
                            resonanceReversal,
                            type,
                            resultsDirectoryFile); 
@@ -200,7 +202,8 @@ public class RawData implements Serializable {
     }
     
     /**
-     * Get the getScalingFactor, which is the value used to scale the two different nuclei. This value
+     * Get the getScalingFactor, which is the value used to scale the two 
+     * different nuclei. This value
      * was provided by the user
      * 
      * @return the getScalingFactor value

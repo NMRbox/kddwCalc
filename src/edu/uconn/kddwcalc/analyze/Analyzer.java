@@ -1,5 +1,6 @@
 package edu.uconn.kddwcalc.analyze;
 
+import edu.uconn.kddwcalc.input.FactoryMaker;
 import edu.uconn.kddwcalc.fitting.LeastSquaresFitter;
 import edu.uconn.kddwcalc.data.TitrationSeries;
 import edu.uconn.kddwcalc.fitting.ResultsKdAndMaxObs;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
  * 
  * @author Rizzo
  */
-public class FastExchangeDataAnalyzer {
+public class Analyzer {
     
     private static final String TWO_PARAM_BY_RESIDUE_DIRECTORY = "resultsByResidueTwoParamFit";   
     private static final String ONE_PARAM_BY_RESIDUE_DIRECTORY = "resultsByResidueKdFixed";
