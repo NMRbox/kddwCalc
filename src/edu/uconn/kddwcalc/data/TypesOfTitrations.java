@@ -20,6 +20,6 @@ public enum TypesOfTitrations {
     AMIDEHSQC,
 
     /**
-     *Represents a 1H-13N methyl HMQC-based NMR titration.
+     *Represents a 1H-13C methyl HMQC-based NMR titration.
      */
     METHYLHMQC }

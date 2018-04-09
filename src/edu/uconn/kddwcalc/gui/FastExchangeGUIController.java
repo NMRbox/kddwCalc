@@ -6,6 +6,7 @@ import edu.uconn.kddwcalc.analyze.ArraysInvalidException;
 import edu.uconn.kddwcalc.data.TitrationSeries;
 import edu.uconn.kddwcalc.data.TypesOfTitrations;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -324,7 +325,7 @@ public class FastExchangeGUIController {
      * @see RawData
      */
     @FXML 
-    private void analyzeButtonPressed (ActionEvent event) {   
+    private void analyzeButtonPressed (ActionEvent event) throws FileNotFoundException, InterruptedException {   
         
         Instant start = Instant.now();
         
@@ -342,10 +343,11 @@ public class FastExchangeGUIController {
            displayResultsWrittenPopUp(); // only reach this if extensive validation passed
         }
 
-        // note: NumberFormatException will be caught by its superclass IllegalArgumentException
-        //       FileNotFoundException hanled by IOException
-        catch (IllegalArgumentException | NullPointerException | IOException | SecurityException |
-            FormatterClosedException | NoSuchElementException | ArraysInvalidException e) {
+        // note: NumberFormatException will be caught by its superclass 
+        //IllegalArgumentException FileNotFoundException hanled by IOException
+        catch (IllegalArgumentException | NullPointerException | IOException | 
+               SecurityException | FormatterClosedException | 
+               NoSuchElementException | ArraysInvalidException e) {
 
             showExceptionDialog(e);
         }
@@ -565,7 +567,9 @@ public class FastExchangeGUIController {
     private void displayResultsWrittenPopUp() {
 
         Alert alert
-            = new Alert(Alert.AlertType.INFORMATION, "Results were written to disk (a good sign!)");
+            = new Alert(Alert.AlertType.INFORMATION, 
+                       "Text results/data were written to disk (a good sign). "
+                               + "Images will take a few more seconds.");
 
         alert.setTitle("Application Status");
 

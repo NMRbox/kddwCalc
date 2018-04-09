@@ -15,7 +15,15 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Formatter;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 
 /**
  * Static method <code>AnalyzeRawData</code> take the data, sorts it, creates the results,
@@ -42,7 +50,7 @@ public class Analyzer {
      * @throws ArraysInvalidException if data is duplicated or arrays have different lengths (they cant)
      */
     public static void analyzeRawData(RawData rawDataInstance) 
-        throws IOException, ArraysInvalidException {
+        throws IOException, ArraysInvalidException, FileNotFoundException, InterruptedException {
         
         Path resultsOverallDirectory = 
             rawDataInstance.getResultsDirectoryFile().toPath().toAbsolutePath();
@@ -92,7 +100,7 @@ public class Analyzer {
                                            List<ResultsKdAndMaxObs> resultsByResidueFixedKd,
                                            List<ResultsKdAndMaxObs> twoParamResultsList,
                                            Path resultsOverallDirectory) 
-                                        throws FileNotFoundException, IOException {
+                                        throws FileNotFoundException, IOException, InterruptedException {
         
             writeCumulativeResults(resultsOverallDirectory,
                                    aggTwoParamResults,
@@ -163,14 +171,14 @@ public class Analyzer {
     private static void writeTwoParamResultsByResidue(Path resultsOverallDirectory, 
                                                       List<ResultsKdAndMaxObs> twoParamResultsList,
                                                       String newDirectoryName) 
-                                                throws IOException {
+                                                throws IOException, InterruptedException {
         
         Path subDirectory = Paths.get(resultsOverallDirectory.toAbsolutePath().toString(),
                                       newDirectoryName);
         
         Files.createDirectory(subDirectory);
         
-        twoParamResultsList.stream()
+        /*twoParamResultsList.stream()
                            .forEach(result -> { 
                                try {
                                    result.writeFitAndTextToDisk(subDirectory);
@@ -179,7 +187,30 @@ public class Analyzer {
                                    System.out.println("Issue writing fit image to disk");
                                }
                            });
+        */
         
+        //ExecutorService service = null;
+        
+        try {
+            //service = Executors.newCachedThreadPool();
+            
+            for (ResultsKdAndMaxObs res : twoParamResultsList) {
+                Platform.runLater(new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        //System.out.println("hello there"); executes
+                        res.writeFitAndTextToDisk(subDirectory);
+                        return null;
+                    }
+                });
+            }
+            
+            //service.awaitTermination(20, TimeUnit.SECONDS);
+            
+        } finally {
+            //Objects.requireNonNull(service);
+            //service.shutdown();
+        }
     } // end method writeTwoParamResultsByResidue 
 
     

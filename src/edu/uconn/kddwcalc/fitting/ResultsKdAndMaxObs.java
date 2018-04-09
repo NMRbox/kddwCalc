@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Formatter;
+import java.util.concurrent.ExecutorService;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
@@ -144,9 +145,9 @@ public class ResultsKdAndMaxObs {
     }
     
     public void writeFitImageInPassedPath(Path path) throws IOException {
-        
+        // System.out.println("works"); called ~152 times
         WritableImage image = getAsWritableImage();
-        
+        // System.out.println("still working"); called once
         ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", path.toFile());
     } 
     
@@ -154,7 +155,7 @@ public class ResultsKdAndMaxObs {
         
         Path filePath = Paths.get(path.toAbsolutePath().toString(),
                                   String.format("%s.png", getIdentifier()));
-
+        
         writeFitImageInPassedPath(filePath);
     }
     
@@ -179,46 +180,51 @@ public class ResultsKdAndMaxObs {
     }
 
     private WritableImage getAsWritableImage() {
+        try {    
+            // for x-axis
+            double maxLigandRatio = 
+                getPresentationFit()[getPresentationFit().length - 1][0];
+
+            // define axes, round so x-axis is a little bigger than maxLigandRadio
+            final NumberAxis xAxis = 
+                new NumberAxis(0, Math.ceil(maxLigandRatio), 0.5);
+            final NumberAxis yAxis = 
+                new NumberAxis(0, 1, 0.25);
+            xAxis.setLabel("Ligand/Protein ratio");
+            yAxis.setLabel("Percent bound");
+
+            //creating the chart
+            final LineChart<Number,Number> lineChart = 
+                    new LineChart<>(xAxis,yAxis);
+
+            // if this is true, then the scene is only partially printed
+            lineChart.setAnimated(false);
+
+            XYChart.Series expSeries = new XYChart.Series();
+            XYChart.Series modelSeries = new XYChart.Series();
+
+
+            Arrays.stream(presentationFit)
+                  .forEach( (double[] line) -> {
+                      expSeries.getData().add(new XYChart.Data(line[0], line[2]));
+                      modelSeries.getData().add(new XYChart.Data(line[0], line[1]));
+                  });//}); 
+
+
+            Scene scene  = new Scene(lineChart, 660, 600);
+
+            scene.getStylesheets().add(
+                getClass().getResource("chartStyleSheet.css").toExternalForm());
+
+            lineChart.getData().add(expSeries);
+            lineChart.getData().add(modelSeries);
+
+            return lineChart.snapshot(new SnapshotParameters(), null);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }
         
-        // for x-axis
-        double maxLigandRatio = 
-            getPresentationFit()[getPresentationFit().length - 1][0];
-        
-        // define axes, round so x-axis is a little bigger than maxLigandRadio
-        final NumberAxis xAxis = 
-            new NumberAxis(0, Math.ceil(maxLigandRatio), 0.5);
-        final NumberAxis yAxis = 
-            new NumberAxis(0, 1, 0.25);
-        xAxis.setLabel("Ligand/Protein ratio");
-        yAxis.setLabel("Percent bound");
-        
-        //creating the chart
-        final LineChart<Number,Number> lineChart = 
-                new LineChart<>(xAxis,yAxis);
-        
-        // if this is true, then the scene is only partially printed
-        lineChart.setAnimated(false);
-        
-        XYChart.Series expSeries = new XYChart.Series();
-        XYChart.Series modelSeries = new XYChart.Series();
-        
-        
-        Arrays.stream(presentationFit)
-              .forEach( (double[] line) -> {
-                  expSeries.getData().add(new XYChart.Data(line[0], line[2]));
-                  modelSeries.getData().add(new XYChart.Data(line[0], line[1]));
-              });//}); 
-        
-        
-        Scene scene  = new Scene(lineChart, 660, 600);
-        
-        scene.getStylesheets().add(
-            getClass().getResource("chartStyleSheet.css").toExternalForm());
-        
-        lineChart.getData().add(expSeries);
-        lineChart.getData().add(modelSeries);
-        
-        return lineChart.snapshot(new SnapshotParameters(), null);
+        throw new AssertionError();
     } // end method getAsWritableImage
     
     
