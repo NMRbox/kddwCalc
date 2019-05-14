@@ -15,12 +15,6 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Formatter;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -188,25 +182,18 @@ public class Analyzer {
                                }
                            });
         */
-        
-        //ExecutorService service = null;
+          
         
         try {
-            //service = Executors.newCachedThreadPool();
-            
             for (ResultsKdAndMaxObs res : twoParamResultsList) {
                 Platform.runLater(new Task<Void>() {
                     @Override
                     protected Void call() throws Exception {
-                        //System.out.println("hello there"); executes
                         res.writeFitAndTextToDisk(subDirectory);
                         return null;
                     }
                 });
-            }
-            
-            //service.awaitTermination(20, TimeUnit.SECONDS);
-            
+            }    
         } finally {
             //Objects.requireNonNull(service);
             //service.shutdown();

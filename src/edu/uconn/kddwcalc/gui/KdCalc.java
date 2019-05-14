@@ -100,12 +100,5 @@ public class KdCalc extends Application {
             });
         
         delay.play();    
-    }
-
-    
-    
-    
-    
-    
-    
+    } 
 } // end class KdCalc
