@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER_RIGHT" prefHeight="706.0" prefWidth="1050.0" stylesheets="@FastExchangeGUIStyleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.uconn.kddwcalc.gui.FastExchangeGUIController">
+   <children>
+      <SplitPane dividerPositions="0.21401869158878506" prefHeight="767.0" prefWidth="1246.0">
+         <items>
+            <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="627.0" prefWidth="225.0">
+               <children>
+                  <VBox fx:id="typeOfTitrVBox" alignment="CENTER_LEFT">
+                     <children>
+                        <Label fx:id="typeOfTitrLabel" alignment="CENTER" contentDisplay="CENTER" text="Type of titration?">
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                        </Label>
+                        <RadioButton fx:id="amideHSQCRadioButton" contentDisplay="CENTER" mnemonicParsing="false" selected="true" text="1H-15N HSQC">
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="typeOfTitrationToggleGroup" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="methylHMQCRadioButton" contentDisplay="CENTER" mnemonicParsing="false" text="1H-13C methyl HMQC" toggleGroup="$typeOfTitrationToggleGroup">
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </RadioButton>
+                     </children>
+                     <padding>
+                        <Insets bottom="30.0" left="8.0" right="8.0" top="30.0" />
+                     </padding>
+                  </VBox>
+                  <VBox fx:id="orderVBox" alignment="CENTER_LEFT">
+                     <children>
+                        <Label fx:id="orderLabel" text="Order of nuclei?">
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                        </Label>
+                        <RadioButton fx:id="orderNucleiFirstRadioButton" mnemonicParsing="false" selected="true" text="Nitrogen Proton">
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="nucleiToggleGroup" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="orderNucleiSecondRadioButton" mnemonicParsing="false" text="Proton Nitrogen" toggleGroup="$nucleiToggleGroup">
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                        </RadioButton>
+                     </children>
+                     <padding>
+                        <Insets bottom="30.0" left="8.0" right="8.0" top="30.0" />
+                     </padding>
+                  </VBox>
+                  <VBox fx:id="multiplierVBox">
+                     <children>
+                        <Label fx:id="scalingFactorLabel" text="Enter scaling factor">
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                        </Label>
+                        <TextField fx:id="scalingFactorTextField" prefHeight="36.0" prefWidth="105.0">
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets left="8.0" right="8.0" />
+                           </VBox.margin>
+                        </TextField>
+                     </children>
+                     <padding>
+                        <Insets bottom="30.0" left="8.0" right="8.0" top="30.0" />
+                     </padding>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Button fx:id="resultsOutputButton" mnemonicParsing="false" onAction="#resultsOutputButtonPressed" styleClass="fileChooser" text="Choose results folder...">
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                           <HBox.margin>
+                              <Insets right="4.0" />
+                           </HBox.margin>
+                           <VBox.margin>
+                              <Insets bottom="4.0" left="8.0" right="8.0" />
+                           </VBox.margin>
+                        </Button>
+                        <TextField fx:id="resultsOutputTextField" editable="false" prefHeight="36.0" prefWidth="167.0">
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                           <HBox.margin>
+                              <Insets left="4.0" />
+                           </HBox.margin>
+                           <VBox.margin>
+                              <Insets left="8.0" right="8.0" top="4.0" />
+                           </VBox.margin>
+                        </TextField>
+                     </children>
+                     <padding>
+                        <Insets bottom="30.0" left="8.0" right="8.0" top="30.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </VBox>
+            <GridPane hgap="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="648.0" prefWidth="808.0" vgap="14.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="252.0" minWidth="10.0" prefWidth="82.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="159.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="160.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="160.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="160.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="[Receptor] (uM)" GridPane.columnIndex="3">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </Label>
+                  <Label text="[Ligand] (uM)" GridPane.columnIndex="4">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="receptorConc1" editable="false" prefHeight="32.0" prefWidth="155.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <TextField fx:id="ligandConc1" text="0.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                  <TextField fx:id="receptorConc4" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <TextField fx:id="receptorConc5" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                  <TextField fx:id="receptorConc6" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                  <TextField fx:id="receptorConc7" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+                  <TextField fx:id="receptorConc8" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+                  <TextField fx:id="receptorConc9" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="9" />
+                  <TextField fx:id="receptorConc10" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="10" />
+                  <TextField fx:id="receptorConc11" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="11" />
+                  <TextField fx:id="receptorConc12" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="12" />
+                  <TextField fx:id="receptorConc13" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="13" />
+                  <TextField fx:id="receptorConc14" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="14" />
+                  <TextField fx:id="ligandConc4" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                  <TextField fx:id="ligandConc5" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                  <TextField fx:id="ligandConc6" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                  <TextField fx:id="ligandConc7" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+                  <TextField fx:id="ligandConc8" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="8" />
+                  <TextField fx:id="ligandConc9" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="9" />
+                  <TextField fx:id="ligandConc10" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="10" />
+                  <TextField fx:id="ligandConc11" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="11" />
+                  <TextField fx:id="ligandConc12" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="12" />
+                  <TextField fx:id="ligandConc13" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="13" />
+                  <TextField fx:id="ligandConc14" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="14" />
+                  <Label text="Point 2" GridPane.rowIndex="2" />
+                  <Label text="Point 1" GridPane.rowIndex="1" />
+                  <Label text="Point 3" GridPane.rowIndex="3" />
+                  <Label text="Point 4" GridPane.rowIndex="4" />
+                  <Label text="Point 5" GridPane.rowIndex="5" />
+                  <Label text="Point 6" GridPane.rowIndex="6" />
+                  <Label text="Point 7" GridPane.rowIndex="7" />
+                  <Label text="Point 8" GridPane.rowIndex="8" />
+                  <Label text="Point 9" GridPane.rowIndex="9" />
+                  <Label text="Point 10" GridPane.rowIndex="10" />
+                  <Label text="Point 11" GridPane.rowIndex="11" />
+                  <Label text="Point 12" GridPane.rowIndex="12" />
+                  <Label text="Point 13" GridPane.rowIndex="13" />
+                  <Label text="Point 14" GridPane.rowIndex="14" />
+                  <Label text="Point 15" GridPane.rowIndex="15" />
+                  <TextField fx:id="fileName1" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <TextField fx:id="fileName2" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <TextField fx:id="fileName3" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <TextField fx:id="fileName4" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                  <TextField fx:id="fileName5" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                  <TextField fx:id="fileName6" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                  <TextField fx:id="fileName7" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                  <TextField fx:id="fileName8" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                  <TextField fx:id="fileName9" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+                  <TextField fx:id="fileName10" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+                  <TextField fx:id="fileName11" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+                  <TextField fx:id="fileName12" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="12" />
+                  <TextField fx:id="fileName13" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="13" />
+                  <TextField fx:id="fileName14" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="14" />
+                  <TextField fx:id="fileName15" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="15" />
+                  <Button fx:id="chooser1" mnemonicParsing="false" onAction="#Button1pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button fx:id="chooser2" mnemonicParsing="false" onAction="#Button2pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Button fx:id="chooser3" mnemonicParsing="false" onAction="#Button3pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Button fx:id="chooser4" mnemonicParsing="false" onAction="#Button4pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Button fx:id="chooser5" mnemonicParsing="false" onAction="#Button5pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <Button fx:id="chooser6" mnemonicParsing="false" onAction="#Button6pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <Button fx:id="chooser7" mnemonicParsing="false" onAction="#Button7pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <Button fx:id="chooser8" mnemonicParsing="false" onAction="#Button8pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <Button fx:id="chooser9" mnemonicParsing="false" onAction="#Button9pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                  <Button fx:id="chooser10" mnemonicParsing="false" onAction="#Button10pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                  <Button fx:id="chooser15" mnemonicParsing="false" onAction="#Button15pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="15" />
+                  <Button fx:id="chooser14" mnemonicParsing="false" onAction="#Button14pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="14" />
+                  <Button fx:id="chooser13" mnemonicParsing="false" onAction="#Button13pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="13" />
+                  <Button fx:id="chooser11" mnemonicParsing="false" onAction="#Button11pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                  <Button fx:id="chooser12" mnemonicParsing="false" onAction="#Button12pressed" styleClass="fileChooser" text="Choose file..." GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                  <TextField fx:id="receptorConc2" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <TextField fx:id="ligandConc2" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                  <TextField fx:id="receptorConc15" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="15" />
+                  <TextField fx:id="ligandConc15" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="15" />
+                  <Label text="File name" GridPane.columnIndex="2">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="receptorConc3" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <TextField fx:id="ligandConc3" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+               </children>
+               <padding>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </padding>
+            </GridPane>
+         </items>
+      </SplitPane>
+      <SplitPane dividerPositions="0.2" prefHeight="59.0" prefWidth="1114.0">
+         <items>
+            <Button fx:id="clearButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#clearButtonPressed" prefHeight="49.0" prefWidth="232.0" styleClass="bigButton" text="Clear">
+               <padding>
+                  <Insets left="8.0" right="8.0" />
+               </padding></Button>
+            <HBox alignment="CENTER_RIGHT" prefHeight="65.0" prefWidth="805.0">
+               <children>
+                  <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveButtonPressed" prefWidth="155.0" styleClass="bigButton" text="Save">
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                     </VBox.margin>
+                     <HBox.margin>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="loadButton" mnemonicParsing="false" onAction="#loadButtonPressed" prefWidth="155.0" styleClass="bigButton" text="Load">
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="analyzeButton" mnemonicParsing="false" onAction="#analyzeButtonPressed" prefWidth="155.0" styleClass="bigButton" text="Analyze">
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets bottom="8.0" left="8.0" right="15.0" top="8.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </VBox.margin>
+            </HBox>
+         </items>
+      </SplitPane>
+   </children>
+</VBox>
